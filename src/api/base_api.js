@@ -56,9 +56,7 @@ apiClient.interceptors.response.use(
       } catch (refreshError) {
         console.error("Error refreshing access token:", refreshError);
 
-        // Handle the refresh error as needed, e.g., redirect to login
-        // You might want to clear the token and navigate to the login page
-        // window.location.href = '/login';
+  
 
         return Promise.reject(refreshError);
       }
