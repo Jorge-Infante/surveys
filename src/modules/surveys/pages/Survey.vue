@@ -140,7 +140,7 @@ export default {
     },
     clearData() {
       this.titulo = null;
-      this.formScheme = null;
+      this.formScheme = [];
       this.inputTitle = null;
     },
   },
