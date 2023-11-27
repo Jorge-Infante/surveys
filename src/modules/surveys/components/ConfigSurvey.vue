@@ -3,7 +3,11 @@
     <v-card title="Creación de campos">
       <v-row class="ma-1">
         <v-col cols="6"
-          ><v-select :items="inputs" v-model="inputSelect" label="Tipo de dato"></v-select
+          ><v-select
+            :items="inputs"
+            v-model="inputSelect"
+            label="Tipo de dato"
+          ></v-select
         ></v-col>
         <v-col cols="6"
           ><v-text-field
@@ -56,6 +60,7 @@ export default {
   }),
   props: {
     dialogConfig: { type: Boolean, required: false },
+    currentSeccion: { type: Object, required: false },
   },
   watch: {
     dialogConfig(nuevo) {
@@ -63,12 +68,12 @@ export default {
     },
     labelValue(nuevo) {
       let input = { label: this.labelValue, input: nuevo };
-      console.log("EL VALOR DEL INPUT: ", input,nuevo);
+      console.log("EL VALOR DEL INPUT: ", input, nuevo);
     },
     inputSelect(nuevo) {
       this.optionsForm = false;
       this.options = [];
-      if (nuevo === "Seleccion simple" || nuevo === "Selecccion multiple" ) {
+      if (nuevo === "Seleccion simple" || nuevo === "Selecccion multiple") {
         this.optionsForm = true;
         let option = { clave: "", valor: "" };
         this.options.push(option);
@@ -89,13 +94,18 @@ export default {
       let form;
       if (this.options.length > 0) {
         form = {
+          idSeccion: this.currentSeccion.id,
           type: this.inputSelect,
           label: this.labelValue,
           options: this.options,
         };
         console.log("FORM with OPTIONS: ", form);
       } else {
-        form = { type: this.inputSelect, label: this.labelValue };
+        form = {
+          idSeccion: this.currentSeccion.id,
+          type: this.inputSelect,
+          label: this.labelValue,
+        };
         console.log("FORM out OPTIONS: ", form);
       }
       this.$emit("on:handleAddForm", form);

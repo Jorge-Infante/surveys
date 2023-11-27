@@ -64,7 +64,7 @@ self.addEventListener('activate', e => {
 
 
 self.addEventListener( 'fetch', e => {
-
+    console.log('FEEEEEEECH')
     let respuesta;
 
     if ( e.request.url.includes('/api') ) {

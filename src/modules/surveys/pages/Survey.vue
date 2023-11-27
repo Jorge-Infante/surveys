@@ -31,40 +31,68 @@
         </v-col>
       </v-row>
       <v-row class="ma-1">
-        <v-col cols="4" v-for="(item, index) in formScheme" :key="index">
-          <v-text-field
-            v-model="formScheme[index].value"
-            v-if="item.type == 'Texto'"
-            :label="item.label"
-          ></v-text-field>
-          <v-text-field
-            v-model="formScheme[index].value"
-            v-if="item.type == 'Numerico'"
-            :label="item.label"
-          ></v-text-field>
-          <v-select
-            v-model="formScheme[index].value"
-            v-if="item.type == 'Seleccion simple'"
-            :label="item.label"
-            :items="item.options"
-            item-title="valor"
-            item-value="clave"
-          ></v-select>
-          <v-combobox
-            v-model="formScheme[index].value"
-            v-if="item.type == 'Selecccion multiple'"
-            :label="item.label"
-            :items="item.options"
-            item-title="valor"
-            item-value="clave"
-            multiple
-          ></v-combobox>
+        <v-card
+          class="mb-4"
+          width="100%"
+          min-height="300"
+          :title="seccion.nombre"
+          variant="outlined"
+          v-for="seccion in seccions"
+          :key="seccion.id"
+        >
+          <v-row class="ma-2">
+            <v-col cols="4" v-for="(item, index) in seccion.questions" :key="index">
+              <v-text-field
+                v-model="seccion.questions[index].value"
+                v-if="item.type == 'Texto'"
+                :label="item.label"
+              ></v-text-field>
+              <v-text-field
+                v-model="seccion.questions[index].value"
+                v-if="item.type == 'Numerico'"
+                :label="item.label"
+              ></v-text-field>
+              <v-select
+                v-model="seccion.questions[index].value"
+                v-if="item.type == 'Seleccion simple'"
+                :label="item.label"
+                :items="item.options"
+                item-title="valor"
+                item-value="clave"
+              ></v-select>
+              <v-combobox
+                v-model="formScheme[index].value"
+                v-if="item.type == 'Selecccion multiple'"
+                :label="item.label"
+                :items="item.options"
+                item-title="valor"
+                item-value="clave"
+                multiple
+              ></v-combobox>
+            </v-col>
+          </v-row>
+          <v-card-actions>
+            <v-btn @click="handleShowConfig(seccion)" icon>
+              <v-tooltip activator="parent" location="end"
+                >Agregar pregunta</v-tooltip
+              >
+              <v-icon> mdi-file-document-plus-outline </v-icon></v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-row>
+      <v-row>
+        <v-col cols="1" class="justify-start">
+          <v-btn icon size="small" @click="handleAddSeccion">
+            <v-tooltip activator="parent" location="end"
+              >Agregar sección</v-tooltip
+            ><v-icon>mdi-plus</v-icon></v-btn
+          >
         </v-col>
       </v-row>
     </v-card>
 
     <v-card-actions class="d-flex justify-end">
-      <v-btn @click="handleShowConfig">Agregar pregunta</v-btn>
       <v-btn @click="printForm">Guardar</v-btn>
     </v-card-actions>
     <v-row class="d-flex justify-center" v-if="success">
@@ -75,12 +103,18 @@
     <ConfigSurvey
       @on:handleAddForm="addAttrForm"
       :dialogConfig="dialogConfig"
+      :currentSeccion="currentSeccion"
+    />
+    <SeccionConfig
+      :dialogSeccion="dialogSeccion"
+      @on:handleAddSeccion="addSeccion"
     />
   </v-container>
 </template>
 
 <script>
 import { mapActions } from "vuex";
+import SeccionConfig from "../components/SeccionConfig.vue";
 import ConfigSurvey from "../components/ConfigSurvey.vue";
 export default {
   data: () => ({
@@ -91,32 +125,39 @@ export default {
     inputTitle: null,
     loading: false,
     success: false,
+    dialogSeccion: false,
+    currentSeccion: null,
+    seccions: [],
   }),
   computed: {
     formData() {
       let data = {
         name: this.titulo,
-        data: this.formScheme,
+        data: this.seccions,
       };
       return data;
     },
   },
   components: {
     ConfigSurvey,
+    SeccionConfig,
   },
   methods: {
     ...mapActions("survey_store", ["saveSurvey"]),
-    handleShowConfig() {
+    handleShowConfig(seccion) {
+      this.currentSeccion = seccion;
       this.dialogConfig = true;
     },
     addAttrForm(nuevo) {
       nuevo.value = null;
-      console.log("NUEVO DATO PARA EL FORM: ", nuevo);
-      this.formScheme.push(nuevo);
+      let idxSeccion = this.findIndexById(nuevo.idSeccion)
+      console.log("NUEVO DATO PARA EL FORM: ", nuevo, "PARA LA SECCION : ",idxSeccion);
+      // this.formScheme.push(nuevo);
+      this.seccions[idxSeccion].questions.push(nuevo)
       this.dialogConfig = false;
     },
     async printForm() {
-      console.log("el esquema: ", this.formScheme);
+      console.log(" === > EL ESQUEMA : ", this.formData);
       this.loading = true;
       try {
         const res = await this.saveSurvey(this.formData);
@@ -142,6 +183,22 @@ export default {
       this.titulo = null;
       this.formScheme = [];
       this.inputTitle = null;
+      this.seccions=[]
+    },
+    handleAddSeccion() {
+      this.dialogSeccion = true;
+    },
+    addSeccion(seccion) {
+      console.log("SECCION CAPTURADA: ", seccion);
+      seccion.questions=[]
+      this.dialogSeccion = false;
+      this.seccions.push(seccion);
+    },
+    findObjectById(idToFind) {
+      return this.seccions.find((item) => item.id === idToFind);
+    },
+    findIndexById(idToFind) {
+      return this.seccions.findIndex((item) => item.id === idToFind);
     },
   },
 };

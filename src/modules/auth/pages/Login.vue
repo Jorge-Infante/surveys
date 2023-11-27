@@ -17,6 +17,7 @@
           v-model="account"
           density="compact"
           placeholder="Nombre de la cuenta"
+          hint="Nombre o correo de su cuenta"
           prepend-inner-icon="mdi-email-outline"
           variant="outlined"
           :rules="[rules.required]"
