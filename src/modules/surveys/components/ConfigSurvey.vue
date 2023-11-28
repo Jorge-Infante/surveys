@@ -51,7 +51,7 @@
 export default {
   data: () => ({
     dialog: false,
-    inputs: ["Texto", "Numerico", "Seleccion simple", "Selecccion multiple"],
+    inputs: ["Texto", "Numerico", "Seleccion simple", "Selecccion multiple", "Fecha"],
     inputSelect: null,
     formFields: [],
     labelValue: null,

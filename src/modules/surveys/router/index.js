@@ -22,5 +22,13 @@ export default {
           /* webpackChunkName: "survey-form" */ "@/modules/surveys/pages/SchemeForm.vue"
         ),
     },
+    {
+      path: "listForms",
+      name: "list-forms",
+      component: () =>
+        import(
+          /* webpackChunkName: "list-forms" */ "@/modules/surveys/pages/SurveysList.vue"
+        ),
+    },
   ],
 };
