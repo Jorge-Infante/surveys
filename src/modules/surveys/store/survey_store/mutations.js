@@ -4,6 +4,9 @@ export const setEntity = (state, surveys) => {
 export const setForms = (state, forms) => {
   state.forms = forms;
 };
+export const setSurveys = (state, surveys) => {
+  state.surveysList = surveys;
+};
 export const setFormToFill = (state, surveyToFill) => {
   state.surveyToFill = surveyToFill;
 };

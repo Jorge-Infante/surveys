@@ -3864,6 +3864,11 @@ import-fresh@^3.2.1:
     parent-module "^1.0.0"
     resolve-from "^4.0.0"
 
+indexdb@^0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/indexdb/-/indexdb-0.0.0.tgz#6f4bf0df74b87041ffbdaa0b434fdc24e43e4214"
+  integrity sha512-OynrPthUF8S7SQacDDGkO2hR6LLalmXtIlL2Juk1eoc5hK4Le7vIQ3+EnjGmRwtADHCdDSK8qZJ3DWIEXaxxnQ==
+
 inflight@^1.0.4:
   version "1.0.6"
   resolved "https://registry.npmjs.org/inflight/-/inflight-1.0.6.tgz"

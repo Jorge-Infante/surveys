@@ -42,7 +42,15 @@
         ></v-text-field>
       </v-form>
 
-      <v-btn block class="mb-8" color="blue" size="large" variant="tonal" @click="validate">
+      <v-btn
+        :loading="loading"
+        block
+        class="mb-8"
+        color="blue"
+        size="large"
+        variant="tonal"
+        @click="validate"
+      >
         Iniciar
       </v-btn>
     </v-card>
@@ -55,6 +63,7 @@ export default {
     visible: false,
     account: null,
     password: null,
+    loading: false,
     rules: {
       required: (value) => !!value || "El campo es obligatorio",
     },
@@ -76,20 +85,25 @@ export default {
       if (valid) this.handleFormData();
     },
     async handleFormData() {
+      this.loading = true;
       try {
         const res = await this.login(this.formData);
-        if(res.status==200){
-          console.log('LA DATA: ',res.data)
-          console.log('LA REFRESH: ',res.data.refresh)
-          console.log('LA ACCESS: ',res.data.access)
-          localStorage.setItem('refresh', res.data.refresh);
-          localStorage.setItem('access', res.data.access);
-          this.$router.push({ name: 'survey'})
+        if (res.status == 200) {
+          console.log("LA DATA: ", res.data);
+          console.log("LA REFRESH: ", res.data.refresh);
+          console.log("LA ACCESS: ", res.data.access);
+          localStorage.setItem("refresh", res.data.refresh);
+          localStorage.setItem("access", res.data.access);
+          this.$router.push({ name: "survey" });
         }
       } catch (error) {
+        this.loading = false;
         console.log("ERROR", error);
       }
     },
+  },
+  unmounted() {
+    this.loading = false;
   },
 };
 </script>

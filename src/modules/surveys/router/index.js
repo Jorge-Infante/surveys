@@ -4,7 +4,7 @@ export default {
     import(
       /* webpackChunkName: "surveyLayout" */ "@/modules/surveys/layouts/SurveyLayout.vue"
     ),
-  redirect: "/survey/surveyFill",
+  redirect: "/survey/listSurveys",
   children: [
     {
       path: "surveyFill",
@@ -27,7 +27,15 @@ export default {
       name: "list-forms",
       component: () =>
         import(
-          /* webpackChunkName: "list-forms" */ "@/modules/surveys/pages/SurveysList.vue"
+          /* webpackChunkName: "list-forms" */ "@/modules/surveys/pages/FormsList.vue"
+        ),
+    },
+    {
+      path: "listSurveys",
+      name: "list-surveys",
+      component: () =>
+        import(
+          /* webpackChunkName: "list-surveys" */ "@/modules/surveys/pages/SurveysList.vue"
         ),
     },
   ],
