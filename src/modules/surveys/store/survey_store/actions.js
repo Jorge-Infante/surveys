@@ -9,6 +9,8 @@ export const saveFormSurvey = async ({ commit }, data) => {
   const url = "v1/survey-form/";
   const res = await apiClient.post(url, data);
   console.log("  --- SAVE FORM SURVEY DATA: ", data);
+  console.log("  --- LA DATAAAAAA: ", res.data);
+  commit('addForms',res.data)
   return res;
 };
 export const getForms = async ({ commit }) => {

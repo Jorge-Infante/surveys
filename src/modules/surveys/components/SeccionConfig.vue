@@ -1,10 +1,15 @@
 <template>
-  <v-dialog width="700" v-model="dialog" transition="dialog-bottom-transition">
+  <v-dialog
+    persistent
+    width="700"
+    v-model="dialog"
+    transition="dialog-bottom-transition"
+  >
     <v-card title="Creación de sección">
       <v-row class="ma-1">
         <v-col cols="6"
           ><v-text-field
-            label="Nombre del campo"
+            label="Nombre de la sección"
             v-model="seccionName"
           ></v-text-field
         ></v-col>
@@ -15,6 +20,7 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
+        <v-btn text="Cancelar" @click="this.$emit('on:handleCancel')"></v-btn>
         <v-btn text="Agregar sección" @click="hadleSendFormSeccion"></v-btn>
       </v-card-actions>
     </v-card>
@@ -38,6 +44,8 @@ export default {
         descripcion: this.description,
       };
       this.$emit("on:handleAddSeccion", seccion);
+      this.description = null;
+      this.seccionName = null;
     },
   },
   props: {

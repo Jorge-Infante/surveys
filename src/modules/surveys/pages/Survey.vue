@@ -147,7 +147,10 @@ export default {
     formData() {
       let data = {
         name: this.titulo,
-        data: this.seccions,
+        data: {
+          localizacion: { latitud: this.latitude, longitud: this.longitude },
+          survey: this.seccions,
+        },
       };
       return data;
     },

@@ -117,10 +117,12 @@
     </v-row>
     <ConfigSurvey
       @on:handleAddForm="addAttrForm"
+      @on:handleCancel="cancelConfigSurvey"
       :dialogConfig="dialogConfig"
       :currentSeccion="currentSeccion"
     />
     <SeccionConfig
+      @on:handleCancel="cancelSeccionConfig"
       :dialogSeccion="dialogSeccion"
       @on:handleAddSeccion="addSeccion"
     />
@@ -220,6 +222,13 @@ export default {
     },
     findIndexById(idToFind) {
       return this.seccions.findIndex((item) => item.id === idToFind);
+    },
+    cancelConfigSurvey() {
+      this.dialogConfig = false;
+      
+    },
+    cancelSeccionConfig() {
+      this.dialogSeccion = false;
     },
   },
 };

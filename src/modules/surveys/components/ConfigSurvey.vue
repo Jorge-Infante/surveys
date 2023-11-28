@@ -1,5 +1,5 @@
 <template>
-  <v-dialog width="700" v-model="dialog" transition="dialog-bottom-transition">
+  <v-dialog persistent width="700" v-model="dialog" transition="dialog-bottom-transition">
     <v-card title="Creación de campos">
       <v-row class="ma-1">
         <v-col cols="6"
@@ -41,6 +41,7 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
+        <v-btn text="Cancelar" @click="cancelConfig"></v-btn>
         <v-btn text="Agregar campo" @click="hadleSendForm"></v-btn>
       </v-card-actions>
     </v-card>
@@ -116,6 +117,10 @@ export default {
       this.optionsForm = false;
       this.dialog = false;
     },
+    cancelConfig(){
+      console.log('emitiendo')
+      this.$emit('on:handleCancel')
+    }
   },
 };
 </script>
