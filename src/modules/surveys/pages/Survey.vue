@@ -122,7 +122,7 @@
 import { mapActions, mapState } from "vuex";
 import SeccionConfig from "../components/SeccionConfig.vue";
 import ConfigSurvey from "../components/ConfigSurvey.vue";
-import PouchDB from "pouchdb";
+import db from "@/services/pouchdb";
 export default {
   data: () => ({
     dialogConfig: false,
@@ -138,7 +138,9 @@ export default {
     latitude: null,
     longitude: null,
     dateFormat: "YYYY-MM-DD HH:mm",
-    db: new PouchDB("test_pouch"),
+    online: navigator.onLine,
+    db: null,
+    items: [],
   }),
   mounted() {
     this.titulo = this.surveyToFill.name;
@@ -146,6 +148,8 @@ export default {
   },
   created() {
     this.getLocation();
+    this.db = db;
+    // this.fetchItems();
   },
   computed: {
     ...mapState("survey_store", ["surveyToFill"]),
@@ -203,6 +207,8 @@ export default {
     },
     async printForm() {
       console.log(" === > EL ESQUEMA : ", this.formData);
+     
+      
       console.log("la localizacion: ", this.latitude, this.latitude);
       this.loading = true;
       try {
@@ -217,6 +223,7 @@ export default {
           }, 1000);
         }
       } catch (error) {
+        await this.addItem();
         this.loading = false;
       } finally {
         this.clearData();
@@ -245,6 +252,32 @@ export default {
     },
     findIndexById(idToFind) {
       return this.seccions.findIndex((item) => item.id === idToFind);
+    },
+    async fetchItems() {
+      try {
+        const result = await this.db.allDocs({ include_docs: true });
+        this.items = result.rows.map((row) => row.doc);
+        console.log("los items: ", this.items);
+      } catch (error) {
+        console.error("Error fetching items:", error);
+      }
+    },
+    async addItem() {
+      const newItem = {
+        _id: new Date().toISOString(),
+        name: this.formData,
+      };
+
+      try {
+        await this.db.put(newItem);
+        this.fetchItems();
+      } catch (error) {
+        console.error("Error adding item:", error);
+      }
+    },
+    updateOnlineStatus() {
+      // Update the 'online' data property based on the current network status
+      this.online = navigator.onLine;
     },
   },
   watch: {
