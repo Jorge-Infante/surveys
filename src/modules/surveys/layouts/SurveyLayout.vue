@@ -7,14 +7,11 @@
       <v-spacer></v-spacer>
 
       <!-- Show/hide based on screen size -->
-      <v-btn text class="hidden-sm-and-down" :to="{ name: 'list-surveys' }"
-        >Encuestas</v-btn
+      <v-btn text class="hidden-sm-and-down" :to="{ name: 'survey-form' }"
+        >Crear encuesta</v-btn
       >
       <v-btn text class="hidden-sm-and-down" :to="{ name: 'list-forms' }"
         >Formularios</v-btn
-      >
-      <v-btn text class="hidden-sm-and-down" :to="{ name: 'survey-form' }"
-        >Crear encuesta</v-btn
       >
       <v-btn text class="hidden-sm-and-down" :to="{ name: 'survey-fill-out' }"
         >Diligenciar encuesta
@@ -35,15 +32,18 @@
           </v-list>
         </v-menu>
       </v-btn>
+      <v-btn text class="hidden-sm-and-down" :to="{ name: 'list-surveys' }"
+        >Encuestas</v-btn
+      >
     </v-app-bar>
     <v-navigation-drawer v-model="drawer">
       <v-list density="compact" nav>
         <v-list-item
-          prepend-icon="mdi-text-box-check-outline"
-          title="Encuestas"
+          prepend-icon="mdi-file-document-plus"
+          title="Crear encuesta"
           class="text-left"
-          value="encuestas"
-          :to="{ name: 'list-surveys' }"
+          value="create-survey"
+          :to="{ name: 'survey-form' }"
         ></v-list-item>
         <v-list-item
           prepend-icon="mdi-script-text-outline"
@@ -52,14 +52,6 @@
           class="text-left"
           :to="{ name: 'list-forms' }"
         ></v-list-item>
-        <v-list-item
-          prepend-icon="mdi-file-document-plus"
-          title="Crear encuesta"
-          class="text-left"
-          value="create-survey"
-          :to="{ name: 'survey-form' }"
-        ></v-list-item>
-
         <v-list-item
           class="text-left"
           prepend-icon="mdi-text-box-edit-outline"
@@ -85,6 +77,13 @@
             </v-list>
           </v-menu>
         </v-list-item>
+        <v-list-item
+          prepend-icon="mdi-text-box-check-outline"
+          title="Encuestas"
+          class="text-left"
+          value="encuestas"
+          :to="{ name: 'list-surveys' }"
+        ></v-list-item>
       </v-list>
 
       <template v-slot:append>
@@ -111,7 +110,7 @@ export default {
     rail: true,
     fav: true,
     menu: false,
-    menuTop:false,
+    menuTop: false,
     loading: false,
   }),
   components: {
