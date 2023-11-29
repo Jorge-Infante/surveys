@@ -41,6 +41,7 @@
           width="100%"
           min-height="300"
           :title="seccion.nombre"
+          :subtitle="seccion.descripcion"
           variant="elevated"
           v-for="seccion in seccions"
           :key="seccion.id"

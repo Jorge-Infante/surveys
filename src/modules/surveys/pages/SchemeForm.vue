@@ -32,14 +32,16 @@
       </v-row>
       <v-row class="ma-1">
         <v-card
-          class="mb-4"
+          class="mb-4 text-left"
           width="100%"
           min-height="300"
           :title="seccion.nombre"
+          :subtitle="seccion.descripcion"
           variant="outlined"
           v-for="seccion in seccions"
           :key="seccion.id"
         >
+          <v-divider></v-divider>
           <v-row class="ma-2">
             <v-col
               cols="12"
@@ -68,7 +70,6 @@
               ></v-select>
               <v-combobox
                 readonly
-                v-model="formScheme[index].value"
                 v-if="item.type == 'Selecccion multiple'"
                 :label="item.label"
                 :items="item.options"
@@ -98,7 +99,7 @@
       </v-row>
       <v-row>
         <v-col cols="1" class="justify-start">
-          <v-btn icon size="small" @click="handleAddSeccion">
+          <v-btn class="mb-2" icon size="small" @click="handleAddSeccion">
             <v-tooltip activator="parent" location="end"
               >Agregar sección</v-tooltip
             ><v-icon>mdi-plus</v-icon></v-btn

@@ -1,6 +1,42 @@
 <template>
-  <v-layout>
-    <v-navigation-drawer permanent>
+  <v-app>
+    <v-app-bar app>
+      <v-app-bar-nav-icon @click="toggleDrawer"></v-app-bar-nav-icon>
+      <v-toolbar-title>Ohtras App</v-toolbar-title>
+
+      <v-spacer></v-spacer>
+
+      <!-- Show/hide based on screen size -->
+      <v-btn text class="hidden-sm-and-down" :to="{ name: 'list-surveys' }"
+        >Encuestas</v-btn
+      >
+      <v-btn text class="hidden-sm-and-down" :to="{ name: 'list-forms' }"
+        >Formularios</v-btn
+      >
+      <v-btn text class="hidden-sm-and-down" :to="{ name: 'survey-form' }"
+        >Crear encuesta</v-btn
+      >
+      <v-btn text class="hidden-sm-and-down" :to="{ name: 'survey-fill-out' }"
+        >Diligenciar encuesta
+        <v-menu
+          v-model="menuTop"
+          :close-on-content-click="false"
+          location="bottom"
+          activator="parent"
+        >
+          <v-list>
+            <v-list-item
+              v-for="item in forms"
+              :key="item.id"
+              @click="selectForm(item)"
+            >
+              {{ item.name }}
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-btn>
+    </v-app-bar>
+    <v-navigation-drawer v-model="drawer">
       <v-list density="compact" nav>
         <v-list-item
           prepend-icon="mdi-text-box-check-outline"
@@ -59,8 +95,11 @@
         </div>
       </template>
     </v-navigation-drawer>
-    <v-main style="height: 400px"><router-view></router-view></v-main>
-  </v-layout>
+
+    <v-main
+      ><v-container> <router-view></router-view> </v-container
+    ></v-main>
+  </v-app>
 </template>
 
 <script>
@@ -68,10 +107,11 @@ import { mapActions, mapState } from "vuex";
 import Survey from "../pages/Survey.vue";
 export default {
   data: () => ({
-    drawer: true,
+    drawer: false,
     rail: true,
     fav: true,
     menu: false,
+    menuTop:false,
     loading: false,
   }),
   components: {
@@ -84,6 +124,9 @@ export default {
       "getSurveys",
       "logOut",
     ]),
+    toggleDrawer() {
+      this.drawer = !this.drawer;
+    },
     selectForm(item) {
       if (Object.entries(this.formToFill).length === 0) {
         this.formToFill(item);
