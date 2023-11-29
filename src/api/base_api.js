@@ -43,22 +43,22 @@ apiClient.interceptors.response.use(
   async (error) => {
     // Check if the error is due to an expired token
     console.log("___________EL ERRRRORRRRRR : ", error);
-    if (error.response.status === 401) {
-      try {
-        // Attempt to refresh the access token
-        console.log("interceptando API CLIENT");
-        const newAccessToken = await refreshAccessToken();
-        console.log("MI NUEVO ACESS: ", newAccessToken);
-        // Retry the original request with the new access token
-        const originalRequest = error.config;
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        return apiClient(originalRequest);
-      } catch (refreshError) {
-        console.error("Error refreshing access token:", refreshError);
+    if (error.response) {
+      if (error.response.status === 401) {
+        try {
+          // Attempt to refresh the access token
+          console.log("interceptando API CLIENT");
+          const newAccessToken = await refreshAccessToken();
+          console.log("MI NUEVO ACESS: ", newAccessToken);
+          // Retry the original request with the new access token
+          const originalRequest = error.config;
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return apiClient(originalRequest);
+        } catch (refreshError) {
+          console.error("Error refreshing access token:", refreshError);
 
-  
-
-        return Promise.reject(refreshError);
+          return Promise.reject(refreshError);
+        }
       }
     }
 

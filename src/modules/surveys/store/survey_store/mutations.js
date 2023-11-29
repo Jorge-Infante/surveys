@@ -13,3 +13,6 @@ export const setFormToFill = (state, surveyToFill) => {
 export const addForms = (state, form) => {
   state.forms = [form, ...state.forms];
 };
+export const addSurvey = (state, survey) => {
+  state.surveysList = [survey, ...state.surveysList];
+};

@@ -103,7 +103,9 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import isOnline from "is-online";
 import Survey from "../pages/Survey.vue";
+import localforage from "localforage";
 export default {
   data: () => ({
     drawer: false,
@@ -112,6 +114,7 @@ export default {
     menu: false,
     menuTop: false,
     loading: false,
+    isConnected: true,
   }),
   components: {
     Survey,
@@ -122,6 +125,8 @@ export default {
       "formToFill",
       "getSurveys",
       "logOut",
+      "reSetForms",
+      "reSetSurveys",
     ]),
     toggleDrawer() {
       this.drawer = !this.drawer;
@@ -150,10 +155,44 @@ export default {
         console.log(error);
       }
     },
+    async getData() {
+      const key = "your-vuex-key";
+      await this.checkInternetConnection();
+      console.log("ASI EL INTERNET: ", this.isConnected);
+      if (!this.isConnected) {
+        //Refill los datos del store
+        try {
+          
+          const value = await localforage.getItem(key);
+          let nuevo = JSON.parse(value);
+          console.log("LOS FORMULARIOS EN INDEXED: ", nuevo.survey_store.forms);
+          console.log("LOS ENCUESTAS EN INDEXED: ", nuevo.survey_store.forms);
+          this.reSetForms(nuevo.survey_store.forms);
+          this.reSetSurveys(nuevo.survey_store.surveysList);
+        } catch (error) {
+          console.error("Error retrieving data:", error);
+        }
+      }
+    },
+    async checkInternetConnection() {
+      try {
+        // Check if the user is online
+        this.isConnected = await isOnline();
+      } catch (error) {
+        console.error("Error checking internet connection:", error);
+      }
+    },
   },
   mounted() {
-    this.getForms();
-    this.getSurveys();
+    try {
+      this.getForms();
+      this.getSurveys();
+    } catch (error) {
+      if (error.code == "ERR_NETWORK") {
+        console.log("SIN INTERNET");
+      }
+    }
+    this.getData();
   },
   unmounted() {
     this.loading = false;

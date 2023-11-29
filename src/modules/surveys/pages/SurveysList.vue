@@ -1,46 +1,60 @@
 <template>
   <v-row>
-    <v-toolbar title="Encuestas" density="compact"></v-toolbar>
-    <v-table class="mt-5 mr-5" fixed-header density="compact">
-      <thead>
-        <tr>
-          <th class="text-center">Id</th>
-          <th class="text-center">Id encuesta</th>
-          <th class="text-center">Nombre</th>
-          <th class="text-center">Autor</th>
-          <th class="text-center">Configuración</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in surveysList" :key="item.id">
-          <td>{{ item.id }}</td>
-          <td>{{ item.survey_id }}</td>
-          <td>{{ item.name }}</td>
-          <td>{{ item.author_username }}</td>
-          <td>
-            <v-btn icon size="x-small"><v-icon>mdi-cog-outline</v-icon></v-btn>
-          </td>
-        </tr>
-      </tbody>
-    </v-table>
-    <v-table class="mt-5" fixed-header density="compact">
-      <thead>
-        <tr>
-          <th class="text-center">Nombre</th>
-          <th class="text-center">Configuración</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in items" :key="item.id">
-          <td>{{ item.name.name }}</td>
-          <td>
-            <v-btn icon size="x-small" @click="handleSync(item)"
-              ><v-icon>mdi-upload</v-icon></v-btn
-            >
-          </td>
-        </tr>
-      </tbody>
-    </v-table>
+    <v-col cols="6">
+      <v-toolbar title="Encuestas en la nube" density="compact"></v-toolbar>
+      <v-table class="mt-5 mr-5" fixed-header density="compact">
+        <thead>
+          <tr>
+            <th class="text-center">Id</th>
+            <th class="text-center">Id encuesta</th>
+            <th class="text-center">Nombre</th>
+            <th class="text-center">Autor</th>
+            <th class="text-center">Configuración</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in surveysList" :key="item.id">
+            <td>{{ item.id }}</td>
+            <td>{{ item.survey_id }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.author_username }}</td>
+            <td>
+              <v-btn icon size="x-small"
+                ><v-icon>mdi-cog-outline</v-icon></v-btn
+              >
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
+    </v-col>
+    <v-col cols="6">
+      <v-toolbar
+        title="Encuestas por sincronizar"
+        density="compact"
+      ></v-toolbar>
+      <v-table class="mt-5" fixed-header density="compact">
+        <thead>
+          <tr>
+            <th class="text-center">Nombre</th>
+            <th class="text-center">Configuración</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in items" :key="item.id">
+            <td>{{ item.name.name }}</td>
+            <td>
+              <v-btn
+                :loading="loading"
+                icon
+                size="x-small"
+                @click="handleSync(item)"
+                ><v-icon>mdi-upload</v-icon></v-btn
+              >
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
+    </v-col>
   </v-row>
 </template>
 <script>
@@ -51,6 +65,7 @@ export default {
     return {
       db: null,
       items: [],
+      loading: false,
     };
   },
   computed: {
@@ -68,6 +83,7 @@ export default {
       }
     },
     async handleSync(item) {
+      this.loading = true;
       const { name } = item;
       console.log("vamos a sincronizar: ", name);
       try {
@@ -82,12 +98,16 @@ export default {
             })
             .then((result) => {
               console.log("Eliminado", result);
+              this.fetchItems();
             })
             .catch((error) => {
               console.error("Error eliminando del index", error);
             });
         }
+        this.loading = false;
+        
       } catch (error) {
+        this.loading = false;
         console.log(error);
       }
 

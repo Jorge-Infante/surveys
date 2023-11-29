@@ -120,6 +120,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import isOnline from "is-online";
 import SeccionConfig from "../components/SeccionConfig.vue";
 import ConfigSurvey from "../components/ConfigSurvey.vue";
 import db from "@/services/pouchdb";
@@ -141,6 +142,7 @@ export default {
     online: navigator.onLine,
     db: null,
     items: [],
+    isConnected: true,
   }),
   mounted() {
     this.titulo = this.surveyToFill.name;
@@ -170,6 +172,14 @@ export default {
   },
   methods: {
     ...mapActions("survey_store", ["saveSurvey"]),
+    async checkInternetConnection() {
+      try {
+        // Check if the user is online
+        this.isConnected = await isOnline();
+      } catch (error) {
+        console.error("Error checking internet connection:", error);
+      }
+    },
     handleShowConfig(seccion) {
       this.currentSeccion = seccion;
       this.dialogConfig = true;
@@ -207,26 +217,35 @@ export default {
     },
     async printForm() {
       console.log(" === > EL ESQUEMA : ", this.formData);
-     
-      
       console.log("la localizacion: ", this.latitude, this.latitude);
       this.loading = true;
-      try {
-        const res = await this.saveSurvey(this.formData);
-        console.log(" ---- EL RESPONSE: ", res);
-        if (res.status == 201) {
-          console.log(" ---- EL RESPONSE 2: ", res.status);
-          this.success = true;
-          this.loading = false;
-          setTimeout(() => {
-            this.success = false;
-          }, 1000);
-        }
-      } catch (error) {
+
+      await this.checkInternetConnection();
+      if (!this.isConnected) {
         await this.addItem();
+        this.success = true;
         this.loading = false;
-      } finally {
+        setTimeout(() => {
+          this.success = false;
+        }, 1000);
         this.clearData();
+      } else {
+        try {
+          const res = await this.saveSurvey(this.formData);
+          console.log(" ---- EL RESPONSE: ", res);
+          if (res.status == 201) {
+            console.log(" ---- EL RESPONSE 2: ", res.status);
+            this.success = true;
+            this.loading = false;
+            setTimeout(() => {
+              this.success = false;
+            }, 1000);
+          }
+        } catch (error) {
+          this.loading = false;
+        } finally {
+          this.clearData();
+        }
       }
     },
     handleSetTitle() {
