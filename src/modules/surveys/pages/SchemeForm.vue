@@ -42,7 +42,9 @@
         >
           <v-row class="ma-2">
             <v-col
-              cols="4"
+              cols="12"
+              sm="6"
+              md="4"
               v-for="(item, index) in seccion.questions"
               :key="index"
             >
@@ -81,8 +83,6 @@
                 type="datetime-local"
                 :format="dateFormat"
                 :label="item.label"
-                single-line
-                hide-details
               ></v-text-field>
             </v-col>
           </v-row>
@@ -225,7 +225,6 @@ export default {
     },
     cancelConfigSurvey() {
       this.dialogConfig = false;
-      
     },
     cancelSeccionConfig() {
       this.dialogSeccion = false;

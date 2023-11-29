@@ -14,6 +14,7 @@
     "cors": "^2.8.5",
     "http-server": "^14.1.1",
     "indexdb": "^0.0.0",
+    "pouchdb": "^8.0.1",
     "register-service-worker": "^1.7.2",
     "roboto-fontface": "*",
     "vue": "^3.2.13",

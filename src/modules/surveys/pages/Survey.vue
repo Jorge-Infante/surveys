@@ -49,7 +49,9 @@
           <v-divider></v-divider>
           <v-row class="ma-2">
             <v-col
-              cols="4"
+              cols="12"
+              sm="6"
+              md="4"
               v-for="(item, index) in seccion.questions"
               :key="index"
             >
@@ -119,6 +121,7 @@
 import { mapActions, mapState } from "vuex";
 import SeccionConfig from "../components/SeccionConfig.vue";
 import ConfigSurvey from "../components/ConfigSurvey.vue";
+import PouchDB from "pouchdb";
 export default {
   data: () => ({
     dialogConfig: false,
@@ -134,6 +137,7 @@ export default {
     latitude: null,
     longitude: null,
     dateFormat: "YYYY-MM-DD HH:mm",
+    db: new PouchDB("test_pouch"),
   }),
   mounted() {
     this.titulo = this.surveyToFill.name;
