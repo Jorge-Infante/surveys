@@ -54,11 +54,15 @@
                 readonly
                 v-if="item.type == 'Texto'"
                 :label="item.label"
+                persistent-hint
+                :hint="item.descripcion"
               ></v-text-field>
               <v-text-field
                 readonly
                 v-if="item.type == 'Numerico'"
                 :label="item.label"
+                persistent-hint
+                :hint="item.descripcion"
               ></v-text-field>
               <v-select
                 readonly
@@ -67,6 +71,8 @@
                 :items="item.options"
                 item-title="valor"
                 item-value="clave"
+                persistent-hint
+                :hint="item.descripcion"
               ></v-select>
               <v-combobox
                 readonly
@@ -76,6 +82,8 @@
                 item-title="valor"
                 item-value="clave"
                 multiple
+                persistent-hint
+                :hint="item.descripcion"
               ></v-combobox>
               <v-text-field
                 readonly
@@ -84,6 +92,8 @@
                 type="datetime-local"
                 :format="dateFormat"
                 :label="item.label"
+                persistent-hint
+                :hint="item.descripcion"
               ></v-text-field>
             </v-col>
           </v-row>

@@ -60,11 +60,15 @@
                 v-model="seccion.questions[index].value"
                 v-if="item.type == 'Texto'"
                 :label="item.label"
+                persistent-hint
+                :hint="item.descripcion"
               ></v-text-field>
               <v-text-field
                 v-model="seccion.questions[index].value"
                 v-if="item.type == 'Numerico'"
                 :label="item.label"
+                persistent-hint
+                :hint="item.descripcion"
               ></v-text-field>
               <v-select
                 v-model="seccion.questions[index].value"
@@ -73,6 +77,8 @@
                 :items="item.options"
                 item-title="valor"
                 item-value="clave"
+                persistent-hint
+                :hint="item.descripcion"
               ></v-select>
               <v-combobox
                 v-model="seccion.questions[index].value"
@@ -82,6 +88,8 @@
                 item-title="valor"
                 item-value="clave"
                 multiple
+                persistent-hint
+                :hint="item.descripcion"
               ></v-combobox>
               <v-text-field
                 v-model="seccion.questions[index].value"
@@ -89,8 +97,8 @@
                 type="datetime-local"
                 :format="dateFormat"
                 :label="item.label"
-                single-line
-                hide-details
+                persistent-hint
+                :hint="item.descripcion"
               ></v-text-field>
             </v-col>
           </v-row>

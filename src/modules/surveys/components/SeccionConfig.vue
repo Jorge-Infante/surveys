@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     persistent
-    width="700"
+    width="80%"
     v-model="dialog"
     transition="dialog-bottom-transition"
   >

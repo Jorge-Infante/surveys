@@ -1,20 +1,32 @@
 <template>
-  <v-dialog persistent width="700" v-model="dialog" transition="dialog-bottom-transition">
+  <v-dialog
+    persistent
+    width="80%"
+    v-model="dialog"
+    transition="dialog-bottom-transition"
+  >
     <v-card title="Creación de campos">
       <v-row class="ma-1">
-        <v-col cols="6"
+        <v-col cols="4"
           ><v-select
             :items="inputs"
             v-model="inputSelect"
             label="Tipo de dato"
           ></v-select
         ></v-col>
-        <v-col cols="6"
+        <v-col cols="4"
           ><v-text-field
             v-if="inputSelect"
             label="Nombre del campo"
             v-model="labelValue"
           ></v-text-field
+        ></v-col>
+        <v-col cols="4"
+          ><v-textarea
+            v-if="inputSelect"
+            label="Descripción"
+            v-model="description"
+          ></v-textarea
         ></v-col>
         <v-col cols="12" v-if="optionsForm">
           <v-row v-for="(item, index) in options" :key="index">
@@ -52,8 +64,15 @@
 export default {
   data: () => ({
     dialog: false,
-    inputs: ["Texto", "Numerico", "Seleccion simple", "Selecccion multiple", "Fecha"],
+    inputs: [
+      "Texto",
+      "Numerico",
+      "Seleccion simple",
+      "Selecccion multiple",
+      "Fecha",
+    ],
     inputSelect: null,
+    description: null,
     formFields: [],
     labelValue: null,
     options: [],
@@ -98,6 +117,7 @@ export default {
           idSeccion: this.currentSeccion.id,
           type: this.inputSelect,
           label: this.labelValue,
+          descripcion: this.description,
           options: this.options,
         };
         console.log("FORM with OPTIONS: ", form);
@@ -106,6 +126,7 @@ export default {
           idSeccion: this.currentSeccion.id,
           type: this.inputSelect,
           label: this.labelValue,
+          descripcion: this.description,
         };
         console.log("FORM out OPTIONS: ", form);
       }
@@ -116,11 +137,12 @@ export default {
       this.options = [];
       this.optionsForm = false;
       this.dialog = false;
+      this.description = null;
     },
-    cancelConfig(){
-      console.log('emitiendo')
-      this.$emit('on:handleCancel')
-    }
+    cancelConfig() {
+      console.log("emitiendo");
+      this.$emit("on:handleCancel");
+    },
   },
 };
 </script>
