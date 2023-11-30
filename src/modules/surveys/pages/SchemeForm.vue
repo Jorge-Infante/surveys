@@ -95,6 +95,17 @@
                 persistent-hint
                 :hint="item.descripcion"
               ></v-text-field>
+              <v-file-input
+                v-model="seccion.questions[index].value"
+                v-if="item.type == 'Imagen'"
+                accept="image/*"
+                variant="filled"
+                prepend-icon="mdi-camera"
+                :label="item.label"
+                persistent-hint
+                :hint="item.descripcion"
+                @click="capturarImagen(seccion.questions[index].value)"
+              ></v-file-input>
             </v-col>
           </v-row>
           <v-card-actions>
@@ -167,6 +178,11 @@ export default {
       return data;
     },
   },
+  mounted(){
+    this.$watch('seccions', (newValue, oldValue) => {
+      console.log('List changed:', oldValue, '=>', newValue);
+    }, { deep: true });
+  },
   components: {
     ConfigSurvey,
     SeccionConfig,
@@ -176,6 +192,9 @@ export default {
     handleShowConfig(seccion) {
       this.currentSeccion = seccion;
       this.dialogConfig = true;
+    },
+    capturarImagen(nuevo){
+      console.log('pitando el file: ',nuevo)
     },
     addAttrForm(nuevo) {
       nuevo.value = null;

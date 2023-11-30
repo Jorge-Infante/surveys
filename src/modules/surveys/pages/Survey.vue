@@ -100,6 +100,17 @@
                 persistent-hint
                 :hint="item.descripcion"
               ></v-text-field>
+              <v-file-input
+                v-model="seccion.questions[index].value"
+                v-if="item.type == 'Imagen'"
+                accept="image/*"
+                variant="filled"
+                prepend-icon="mdi-camera"
+                :label="item.label"
+                persistent-hint
+                :hint="item.descripcion"
+                @click:prepend="imgFocus(seccion.questions[index],index)"
+              ></v-file-input>
             </v-col>
           </v-row>
         </v-card>
@@ -151,8 +162,17 @@ export default {
     db: null,
     items: [],
     isConnected: true,
+    index: null,
   }),
   mounted() {
+    this.$watch(
+      "seccions",
+      (newValue, oldValue) => {
+        
+        console.log("List changed:", oldValue, "=>", newValue);
+      },
+      { deep: true }
+    );
     this.titulo = this.surveyToFill.name;
     this.seccions = this.surveyToFill.data;
   },
@@ -180,6 +200,10 @@ export default {
   },
   methods: {
     ...mapActions("survey_store", ["saveSurvey"]),
+    imgFocus(input,indexArg) {
+      this.index = indexArg;
+      console.log("EL INPUT: ", input, "index: ",this.index);
+    },
     async checkInternetConnection() {
       try {
         // Check if the user is online

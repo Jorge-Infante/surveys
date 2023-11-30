@@ -70,6 +70,7 @@ export default {
       "Seleccion simple",
       "Selecccion multiple",
       "Fecha",
+      "Imagen",
     ],
     inputSelect: null,
     description: null,
