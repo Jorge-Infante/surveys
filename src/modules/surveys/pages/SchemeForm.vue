@@ -50,40 +50,37 @@
               v-for="(item, index) in seccion.questions"
               :key="index"
             >
-              <v-text-field
-                readonly
-                v-if="item.type == 'Texto'"
-                :label="item.label"
-                persistent-hint
-                :hint="item.descripcion"
-              ></v-text-field>
+              <div
+                v-if="item.label"
+                class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
+              >
+                {{ item.label }}
+              </div>
+              <div
+                v-if="item.descripcion"
+                class="text-subtitle-2 text-medium-emphasis d-flex align-center justify-space-between"
+              >
+                {{ item.descripcion }}
+              </div>
+              <v-text-field readonly v-if="item.type == 'Texto'"></v-text-field>
               <v-text-field
                 readonly
                 v-if="item.type == 'Numerico'"
-                :label="item.label"
-                persistent-hint
-                :hint="item.descripcion"
               ></v-text-field>
               <v-select
                 readonly
                 v-if="item.type == 'Seleccion simple'"
-                :label="item.label"
                 :items="item.options"
                 item-title="valor"
                 item-value="clave"
-                persistent-hint
-                :hint="item.descripcion"
               ></v-select>
               <v-combobox
                 readonly
                 v-if="item.type == 'Selecccion multiple'"
-                :label="item.label"
                 :items="item.options"
                 item-title="valor"
                 item-value="clave"
                 multiple
-                persistent-hint
-                :hint="item.descripcion"
               ></v-combobox>
               <v-text-field
                 readonly
@@ -91,9 +88,6 @@
                 v-if="item.type == 'Fecha'"
                 type="datetime-local"
                 :format="dateFormat"
-                :label="item.label"
-                persistent-hint
-                :hint="item.descripcion"
               ></v-text-field>
               <v-file-input
                 v-model="seccion.questions[index].value"
@@ -101,9 +95,6 @@
                 accept="image/*"
                 variant="filled"
                 prepend-icon="mdi-camera"
-                :label="item.label"
-                persistent-hint
-                :hint="item.descripcion"
                 @click="capturarImagen(seccion.questions[index].value)"
               ></v-file-input>
             </v-col>
@@ -178,10 +169,14 @@ export default {
       return data;
     },
   },
-  mounted(){
-    this.$watch('seccions', (newValue, oldValue) => {
-      console.log('List changed:', oldValue, '=>', newValue);
-    }, { deep: true });
+  mounted() {
+    this.$watch(
+      "seccions",
+      (newValue, oldValue) => {
+        console.log("List changed:", oldValue, "=>", newValue);
+      },
+      { deep: true }
+    );
   },
   components: {
     ConfigSurvey,
@@ -193,8 +188,8 @@ export default {
       this.currentSeccion = seccion;
       this.dialogConfig = true;
     },
-    capturarImagen(nuevo){
-      console.log('pitando el file: ',nuevo)
+    capturarImagen(nuevo) {
+      console.log("pitando el file: ", nuevo);
     },
     addAttrForm(nuevo) {
       nuevo.value = null;

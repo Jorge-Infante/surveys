@@ -56,49 +56,48 @@
               v-for="(item, index) in seccion.questions"
               :key="index"
             >
+              <div
+                v-if="item.label"
+                class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
+              >
+                {{ item.label }}
+              </div>
+              <div
+                v-if="item.descripcion"
+                class="text-subtitle-2 text-medium-emphasis d-flex align-center justify-space-between"
+              >
+                {{ item.descripcion }}
+              </div>
               <v-text-field
                 v-model="seccion.questions[index].value"
                 v-if="item.type == 'Texto'"
-                :label="item.label"
-                persistent-hint
-                :hint="item.descripcion"
               ></v-text-field>
               <v-text-field
                 v-model="seccion.questions[index].value"
                 v-if="item.type == 'Numerico'"
-                :label="item.label"
-                persistent-hint
-                :hint="item.descripcion"
+                type="number"
+                :rules="[rules.numbers]"
               ></v-text-field>
               <v-select
                 v-model="seccion.questions[index].value"
                 v-if="item.type == 'Seleccion simple'"
-                :label="item.label"
                 :items="item.options"
                 item-title="valor"
                 item-value="clave"
-                persistent-hint
-                :hint="item.descripcion"
               ></v-select>
               <v-combobox
                 v-model="seccion.questions[index].value"
                 v-if="item.type == 'Selecccion multiple'"
-                :label="item.label"
                 :items="item.options"
                 item-title="valor"
                 item-value="clave"
                 multiple
-                persistent-hint
-                :hint="item.descripcion"
               ></v-combobox>
               <v-text-field
                 v-model="seccion.questions[index].value"
                 v-if="item.type == 'Fecha'"
                 type="datetime-local"
                 :format="dateFormat"
-                :label="item.label"
-                persistent-hint
-                :hint="item.descripcion"
               ></v-text-field>
               <v-file-input
                 v-model="seccion.questions[index].value"
@@ -106,10 +105,7 @@
                 accept="image/*"
                 variant="filled"
                 prepend-icon="mdi-camera"
-                :label="item.label"
-                persistent-hint
-                :hint="item.descripcion"
-                @click:prepend="imgFocus(seccion.questions[index],index)"
+                @click:prepend="imgFocus(seccion.questions[index], index)"
               ></v-file-input>
             </v-col>
           </v-row>
@@ -162,14 +158,27 @@ export default {
     db: null,
     items: [],
     isConnected: true,
-    index: null,
+    sectionToFind: null,
+    rules: {
+      numbers: (value) =>
+        !value || /[0-9]+$/.test(value) || "Solo permite numeros",
+    },
   }),
   mounted() {
     this.$watch(
       "seccions",
       (newValue, oldValue) => {
-        
-        console.log("List changed:", oldValue, "=>", newValue);
+        if (this.sectionToFind) {
+          let seccion = this.findObjectById(this.sectionToFind.idSeccion);
+          if (seccion) {
+            let question = seccion.questions[this.sectionToFind.questionIdx];
+            if (question.type === "Imagen") {
+              console.log("cambio una pregunta de tipo imagen: ", question);
+              this.uploadImage(question.value[0]);
+            }
+          }
+        }
+        // console.log("List changed:", oldValue, "=>", newValue);
       },
       { deep: true }
     );
@@ -199,10 +208,14 @@ export default {
     SeccionConfig,
   },
   methods: {
-    ...mapActions("survey_store", ["saveSurvey"]),
-    imgFocus(input,indexArg) {
+    ...mapActions("survey_store", ["saveSurvey", "uploadFile"]),
+    imgFocus(input, indexArg) {
+      this.sectionToFind = {
+        idSeccion: input.idSeccion,
+        questionIdx: indexArg,
+      };
       this.index = indexArg;
-      console.log("EL INPUT: ", input, "index: ",this.index);
+      console.log("EL INPUT: ", input, "index: ", this.index);
     },
     async checkInternetConnection() {
       try {
@@ -329,6 +342,11 @@ export default {
     updateOnlineStatus() {
       // Update the 'online' data property based on the current network status
       this.online = navigator.onLine;
+    },
+    async uploadImage(file) {
+      let params = { file };
+      let res = await this.uploadFile(params);
+      console.log("LA RESPUESTA: ", res);
     },
   },
   watch: {
