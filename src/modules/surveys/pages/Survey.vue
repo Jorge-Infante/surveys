@@ -16,7 +16,7 @@
         density="compact"
         v-if="titulo"
         :color="'grey darken-4'"
-        class="mb-4"
+        class="mb-4 d-flex align-center justify-space-between"
       >
         <v-toolbar-title>
           {{ titulo }}
@@ -40,13 +40,25 @@
           class="mb-4 text-left"
           width="100%"
           min-height="300"
-          :title="seccion.nombre"
-          :subtitle="seccion.descripcion"
           variant="elevated"
           v-for="seccion in seccions"
           :key="seccion.id"
           elevation="4"
         >
+          <v-row>
+            <v-col cols="12">
+              <div
+                class="text-h6 text-medium-emphasis d-flex align-center justify-space-between ml-2"
+              >
+                {{ seccion.nombre }}
+              </div>
+              <div
+                class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between ml-2"
+              >
+                {{ seccion.descripcion }}
+              </div>
+            </v-col>
+          </v-row>
           <v-divider></v-divider>
           <v-row class="ma-2">
             <v-col
@@ -159,6 +171,7 @@ export default {
     items: [],
     isConnected: true,
     sectionToFind: null,
+    currentUrl: null,
     rules: {
       numbers: (value) =>
         !value || /[0-9]+$/.test(value) || "Solo permite numeros",
@@ -170,11 +183,18 @@ export default {
       (newValue, oldValue) => {
         if (this.sectionToFind) {
           let seccion = this.findObjectById(this.sectionToFind.idSeccion);
+          this.sectionToFind.seccionIdx = this.findIndexById(
+            this.sectionToFind.idSeccion
+          );
+          this.sectionToFind.seccion = seccion;
           if (seccion) {
             let question = seccion.questions[this.sectionToFind.questionIdx];
+            this.sectionToFind.question = question;
             if (question.type === "Imagen") {
-              console.log("cambio una pregunta de tipo imagen: ", question);
-              this.uploadImage(question.value[0]);
+              console.log("ES UNA IMAGEN EN ARRAY: ", question);
+              if (!question.url) {
+                this.uploadImage(question.value[0], seccion, question);
+              }
             }
           }
         }
@@ -343,10 +363,11 @@ export default {
       // Update the 'online' data property based on the current network status
       this.online = navigator.onLine;
     },
-    async uploadImage(file) {
+    async uploadImage(file, seccion, question) {
       let params = { file };
       let res = await this.uploadFile(params);
-      console.log("LA RESPUESTA: ", res);
+      console.log("LA QUESTION: ", res);
+      this.currentUrl = res.url;
     },
   },
   watch: {
@@ -357,6 +378,18 @@ export default {
     },
     latitude(nuevo) {
       console.log("aqui va: ", nuevo);
+    },
+    currentUrl(nuevo) {
+      //remplazar value en la  pregunta
+      let question = this.sectionToFind.question;
+      let seccion = this.sectionToFind.seccion;
+
+      question.url = `https://test-apiothras.djsoftwaremakers.com${nuevo}`;
+      //reemplazar pregunta en la seccion
+      seccion.questions[this.sectionToFind.questionIdx] = question;
+      //reeemplazar seccion en las secciones
+      this.seccions[this.sectionToFind.seccionIdx] = seccion;
+      console.log("LAS SECCIONES: ", this.seccions);
     },
   },
 };

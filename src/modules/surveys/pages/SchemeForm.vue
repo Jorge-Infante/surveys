@@ -35,12 +35,24 @@
           class="mb-4 text-left"
           width="100%"
           min-height="300"
-          :title="seccion.nombre"
-          :subtitle="seccion.descripcion"
           variant="outlined"
           v-for="seccion in seccions"
           :key="seccion.id"
         >
+          <v-row>
+            <v-col cols="12">
+              <div
+                class="text-h6 text-medium-emphasis d-flex align-center justify-space-between ml-2"
+              >
+                {{ seccion.nombre }}
+              </div>
+              <div
+                class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between ml-2"
+              >
+                {{ seccion.descripcion }}
+              </div>
+            </v-col>
+          </v-row>
           <v-divider></v-divider>
           <v-row class="ma-2">
             <v-col
