@@ -39,6 +39,7 @@
     <v-navigation-drawer v-model="drawer">
       <v-list density="compact" nav>
         <v-list-item
+          @click="handleCloseDrawer"
           prepend-icon="mdi-file-document-plus"
           title="Crear encuesta"
           class="text-left"
@@ -46,6 +47,7 @@
           :to="{ name: 'survey-form' }"
         ></v-list-item>
         <v-list-item
+          @click="handleCloseDrawer"
           prepend-icon="mdi-script-text-outline"
           title="Formularios"
           value="forms"
@@ -78,6 +80,7 @@
           </v-menu>
         </v-list-item>
         <v-list-item
+          @click="handleCloseDrawer"
           prepend-icon="mdi-text-box-check-outline"
           title="Encuestas"
           class="text-left"
@@ -128,6 +131,9 @@ export default {
       "reSetForms",
       "reSetSurveys",
     ]),
+    handleCloseDrawer() {
+      this.drawer = false;
+    },
     toggleDrawer() {
       this.drawer = !this.drawer;
     },
@@ -135,6 +141,8 @@ export default {
       if (Object.entries(this.formToFill).length === 0) {
         this.formToFill(item);
       }
+      this.menu = false;
+      this.handleCloseDrawer();
     },
     async handleLogOut() {
       this.loading = true;
@@ -162,7 +170,6 @@ export default {
       if (!this.isConnected) {
         //Refill los datos del store
         try {
-          
           const value = await localforage.getItem(key);
           let nuevo = JSON.parse(value);
           console.log("LOS FORMULARIOS EN INDEXED: ", nuevo.survey_store.forms);
