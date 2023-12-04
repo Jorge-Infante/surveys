@@ -2,5 +2,6 @@ export default ()=>({
     surveys:{},
     forms:[],
     surveysList:[],
-    surveyToFill:{}
+    surveyToFill:{},
+    user:null
 })

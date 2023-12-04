@@ -16,3 +16,6 @@ export const addForms = (state, form) => {
 export const addSurvey = (state, survey) => {
   state.surveysList = [survey, ...state.surveysList];
 };
+export const setUser = (state, user) => {
+  state.user = user;
+};

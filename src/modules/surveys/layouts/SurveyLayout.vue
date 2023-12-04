@@ -7,13 +7,25 @@
       <v-spacer></v-spacer>
 
       <!-- Show/hide based on screen size -->
-      <v-btn text class="hidden-sm-and-down" :to="{ name: 'survey-form' }"
+      <v-btn
+        v-show="supervisor"
+        text
+        class="hidden-sm-and-down"
+        :to="{ name: 'survey-form' }"
         >Crear encuesta</v-btn
       >
-      <v-btn text class="hidden-sm-and-down" :to="{ name: 'list-forms' }"
+      <v-btn
+        v-show="supervisor"
+        text
+        class="hidden-sm-and-down"
+        :to="{ name: 'list-forms' }"
         >Formularios</v-btn
       >
-      <v-btn text class="hidden-sm-and-down" :to="{ name: 'survey-fill-out' }"
+      <v-btn
+        v-show="extensionista || supervisor"
+        text
+        class="hidden-sm-and-down"
+        :to="{ name: 'survey-fill-out' }"
         >Diligenciar encuesta
         <v-menu
           v-model="menuTop"
@@ -32,13 +44,18 @@
           </v-list>
         </v-menu>
       </v-btn>
-      <v-btn text class="hidden-sm-and-down" :to="{ name: 'list-surveys' }"
+      <v-btn
+        v-show="extensionista || supervisor"
+        text
+        class="hidden-sm-and-down"
+        :to="{ name: 'list-surveys' }"
         >Encuestas</v-btn
       >
     </v-app-bar>
     <v-navigation-drawer v-model="drawer">
       <v-list density="compact" nav>
         <v-list-item
+          v-show="supervisor"
           @click="handleCloseDrawer"
           prepend-icon="mdi-file-document-plus"
           title="Crear encuesta"
@@ -47,6 +64,7 @@
           :to="{ name: 'survey-form' }"
         ></v-list-item>
         <v-list-item
+          v-show="supervisor"
           @click="handleCloseDrawer"
           prepend-icon="mdi-script-text-outline"
           title="Formularios"
@@ -55,6 +73,7 @@
           :to="{ name: 'list-forms' }"
         ></v-list-item>
         <v-list-item
+          v-show="extensionista || supervisor"
           class="text-left"
           prepend-icon="mdi-text-box-edit-outline"
           append-icon="mdi-menu-down-outline"
@@ -80,6 +99,7 @@
           </v-menu>
         </v-list-item>
         <v-list-item
+          v-show="extensionista || supervisor"
           @click="handleCloseDrawer"
           prepend-icon="mdi-text-box-check-outline"
           title="Encuestas"
@@ -118,9 +138,14 @@ export default {
     menuTop: false,
     loading: false,
     isConnected: true,
+    extensionista: null,
+    supervisor: null,
   }),
   components: {
     Survey,
+  },
+  created() {
+    this.getUser();
   },
   methods: {
     ...mapActions("survey_store", [
@@ -130,9 +155,16 @@ export default {
       "logOut",
       "reSetForms",
       "reSetSurveys",
+      "me",
     ]),
+    async getUser() {
+      await this.me();
+    },
     handleCloseDrawer() {
       this.drawer = false;
+    },
+    handleCloseMenuTop() {
+      this.menuTop = false;
     },
     toggleDrawer() {
       this.drawer = !this.drawer;
@@ -143,6 +175,7 @@ export default {
       }
       this.menu = false;
       this.handleCloseDrawer();
+      this.handleCloseMenuTop();
     },
     async handleLogOut() {
       this.loading = true;
@@ -205,7 +238,17 @@ export default {
     this.loading = false;
   },
   computed: {
-    ...mapState("survey_store", ["forms", "surveyToFill"]),
+    ...mapState("survey_store", ["forms", "surveyToFill", "user"]),
+  },
+  watch: {
+    user() {
+      this.userGroup = this.user.groups[0];
+      if (this.user.groups[0] === "supervisores") {
+        this.supervisor = true;
+      } else if (this.user.groups[0] === "extensionistas") {
+        this.extensionista = true;
+      }
+    },
   },
 };
 </script>
