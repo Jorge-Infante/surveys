@@ -171,6 +171,7 @@ export default {
     },
     selectForm(item) {
       if (Object.entries(this.formToFill).length === 0) {
+        console.log('EL ITEM: ',item)
         this.formToFill(item);
       }
       this.menu = false;

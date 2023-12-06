@@ -6,6 +6,13 @@ export const saveSurvey = async ({ commit }, data) => {
   commit("addSurvey", res.data);
   return res;
 };
+export const deleteFormSurvey = async ({ commit }, id) => {
+  const url = `v1/survey-form/${id}/`;
+  const res = await apiClient.delete(url);
+  console.log("  --- DELETE SURVEY : ", res, "el id: ", id);
+  // commit("addSurvey", res.data);
+  return res;
+};
 export const saveFormSurvey = async ({ commit }, data) => {
   const url = "v1/survey-form/";
   const res = await apiClient.post(url, data);
@@ -47,8 +54,8 @@ export const logOut = async ({ commit }, data) => {
 export const me = async ({ commit }) => {
   const url = "v1/me/";
   const res = await apiClient.get(url);
-  console.log('RESPONSE USER ME: ',res.data)
-  commit("setUser",res.data);
+  console.log("RESPONSE USER ME: ", res.data);
+  commit("setUser", res.data);
 };
 export const reSetForms = ({ commit }, forms) => {
   commit("setForms", forms);

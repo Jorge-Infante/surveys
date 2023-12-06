@@ -59,6 +59,7 @@
 </template>
 <script>
 import { mapActions, mapState } from "vuex";
+import Swal from "sweetalert2";
 import db from "@/services/pouchdb";
 export default {
   data() {
@@ -105,9 +106,16 @@ export default {
             });
         }
         this.loading = false;
-        
+        Swal.fire({
+          title: "¡Encuesta sincronizada!",
+          icon: "success",
+        });
       } catch (error) {
         this.loading = false;
+        Swal.fire({
+          title: "¡Error al sincronizar!",
+          icon: "error",
+        });
         console.log(error);
       }
 

@@ -23,17 +23,10 @@
         </v-toolbar-title></v-toolbar
       >
       <v-row v-if="!titulo">
-        <v-col cols="10" class="ma-1">
-          <v-text-field
-            v-model="inputTitle"
-            label="Nombre de la encuenta"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="1" class="mt-3">
-          <v-btn icon @click="handleSetTitle" size="small"
-            ><v-icon>mdi-check-all</v-icon></v-btn
-          >
-        </v-col>
+        <v-alert
+          type="info"
+          title="Seleccione encuesta a diligenciar."
+        ></v-alert>
       </v-row>
       <v-row class="ma-1">
         <v-card
@@ -125,14 +118,14 @@
       </v-row>
     </v-card>
 
-    <v-card-actions class="d-flex justify-end">
+    <v-card-actions class="d-flex justify-end" v-if="titulo">
       <v-btn @click="printForm">Guardar</v-btn>
     </v-card-actions>
-    <v-row class="d-flex justify-center" v-if="success">
+    <!-- <v-row class="d-flex justify-center" v-if="success">
       <v-col cols="2">
         <v-alert density="compact" type="success" title="Guardado"></v-alert>
       </v-col>
-    </v-row>
+    </v-row> -->
     <ConfigSurvey
       @on:handleAddForm="addAttrForm"
       :dialogConfig="dialogConfig"
@@ -147,6 +140,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import Swal from "sweetalert2";
 import isOnline from "is-online";
 import SeccionConfig from "../components/SeccionConfig.vue";
 import ConfigSurvey from "../components/ConfigSurvey.vue";
@@ -288,26 +282,29 @@ export default {
       await this.checkInternetConnection();
       if (!this.isConnected) {
         await this.addItem();
-        this.success = true;
         this.loading = false;
-        setTimeout(() => {
-          this.success = false;
-        }, 1000);
+        Swal.fire({
+          title: "¡Registrado exitosamente!",
+          icon: "success",
+        });
         this.clearData();
       } else {
         try {
           const res = await this.saveSurvey(this.formData);
-          console.log(" ---- EL RESPONSE: ", res);
           if (res.status == 201) {
             console.log(" ---- EL RESPONSE 2: ", res.status);
-            this.success = true;
             this.loading = false;
-            setTimeout(() => {
-              this.success = false;
-            }, 1000);
+            Swal.fire({
+              title: "¡Registrado exitosamente!",
+              icon: "success",
+            });
           }
         } catch (error) {
           this.loading = false;
+          Swal.fire({
+            title: "¡Error al registrarlo!",
+            icon: "error",
+          });
         } finally {
           this.clearData();
         }
@@ -317,6 +314,7 @@ export default {
       this.titulo = this.inputTitle;
     },
     clearData() {
+      console.log('*** CLEAR DATA ***')
       this.titulo = null;
       this.formScheme = [];
       this.inputTitle = null;

@@ -74,10 +74,17 @@
               >
                 {{ item.descripcion }}
               </div>
-              <v-text-field readonly v-if="item.type == 'Texto'"></v-text-field>
+              <v-text-field
+                readonly
+                v-if="item.type == 'Texto'"
+                append-icon="mdi-delete-circle-outline"
+                @click:append="onClear(item, index)"
+              ></v-text-field>
               <v-text-field
                 readonly
                 v-if="item.type == 'Numerico'"
+                append-icon="mdi-delete-circle-outline"
+                @click:append="onClear(item, index)"
               ></v-text-field>
               <v-select
                 readonly
@@ -85,6 +92,8 @@
                 :items="item.options"
                 item-title="valor"
                 item-value="clave"
+                append-icon="mdi-delete-circle-outline"
+                @click:append="onClear(item, index)"
               ></v-select>
               <v-combobox
                 readonly
@@ -93,6 +102,8 @@
                 item-title="valor"
                 item-value="clave"
                 multiple
+                append-icon="mdi-delete-circle-outline"
+                @click:append="onClear(item, index)"
               ></v-combobox>
               <v-text-field
                 readonly
@@ -100,6 +111,8 @@
                 v-if="item.type == 'Fecha'"
                 type="datetime-local"
                 :format="dateFormat"
+                append-icon="mdi-delete-circle-outline"
+                @click:append="onClear(item, index)"
               ></v-text-field>
               <v-file-input
                 v-model="seccion.questions[index].value"
@@ -107,7 +120,9 @@
                 accept="image/*"
                 variant="filled"
                 prepend-icon="mdi-camera"
-                @click="capturarImagen(seccion.questions[index].value)"
+                append-icon="mdi-delete-circle-outline"
+                @click:append="onClear(item, index)"
+                
               ></v-file-input>
             </v-col>
           </v-row>
@@ -215,6 +230,16 @@ export default {
       // this.formScheme.push(nuevo);
       this.seccions[idxSeccion].questions.push(nuevo);
       this.dialogConfig = false;
+    },
+    onClear(item, idx) {
+      let seccion = this.findObjectById(item.idSeccion);
+      let seccionIdx = this.findIndexById(item.idSeccion);
+      let questions = seccion.questions;
+      questions.splice(idx, 1);
+      seccion.questions = questions;
+      console.log("LA SECCION SIN la quest: ", seccion);
+      // this.seccions[seccionIdx] = seccion;
+      // console.log("LA SECCION ENCONTRADA: ", questionsFilter);
     },
     async printForm() {
       console.log(" === > EL ESQUEMA : ", this.formData);
