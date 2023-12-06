@@ -9,6 +9,7 @@ export const saveSurvey = async ({ commit }, data) => {
 export const deleteFormSurvey = async ({ commit }, id) => {
   const url = `v1/survey-form/${id}/`;
   const res = await apiClient.delete(url);
+  commit("deleteForm",id)
   console.log("  --- DELETE SURVEY : ", res, "el id: ", id);
   // commit("addSurvey", res.data);
   return res;

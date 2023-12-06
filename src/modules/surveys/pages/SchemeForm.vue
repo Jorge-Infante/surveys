@@ -122,7 +122,6 @@
                 prepend-icon="mdi-camera"
                 append-icon="mdi-delete-circle-outline"
                 @click:append="onClear(item, index)"
-                
               ></v-file-input>
             </v-col>
           </v-row>
@@ -173,6 +172,7 @@
 import { mapActions } from "vuex";
 import SeccionConfig from "../components/SeccionConfig.vue";
 import ConfigSurvey from "../components/ConfigSurvey.vue";
+import Swal from "sweetalert2";
 export default {
   data: () => ({
     dialogConfig: false,
@@ -249,13 +249,17 @@ export default {
         console.log(" ---- EL RESPONSE: ", res);
         if (res.status == 201) {
           console.log(" ---- EL RESPONSE 2: ", res.status);
-          this.success = true;
           this.loading = false;
-          setTimeout(() => {
-            this.success = false;
-          }, 1000);
+          Swal.fire({
+            title: "¡Encuesta registrada!",
+            icon: "success",
+          });
         }
       } catch (error) {
+        Swal.fire({
+          title: "¡Error al registrar encuesta!",
+          icon: "error",
+        });
         this.loading = false;
       } finally {
         this.clearData();

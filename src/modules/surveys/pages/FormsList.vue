@@ -65,6 +65,8 @@ export default {
       //
     },
   },
-  mounted() {},
+  mounted() {
+    console.log('LOA FOORMS: ',this.forms)
+  },
 };
 </script>

@@ -19,3 +19,6 @@ export const addSurvey = (state, survey) => {
 export const setUser = (state, user) => {
   state.user = user;
 };
+export const deleteForm = (state, id) => {
+  state.forms = state.forms.filter((form) => form.id !== id);
+};

@@ -222,7 +222,7 @@ export default {
     SeccionConfig,
   },
   methods: {
-    ...mapActions("survey_store", ["saveSurvey", "uploadFile"]),
+    ...mapActions("survey_store", ["saveSurvey", "uploadFile","formToFill"]),
     imgFocus(input, indexArg) {
       this.sectionToFind = {
         idSeccion: input.idSeccion,
@@ -319,6 +319,8 @@ export default {
       this.formScheme = [];
       this.inputTitle = null;
       this.seccions = [];
+      const toFill={}
+      this.formToFill(toFill);
     },
     handleAddSeccion() {
       this.dialogSeccion = true;

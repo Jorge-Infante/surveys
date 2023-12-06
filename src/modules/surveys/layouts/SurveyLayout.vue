@@ -35,7 +35,7 @@
         >
           <v-list>
             <v-list-item
-              v-for="item in forms"
+              v-for="item in formularios"
               :key="item.id"
               @click="selectForm(item)"
             >
@@ -89,7 +89,7 @@
           >
             <v-list>
               <v-list-item
-                v-for="item in forms"
+                v-for="item in formularios"
                 :key="item.id"
                 @click="selectForm(item)"
               >
@@ -140,6 +140,7 @@ export default {
     isConnected: true,
     extensionista: null,
     supervisor: null,
+    formularios: null,
   }),
   components: {
     Survey,
@@ -171,7 +172,8 @@ export default {
     },
     selectForm(item) {
       if (Object.entries(this.formToFill).length === 0) {
-        console.log('EL ITEM: ',item)
+        this.formularios = JSON.parse(JSON.stringify(this.forms));
+        console.log("EL ITEM: ", item);
         this.formToFill(item);
       }
       this.menu = false;
@@ -249,6 +251,10 @@ export default {
       } else if (this.user.groups[0] === "extensionistas") {
         this.extensionista = true;
       }
+    },
+    forms() {
+      this.formularios = JSON.parse(JSON.stringify(this.forms));
+      console.log("LOS FORMULARIOOO: ", this.formularios);
     },
   },
 };
