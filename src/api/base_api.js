@@ -26,7 +26,7 @@ apiClient.interceptors.request.use(
 
     // Add the access token to the Authorization header
     config.headers.Authorization = `Bearer ${accessToken}`;
-    console.log("CON ESTE ACCESS: ", accessToken);
+    // console.log("CON ESTE ACCESS: ", accessToken);
 
     return config;
   },
@@ -49,7 +49,7 @@ apiClient.interceptors.response.use(
           // Attempt to refresh the access token
           console.log("interceptando API CLIENT");
           const newAccessToken = await refreshAccessToken();
-          console.log("MI NUEVO ACESS: ", newAccessToken);
+          // console.log("MI NUEVO ACESS: ", newAccessToken);
           // Retry the original request with the new access token
           const originalRequest = error.config;
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
@@ -116,6 +116,28 @@ imgClient.interceptors.response.use(
     }
 
     // Handle other errors
+    return Promise.reject(error);
+  }
+);
+
+export const downloadCsvApi = axios.create({
+  baseURL: "https://test-apiothras.djsoftwaremakers.com/api/",
+  withCredentials: false,
+
+});
+
+downloadCsvApi.interceptors.request.use(
+  async (config) => {
+    // Get the access token from where you stored it
+    const accessToken = localStorage.getItem("access");
+
+    // Add the access token to the Authorization header
+    config.headers.Authorization = `Bearer ${accessToken}`;
+    // console.log("CON ESTE ACCESS: ", accessToken);
+
+    return config;
+  },
+  (error) => {
     return Promise.reject(error);
   }
 );

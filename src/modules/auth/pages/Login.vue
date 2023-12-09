@@ -38,6 +38,7 @@
           prepend-inner-icon="mdi-lock-outline"
           variant="outlined"
           @click:append-inner="visible = !visible"
+          @keyup.enter="validate"
           :rules="[rules.required]"
         ></v-text-field>
       </v-form>
@@ -89,9 +90,9 @@ export default {
       try {
         const res = await this.login(this.formData);
         if (res.status == 200) {
-          console.log("LA DATA: ", res.data);
-          console.log("LA REFRESH: ", res.data.refresh);
-          console.log("LA ACCESS: ", res.data.access);
+          // console.log("LA DATA: ", res.data);
+          // console.log("LA REFRESH: ", res.data.refresh);
+          // console.log("LA ACCESS: ", res.data.access);
           localStorage.setItem("refresh", res.data.refresh);
           localStorage.setItem("access", res.data.access);
           this.$router.push({ name: "survey" });

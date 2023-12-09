@@ -191,7 +191,7 @@ export default {
         if (res.status == 200) {
           localStorage.removeItem("refresh");
           localStorage.removeItem("access");
-          console.log("EL RESULTADO DEL LOGUT: ", res);
+          // console.log("EL RESULTADO DEL LOGUT: ", res);
           this.$router.push({ name: "auth-login" });
         }
       } catch (error) {
@@ -208,8 +208,8 @@ export default {
         try {
           const value = await localforage.getItem(key);
           let nuevo = JSON.parse(value);
-          console.log("LOS FORMULARIOS EN INDEXED: ", nuevo.survey_store.forms);
-          console.log("LOS ENCUESTAS EN INDEXED: ", nuevo.survey_store.forms);
+          // console.log("LOS FORMULARIOS EN INDEXED: ", nuevo.survey_store.forms);
+          // console.log("LOS ENCUESTAS EN INDEXED: ", nuevo.survey_store.forms);
           this.reSetForms(nuevo.survey_store.forms);
           this.reSetSurveys(nuevo.survey_store.surveysList);
         } catch (error) {
