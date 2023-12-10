@@ -8,21 +8,21 @@
 
       <!-- Show/hide based on screen size -->
       <v-btn
-        v-show="supervisor"
+        v-show="administrador"
         text
         class="hidden-sm-and-down"
         :to="{ name: 'survey-form' }"
         >Crear encuesta</v-btn
       >
       <v-btn
-        v-show="supervisor"
+        v-show="administrador"
         text
         class="hidden-sm-and-down"
         :to="{ name: 'list-forms' }"
         >Formularios</v-btn
       >
       <v-btn
-        v-show="extensionista || supervisor"
+        v-show="extensionista || administrador"
         text
         class="hidden-sm-and-down"
         :to="{ name: 'survey-fill-out' }"
@@ -45,7 +45,7 @@
         </v-menu>
       </v-btn>
       <v-btn
-        v-show="extensionista || supervisor"
+        v-show="extensionista || administrador"
         text
         class="hidden-sm-and-down"
         :to="{ name: 'list-surveys' }"
@@ -55,7 +55,7 @@
     <v-navigation-drawer v-model="drawer">
       <v-list density="compact" nav>
         <v-list-item
-          v-show="supervisor"
+          v-show="administrador"
           @click="handleCloseDrawer"
           prepend-icon="mdi-file-document-plus"
           title="Crear encuesta"
@@ -64,7 +64,7 @@
           :to="{ name: 'survey-form' }"
         ></v-list-item>
         <v-list-item
-          v-show="supervisor"
+          v-show="administrador"
           @click="handleCloseDrawer"
           prepend-icon="mdi-script-text-outline"
           title="Formularios"
@@ -73,7 +73,7 @@
           :to="{ name: 'list-forms' }"
         ></v-list-item>
         <v-list-item
-          v-show="extensionista || supervisor"
+          v-show="extensionista || administrador"
           class="text-left"
           prepend-icon="mdi-text-box-edit-outline"
           append-icon="mdi-menu-down-outline"
@@ -99,7 +99,7 @@
           </v-menu>
         </v-list-item>
         <v-list-item
-          v-show="extensionista || supervisor"
+          v-show="extensionista || administrador"
           @click="handleCloseDrawer"
           prepend-icon="mdi-text-box-check-outline"
           title="Encuestas"
@@ -139,7 +139,7 @@ export default {
     loading: false,
     isConnected: true,
     extensionista: null,
-    supervisor: null,
+    administrador: null,
     formularios: null,
   }),
   components: {
@@ -191,7 +191,7 @@ export default {
         if (res.status == 200) {
           localStorage.removeItem("refresh");
           localStorage.removeItem("access");
-          console.log("EL RESULTADO DEL LOGUT: ", res);
+          // console.log("EL RESULTADO DEL LOGUT: ", res);
           this.$router.push({ name: "auth-login" });
         }
       } catch (error) {

@@ -1,29 +1,34 @@
 <template>
-  <v-toolbar title="Formularios" density="compact"></v-toolbar>
-  <v-table class="mt-5" fixed-header height="300px" density="compact">
-    <thead>
-      <tr>
-        <th class="text-center">Id</th>
-        <th class="text-center">Nombre</th>
-        <th class="text-center">Slug</th>
-        <th class="text-center">Autor</th>
-        <th class="text-center">Configuración</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="item in forms" :key="item.id">
-        <td>{{ item.id }}</td>
-        <td>{{ item.name }}</td>
-        <td>{{ item.slug_name }}</td>
-        <td>{{ item.author_username }}</td>
-        <td>
-          <v-btn icon size="x-small" @click="handleDeleteForm(item.id)"
-            ><v-icon>mdi-delete-empty-outline</v-icon></v-btn
-          >
-        </td>
-      </tr>
-    </tbody>
-  </v-table>
+  <div>
+    <v-toolbar title="Formularios" density="compact"></v-toolbar>
+    <v-table class="mt-5" fixed-header height="300px" density="compact">
+      <thead>
+        <tr>
+          <th class="text-center">Id</th>
+          <th class="text-center">Nombre</th>
+          <th class="text-center">Slug</th>
+          <th class="text-center">Autor</th>
+          <th class="text-center">Configuración</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in forms" :key="item.id">
+          <td>{{ item.id }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.slug_name }}</td>
+          <td>{{ item.author_username }}</td>
+          <td>
+            <v-btn class="mr-2" icon size="x-small" @click="handleDownloadCsv(item.slug_name, item.name)">
+              <v-icon>mdi-download-outline</v-icon>
+            </v-btn>
+            <v-btn icon size="x-small" @click="handleDeleteForm(item.id)">
+              <v-icon>mdi-delete-empty-outline</v-icon>
+            </v-btn>
+          </td>
+        </tr>
+      </tbody>
+    </v-table>
+  </div>
 </template>
 <script>
 import { mapActions, mapState } from "vuex";
@@ -36,7 +41,7 @@ export default {
     ...mapState("survey_store", ["forms"]),
   },
   methods: {
-    ...mapActions("survey_store", ["deleteFormSurvey"]),
+    ...mapActions("survey_store", ["deleteFormSurvey", "downloadCsv"]),
     handleDeleteForm(itemId) {
       Swal.fire({
         text: "¡No podrá revertir este cambio!",
@@ -63,6 +68,27 @@ export default {
         }
       });
       //
+    },
+    handleDownloadCsv(slugName, name) {
+      this.downloadCsv(slugName)
+        .then(response => {
+          // Crear un objeto URL para el blob
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+
+          // Crear un enlace temporal y hacer clic para descargar
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', `${name}.csv`);
+          document.body.appendChild(link);
+          link.click();
+
+          // Limpiar el enlace y el objeto URL después de la descarga
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+        })
+        .catch(error => {
+          console.error('Error al descargar el archivo:', error);
+        });
     },
   },
   mounted() {
