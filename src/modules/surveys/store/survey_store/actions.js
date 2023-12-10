@@ -77,6 +77,7 @@ export const reSetSurveys = ({ commit }, surveys) => {
   commit("setSurveys", surveys);
 };
 export const reSetUser = ({ commit }, user) => {
+  console.log('el user que llega: ',user)
   commit("setUser", user);
 };
 export const uploadFile = async ({ commit }, params) => {

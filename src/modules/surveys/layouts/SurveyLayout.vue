@@ -145,9 +145,7 @@ export default {
   components: {
     Survey,
   },
-  created() {
-  
-  },
+  created() {},
   methods: {
     ...mapActions("survey_store", [
       "getForms",
@@ -156,7 +154,7 @@ export default {
       "logOut",
       "reSetForms",
       "reSetSurveys",
-      "reSetUser"
+      "reSetUser",
     ]),
     // async getUser() {
     //   await this.me();
@@ -209,7 +207,10 @@ export default {
           const value = await localforage.getItem(key);
           let nuevo = JSON.parse(value);
           console.log("LOS FORMULARIOS EN INDEXED: ", nuevo.survey_store.forms);
-          console.log("LOS ENCUESTAS EN INDEXED: ", nuevo.survey_store.surveysList);
+          console.log(
+            "LOS ENCUESTAS EN INDEXED: ",
+            nuevo.survey_store.surveysList
+          );
           console.log("EL USER EN INDEXED: ", nuevo.survey_store.user);
           this.reSetForms(nuevo.survey_store.forms);
           this.reSetSurveys(nuevo.survey_store.surveysList);
@@ -227,11 +228,20 @@ export default {
         console.error("Error checking internet connection:", error);
       }
     },
+    async refillUser() {
+      
+      const key = "your-vuex-key";  
+      const value = await localforage.getItem(key);
+      let nuevo = JSON.parse(value);
+      console.log('REFILLuSER',nuevo)
+      this.reSetUser(nuevo.survey_store.user);
+    },
   },
   mounted() {
     try {
       this.getForms();
       this.getSurveys();
+      this.refillUser();
     } catch (error) {
       if (error.code == "ERR_NETWORK") {
         console.log("SIN INTERNET");
@@ -247,10 +257,10 @@ export default {
   },
   watch: {
     user(nuevo) {
-      console.log('SI CAMBIA CUANDO RECARGO')
+      console.log("SI CAMBIA CUANDO RECARGO");
       if (this.user.group === "supervisores") {
         this.supervisor = true;
-      } else if (this.user.group=== "extensionistas") {
+      } else if (this.user.group === "extensionistas") {
         this.extensionista = true;
       }
     },
