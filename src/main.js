@@ -4,6 +4,7 @@ import vuetify from "./plugins/vuetify";
 import { loadFonts } from "./plugins/webfontloader";
 import store from "./store";
 import router from "./router";
+import './assets/scss/styles.scss'
 if(navigator.serviceWorker){
     navigator.serviceWorker.register('/sw.js')
 }

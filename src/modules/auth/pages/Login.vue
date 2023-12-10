@@ -1,11 +1,21 @@
 <template>
-  <div>
+  <div class="main-content-login">
+
+  <div class="d-flex justify-center align-center w-100 h-100">
     <v-card
-      class="mx-auto ma-12 pa-12 pb-8"
-      elevation="8"
+      class="mx-auto boxLogin"
       max-width="448"
       rounded="lg"
     >
+    <div>
+      <v-img
+      class="mx-auto text-center"
+        :width="180"
+        aspect-ratio="16/9"
+        cover
+        src="@/assets/images/logo-o2.jpg"
+      ></v-img>
+    </div>
       <v-form @submit.prevent ref="form">
         <div
           class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
@@ -44,10 +54,7 @@
 
       <v-btn
         :loading="loading"
-        block
-        class="mb-8"
-        color="blue"
-        size="large"
+        class="btn btn-primary mb-4"
         variant="tonal"
         @click="validate"
       >
@@ -55,6 +62,7 @@
       </v-btn>
     </v-card>
   </div>
+</div>
 </template>
 <script>
 import { mapActions } from "vuex";

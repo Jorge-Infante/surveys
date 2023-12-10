@@ -147,7 +147,7 @@
     </v-card>
 
     <v-card-actions class="d-flex justify-end">
-      <v-btn @click="printForm">Guardar</v-btn>
+      <v-btn @click="printForm" class="btn-primary">Guardar</v-btn>
     </v-card-actions>
     <v-row class="d-flex justify-center" v-if="success">
       <v-col cols="2">

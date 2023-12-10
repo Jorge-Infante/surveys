@@ -1,8 +1,15 @@
 <template>
   <v-app>
-    <v-app-bar app>
+    <v-app-bar app class="main-header">
       <v-app-bar-nav-icon @click="toggleDrawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>Ohtras App</v-toolbar-title>
+      <v-toolbar-title >
+        <v-img
+        class="mx-auto text-center"
+        :width="60"
+        cover
+        src="@/assets/images/logo-o.jpg"
+      ></v-img>
+      </v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -111,7 +118,7 @@
 
       <template v-slot:append>
         <div class="pa-2">
-          <v-btn :loading="loading" block @click="handleLogOut">
+          <v-btn :loading="loading" block @click="handleLogOut" class="btn-outline-primary">
             Cerrar sesión
           </v-btn>
         </div>
