@@ -79,10 +79,14 @@ export default {
   },
   methods: {
     ...mapActions("auth_store", ["login"]),
+    ...mapActions("survey_store", ["me"]),
     async validate() {
       const { valid } = await this.$refs.form.validate();
 
       if (valid) this.handleFormData();
+    },
+    async getUser() {
+      await this.me();
     },
     async handleFormData() {
       this.loading = true;
@@ -95,6 +99,7 @@ export default {
           localStorage.setItem("refresh", res.data.refresh);
           localStorage.setItem("access", res.data.access);
           this.$router.push({ name: "survey" });
+          this.getUser();
         }
       } catch (error) {
         this.loading = false;

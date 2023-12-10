@@ -146,7 +146,7 @@ export default {
     Survey,
   },
   created() {
-    this.getUser();
+  
   },
   methods: {
     ...mapActions("survey_store", [
@@ -156,11 +156,11 @@ export default {
       "logOut",
       "reSetForms",
       "reSetSurveys",
-      "me",
+      "reSetUser"
     ]),
-    async getUser() {
-      await this.me();
-    },
+    // async getUser() {
+    //   await this.me();
+    // },
     handleCloseDrawer() {
       this.drawer = false;
     },
@@ -209,9 +209,11 @@ export default {
           const value = await localforage.getItem(key);
           let nuevo = JSON.parse(value);
           console.log("LOS FORMULARIOS EN INDEXED: ", nuevo.survey_store.forms);
-          console.log("LOS ENCUESTAS EN INDEXED: ", nuevo.survey_store.forms);
+          console.log("LOS ENCUESTAS EN INDEXED: ", nuevo.survey_store.surveysList);
+          console.log("EL USER EN INDEXED: ", nuevo.survey_store.user);
           this.reSetForms(nuevo.survey_store.forms);
           this.reSetSurveys(nuevo.survey_store.surveysList);
+          this.reSetUser(nuevo.survey_store.user);
         } catch (error) {
           console.error("Error retrieving data:", error);
         }
@@ -244,11 +246,11 @@ export default {
     ...mapState("survey_store", ["forms", "surveyToFill", "user"]),
   },
   watch: {
-    user() {
-      this.userGroup = this.user.groups[0];
-      if (this.user.groups[0] === "supervisores") {
+    user(nuevo) {
+      console.log('SI CAMBIA CUANDO RECARGO')
+      if (this.user.group === "supervisores") {
         this.supervisor = true;
-      } else if (this.user.groups[0] === "extensionistas") {
+      } else if (this.user.group=== "extensionistas") {
         this.extensionista = true;
       }
     },

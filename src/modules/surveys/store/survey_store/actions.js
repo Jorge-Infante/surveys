@@ -9,7 +9,7 @@ export const saveSurvey = async ({ commit }, data) => {
 export const deleteFormSurvey = async ({ commit }, id) => {
   const url = `v1/survey-form/${id}/`;
   const res = await apiClient.delete(url);
-  commit("deleteForm",id)
+  commit("deleteForm", id);
   console.log("  --- DELETE SURVEY : ", res, "el id: ", id);
   // commit("addSurvey", res.data);
   return res;
@@ -56,6 +56,12 @@ export const me = async ({ commit }) => {
   const url = "v1/me/";
   const res = await apiClient.get(url);
   console.log("RESPONSE USER ME: ", res.data);
+  if (res.data.groups[0] === "supervisores") {
+    res.data.group = "supervisores";
+  } else if (res.data.groups[0] === "extensionistas") {
+    res.data.group = "extensionistas";
+  }
+
   commit("setUser", res.data);
 };
 export const reSetForms = ({ commit }, forms) => {
@@ -63,6 +69,9 @@ export const reSetForms = ({ commit }, forms) => {
 };
 export const reSetSurveys = ({ commit }, surveys) => {
   commit("setSurveys", surveys);
+};
+export const reSetUser = ({ commit }, user) => {
+  commit("setUser", user);
 };
 export const uploadFile = async ({ commit }, params) => {
   const data = new FormData();
