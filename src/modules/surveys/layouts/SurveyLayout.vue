@@ -152,9 +152,7 @@ export default {
   components: {
     Survey,
   },
-  created() {
-    this.getUser();
-  },
+  created() {},
   methods: {
     ...mapActions("survey_store", [
       "getForms",
@@ -163,11 +161,11 @@ export default {
       "logOut",
       "reSetForms",
       "reSetSurveys",
-      "me",
+      "reSetUser",
     ]),
-    async getUser() {
-      await this.me();
-    },
+    // async getUser() {
+    //   await this.me();
+    // },
     handleCloseDrawer() {
       this.drawer = false;
     },
@@ -196,9 +194,9 @@ export default {
         const res = await this.logOut(data);
 
         if (res.status == 200) {
-          localStorage.removeItem("refresh");
-          localStorage.removeItem("access");
-          console.log("EL RESULTADO DEL LOGUT: ", res);
+          // localStorage.removeItem("refresh");
+          // localStorage.removeItem("access");
+          // console.log("EL RESULTADO DEL LOGUT: ", res);
           this.$router.push({ name: "auth-login" });
         }
       } catch (error) {
@@ -216,9 +214,14 @@ export default {
           const value = await localforage.getItem(key);
           let nuevo = JSON.parse(value);
           console.log("LOS FORMULARIOS EN INDEXED: ", nuevo.survey_store.forms);
-          console.log("LOS ENCUESTAS EN INDEXED: ", nuevo.survey_store.forms);
+          console.log(
+            "LOS ENCUESTAS EN INDEXED: ",
+            nuevo.survey_store.surveysList
+          );
+          console.log("EL USER EN INDEXED: ", nuevo.survey_store.user);
           this.reSetForms(nuevo.survey_store.forms);
           this.reSetSurveys(nuevo.survey_store.surveysList);
+          this.reSetUser(nuevo.survey_store.user);
         } catch (error) {
           console.error("Error retrieving data:", error);
         }
@@ -232,11 +235,20 @@ export default {
         console.error("Error checking internet connection:", error);
       }
     },
+    async refillUser() {
+      
+      const key = "your-vuex-key";  
+      const value = await localforage.getItem(key);
+      let nuevo = JSON.parse(value);
+      console.log('REFILLuSER',nuevo)
+      this.reSetUser(nuevo.survey_store.user);
+    },
   },
   mounted() {
     try {
       this.getForms();
       this.getSurveys();
+      this.refillUser();
     } catch (error) {
       if (error.code == "ERR_NETWORK") {
         console.log("SIN INTERNET");
@@ -251,11 +263,11 @@ export default {
     ...mapState("survey_store", ["forms", "surveyToFill", "user"]),
   },
   watch: {
-    user() {
-      this.userGroup = this.user.groups[0];
-      if (this.user.groups[0] === "administradores") {
+    user(nuevo) {
+      console.log("SI CAMBIA CUANDO RECARGO");
+      if (this.user.group === "administradores") {
         this.administrador = true;
-      } else if (this.user.groups[0] === "extensionistas") {
+      } else if (this.user.group === "extensionistas") {
         this.extensionista = true;
       }
     },

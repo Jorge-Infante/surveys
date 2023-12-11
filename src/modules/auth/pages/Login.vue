@@ -48,6 +48,7 @@
           prepend-inner-icon="mdi-lock-outline"
           variant="outlined"
           @click:append-inner="visible = !visible"
+          @keyup.enter="validate"
           :rules="[rules.required]"
         ></v-text-field>
       </v-form>
@@ -87,22 +88,27 @@ export default {
   },
   methods: {
     ...mapActions("auth_store", ["login"]),
+    ...mapActions("survey_store", ["me"]),
     async validate() {
       const { valid } = await this.$refs.form.validate();
 
       if (valid) this.handleFormData();
+    },
+    async getUser() {
+      await this.me();
     },
     async handleFormData() {
       this.loading = true;
       try {
         const res = await this.login(this.formData);
         if (res.status == 200) {
-          console.log("LA DATA: ", res.data);
-          console.log("LA REFRESH: ", res.data.refresh);
-          console.log("LA ACCESS: ", res.data.access);
+          // console.log("LA DATA: ", res.data);
+          // console.log("LA REFRESH: ", res.data.refresh);
+          // console.log("LA ACCESS: ", res.data.access);
           localStorage.setItem("refresh", res.data.refresh);
           localStorage.setItem("access", res.data.access);
           this.$router.push({ name: "survey" });
+          this.getUser();
         }
       } catch (error) {
         this.loading = false;
