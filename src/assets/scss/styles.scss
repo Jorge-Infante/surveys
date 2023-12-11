@@ -89,3 +89,13 @@ body{
 .v-table.v-table--fixed-header > .v-table__wrapper > table > thead > tr > th{
     font-weight: 700;
 }
+.v-expansion-panel-title{
+    background-color: rgba(236, 126, 76, 0.6);
+    color: #FFFFFF;
+    font-size:1.2rem;
+    font-weight: 600;
+    &--active{
+        background-color: rgba(236, 126, 76, 1);
+        color: #FFFFFF;
+    }
+}
