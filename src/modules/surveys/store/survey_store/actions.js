@@ -62,8 +62,8 @@ export const me = async ({ commit }) => {
   const url = "v1/me/";
   const res = await apiClient.get(url);
   console.log("RESPONSE USER ME: ", res.data);
-  if (res.data.groups[0] === "supervisores") {
-    res.data.group = "supervisores";
+  if (res.data.groups[0] === "administradores") {
+    res.data.group = "administradores";
   } else if (res.data.groups[0] === "extensionistas") {
     res.data.group = "extensionistas";
   }
