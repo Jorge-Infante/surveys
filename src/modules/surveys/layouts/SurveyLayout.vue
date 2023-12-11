@@ -187,8 +187,8 @@ export default {
         const res = await this.logOut(data);
 
         if (res.status == 200) {
-          localStorage.removeItem("refresh");
-          localStorage.removeItem("access");
+          // localStorage.removeItem("refresh");
+          // localStorage.removeItem("access");
           // console.log("EL RESULTADO DEL LOGUT: ", res);
           this.$router.push({ name: "auth-login" });
         }
@@ -258,8 +258,8 @@ export default {
   watch: {
     user(nuevo) {
       console.log("SI CAMBIA CUANDO RECARGO");
-      if (this.user.group === "supervisores") {
-        this.supervisor = true;
+      if (this.user.group === "administradores") {
+        this.administrador = true;
       } else if (this.user.group === "extensionistas") {
         this.extensionista = true;
       }
