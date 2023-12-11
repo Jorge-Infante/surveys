@@ -1,4 +1,4 @@
-import { apiClient, imgClient } from "@/api/base_api";
+import { apiClient, imgClient, downloadCsvApi } from "@/api/base_api";
 export const saveSurvey = async ({ commit }, data) => {
   const url = "v1/survey/";
   const res = await apiClient.post(url, data);
@@ -9,8 +9,14 @@ export const saveSurvey = async ({ commit }, data) => {
 export const deleteFormSurvey = async ({ commit }, id) => {
   const url = `v1/survey-form/${id}/`;
   const res = await apiClient.delete(url);
-  commit("deleteForm",id)
+  commit("deleteForm", id);
   console.log("  --- DELETE SURVEY : ", res, "el id: ", id);
+  // commit("addSurvey", res.data);
+  return res;
+};
+export const downloadCsv = async ({ commit }, slugName) => {
+  const url = `v1/csv-download/?slug_name=${slugName}`;
+  const res = await downloadCsvApi.get(url);
   // commit("addSurvey", res.data);
   return res;
 };
@@ -56,6 +62,12 @@ export const me = async ({ commit }) => {
   const url = "v1/me/";
   const res = await apiClient.get(url);
   console.log("RESPONSE USER ME: ", res.data);
+  if (res.data.groups[0] === "administradores") {
+    res.data.group = "administradores";
+  } else if (res.data.groups[0] === "extensionistas") {
+    res.data.group = "extensionistas";
+  }
+
   commit("setUser", res.data);
 };
 export const reSetForms = ({ commit }, forms) => {
@@ -63,6 +75,10 @@ export const reSetForms = ({ commit }, forms) => {
 };
 export const reSetSurveys = ({ commit }, surveys) => {
   commit("setSurveys", surveys);
+};
+export const reSetUser = ({ commit }, user) => {
+  console.log('el user que llega: ',user)
+  commit("setUser", user);
 };
 export const uploadFile = async ({ commit }, params) => {
   const data = new FormData();
