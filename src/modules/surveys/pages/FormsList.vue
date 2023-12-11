@@ -1,6 +1,7 @@
 <template>
   <div>
-    <v-toolbar title="Formularios" density="compact"></v-toolbar>
+      <v-toolbar title="Formularios" density="compact" class="card-title"></v-toolbar>
+
     <v-table class="mt-5" fixed-header height="300px" density="compact">
       <thead>
         <tr>
@@ -47,8 +48,8 @@ export default {
         text: "¡No podrá revertir este cambio!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
+        confirmButtonColor: "#00a2d3",
+        cancelButtonColor: "#ea7a45",
         confirmButtonText: "Estoy seguro",
         cancelButtonText: "Cancelar",
       }).then((result) => {

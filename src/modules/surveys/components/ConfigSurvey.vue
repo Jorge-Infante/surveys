@@ -53,8 +53,8 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn text="Cancelar" @click="cancelConfig"></v-btn>
-        <v-btn text="Agregar campo" @click="hadleSendForm"></v-btn>
+        <v-btn class="btn-outline-primary" text="Cancelar" @click="cancelConfig"></v-btn>
+        <v-btn class="btn-primary " text="Agregar campo" @click="hadleSendForm"></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
