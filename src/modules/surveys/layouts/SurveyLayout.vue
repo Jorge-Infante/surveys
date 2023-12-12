@@ -33,7 +33,7 @@
         text
         class="hidden-sm-and-down"
         :to="{ name: 'survey-fill-out' }"
-        >Diligenciar encuesta
+        > Diligenciar encuesta
         <v-menu
           v-model="menuTop"
           :close-on-content-click="false"
