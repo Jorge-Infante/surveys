@@ -161,6 +161,7 @@ export default {
     formScheme: [],
     countFields: 0,
     titulo: null,
+    slug_name:null,
     inputTitle: null,
     loading: false,
     success: false,
@@ -220,6 +221,7 @@ export default {
     formData() {
       let data = {
         name: this.titulo,
+        slug_name: this.slug_name,
         data: {
           localizacion: { latitud: this.latitude, longitud: this.longitude },
           survey: this.seccions,
@@ -386,6 +388,7 @@ export default {
       console.log("nuevo valor: ", nuevo);
       this.titulo = nuevo.name;
       this.seccions = nuevo.data;
+      this.slug_name = nuevo.slug_name;
     },
     latitude(nuevo) {
       console.log("aqui va: ", nuevo);
