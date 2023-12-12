@@ -20,8 +20,8 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn text="Cancelar" @click="this.$emit('on:handleCancel')"></v-btn>
-        <v-btn text="Agregar sección" @click="hadleSendFormSeccion"></v-btn>
+        <v-btn class="btn-outline-primary" text="Cancelar" @click="this.$emit('on:handleCancel')"></v-btn>
+        <v-btn class="btn-primary" text="Agregar sección" @click="hadleSendFormSeccion"></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

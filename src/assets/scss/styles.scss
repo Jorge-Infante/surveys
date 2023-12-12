@@ -31,6 +31,8 @@ body{
     }
     &.bg-info{
         background-color: rgba(0, 162, 211, 1) !important;
+        margin-bottom: 2rem;
+        padding-top: 1.5rem;
     }
 }
 .v-app-bar{
@@ -41,6 +43,9 @@ body{
             background-color: rgba(0, 162, 211, 1);
             color: #FFFFFF;
             
+        }
+        .v-btn{
+            margin: 0 0.3rem;
         }
     }
 }
@@ -88,4 +93,76 @@ body{
 }
 .v-table.v-table--fixed-header > .v-table__wrapper > table > thead > tr > th{
     font-weight: 700;
+}
+.v-expansion-panel-title{
+    color: #000000;
+    border: 1px solid rgba(235, 117, 63, 0.3);
+    font-size:1.2rem;
+    font-weight: 600;
+    &--active{
+        color: #000000;
+        border: 0px solid rgba(235, 117, 63, 0.8);
+    }
+    .v-icon{
+        color: rgba(235, 117, 63, 1);
+    }
+    .v-expansion-panel-title__overlay{
+        background-color: rgba(235, 117, 63, 0.5);
+    }
+}
+.v-input{
+    &__input{
+        transition: none;
+        background-color: rgba(144, 186, 50, 0.08);
+        border: 1px solid rgb(147, 205, 8)
+    }
+    &__control{
+        transition: none;
+        background-color: rgba(144, 186, 50, 0.08);
+        border: 1px solid rgb(147, 205, 8)
+    }
+    .v-field{
+        color: #000000;
+
+        &--focused{
+            transition: none;
+            background-color: rgba(255, 255, 255, 1);
+            border: 0px solid rgb(147, 205, 8);
+            opacity: 0.8;
+            color: #000;
+            border-bottom: 0;
+            box-shadow: 0 0 0 transparent;
+            outline: 0;
+        }
+    }
+}
+.v-field--variant-filled .v-field__outline::after, .v-field--variant-underlined .v-field__outline::after {
+    border: 0;
+}
+.v-field--variant-filled.v-field--focused .v-field__overlay{
+    opacity: 0;
+}
+.v-expansion-panels{
+    border: 1px solid rgba(235, 117, 63, 0);
+
+}
+.v-expansion-panel{
+    &--active{
+        margin-bottom: 1rem;
+        border: 1px solid rgba(235, 117, 63, 0.5);
+    }
+}
+.card-title{
+    border-bottom: 1px solid #ccc;
+    background-color: rgba(255, 255, 255, 1);
+    margin-bottom: 2rem;
+}
+.label-form{
+    line-height: 1;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+}
+.semi-bold{
+    font-size: 0.7rem;
 }

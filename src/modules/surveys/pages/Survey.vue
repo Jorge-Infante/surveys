@@ -11,12 +11,11 @@
       </v-col>
     </v-row>
 
-    <v-card v-if="!loading" flat color="transparent">
+    <v-card v-if="!loading" flat color="transparent" elevation="0">
       <v-toolbar
         density="compact"
         v-if="titulo"
-        :color="'grey darken-4'"
-        class="mb-4 d-flex align-center justify-space-between"
+        class="d-flex align-center justify-space-between card-title"
       >
         <v-toolbar-title>
           {{ titulo }}
@@ -33,87 +32,98 @@
           class="mb-4 text-left"
           width="100%"
           min-height="300"
-          variant="elevated"
-          v-for="seccion in seccions"
-          :key="seccion.id"
-          elevation="4"
+          elevation="0"
         >
-          <v-row>
-            <v-col cols="12">
-              <div
-                class="text-h6 text-medium-emphasis d-flex align-center justify-space-between ml-2"
-              >
-                {{ seccion.nombre }}
-              </div>
-              <div
-                class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between ml-2"
-              >
-                {{ seccion.descripcion }}
-              </div>
-            </v-col>
-          </v-row>
-          <v-divider></v-divider>
-          <v-row class="ma-2">
-            <v-col
-              cols="12"
-              sm="6"
-              md="4"
-              v-for="(item, index) in seccion.questions"
-              :key="index"
-            >
-              <div
-                v-if="item.label"
-                class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
-              >
-                {{ item.label }}
-              </div>
-              <div
-                v-if="item.descripcion"
-                class="text-subtitle-2 text-medium-emphasis d-flex align-center justify-space-between"
-              >
-                {{ item.descripcion }}
-              </div>
-              <v-text-field
-                v-model="seccion.questions[index].value"
-                v-if="item.type == 'Texto'"
-              ></v-text-field>
-              <v-text-field
-                v-model="seccion.questions[index].value"
-                v-if="item.type == 'Numerico'"
-                type="number"
-                :rules="[rules.numbers]"
-              ></v-text-field>
-              <v-select
-                v-model="seccion.questions[index].value"
-                v-if="item.type == 'Seleccion simple'"
-                :items="item.options"
-                item-title="valor"
-                item-value="clave"
-              ></v-select>
-              <v-combobox
-                v-model="seccion.questions[index].value"
-                v-if="item.type == 'Selecccion multiple'"
-                :items="item.options"
-                item-title="valor"
-                item-value="clave"
-                multiple
-              ></v-combobox>
-              <v-text-field
-                v-model="seccion.questions[index].value"
-                v-if="item.type == 'Fecha'"
-                type="datetime-local"
-                :format="dateFormat"
-              ></v-text-field>
-              <v-file-input
-                v-model="seccion.questions[index].value"
-                v-if="item.type == 'Imagen'"
-                accept="image/*"
-                variant="filled"
-                prepend-icon="mdi-camera"
-                @click:prepend="imgFocus(seccion.questions[index], index)"
-              ></v-file-input>
-            </v-col>
-          </v-row>
+
+          <v-expansion-panels
+              variant="accordion" v-model="panel"
+          >
+            <v-expansion-panel v-for="(seccion, index) in seccions" :key="index">
+              <v-expansion-panel-title>
+                <v-row>
+                  <v-col cols="12">
+                    <div
+                        class="text-h6 d-flex align-center justify-space-between ml-2"
+                    >
+                      {{ seccion.nombre }}
+                    </div>
+
+                  </v-col>
+                </v-row>
+              </v-expansion-panel-title>
+              <v-expansion-panel-text>
+                <v-row class="ma-2">
+                  <v-col
+                      cols="12"
+                      class=" d-flex align-center justify-space-between ml-2 "
+                  >
+                    {{ seccion.descripcion }}
+                  </v-col>
+                  <v-col
+                      cols="12"
+                      sm="6"
+                      md="4"
+                      v-for="(item, index) in seccion.questions"
+                      :key="index"
+                  >
+                    <div
+                        v-if="item.label"
+                        class="d-flex align-center justify-space-between label-form"
+                    >
+                      {{ item.label }}
+                    </div>
+                    <div
+                        v-if="item.descripcion"
+                        class="d-flex align-center justify-space-between label-form semi-bold"
+                    >
+                      {{ item.descripcion }}
+                    </div>
+                    <v-text-field
+                        v-model="seccion.questions[index].value"
+                        v-if="item.type == 'Texto'"
+                    ></v-text-field>
+                    <v-text-field
+                        v-model="seccion.questions[index].value"
+                        v-if="item.type == 'Numerico'"
+                        type="number"
+                        :rules="[rules.numbers]"
+                    ></v-text-field>
+                    <v-select
+                        v-model="seccion.questions[index].value"
+                        v-if="item.type == 'Seleccion simple'"
+                        :items="item.options"
+                        item-title="valor"
+                        item-value="clave"
+                    ></v-select>
+                    <v-combobox
+                        v-model="seccion.questions[index].value"
+                        v-if="item.type == 'Selecccion multiple'"
+                        :items="item.options"
+                        item-title="valor"
+                        item-value="clave"
+                        multiple
+                    ></v-combobox>
+                    <v-text-field
+                        v-model="seccion.questions[index].value"
+                        v-if="item.type == 'Fecha'"
+                        type="datetime-local"
+                        :format="dateFormat"
+                    ></v-text-field>
+                    <v-file-input
+                        v-model="seccion.questions[index].value"
+                        v-if="item.type == 'Imagen'"
+                        accept="image/*"
+                        variant="filled"
+                        prepend-icon="mdi-camera"
+                        @click:prepend="imgFocus(seccion.questions[index], index)"
+                    ></v-file-input>
+                  </v-col>
+                </v-row>
+              </v-expansion-panel-text>
+            </v-expansion-panel>
+
+          </v-expansion-panels>
+
         </v-card>
       </v-row>
     </v-card>
@@ -166,6 +176,7 @@ export default {
     isConnected: true,
     sectionToFind: null,
     currentUrl: null,
+    panel: [0],
     rules: {
       numbers: (value) =>
         !value || /[0-9]+$/.test(value) || "Solo permite numeros",
