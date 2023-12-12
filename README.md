@@ -1,4 +1,4 @@
-# front-surveys
+# app-extensionist
 
 ## Project setup
 ```
