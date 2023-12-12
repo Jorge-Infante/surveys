@@ -106,7 +106,7 @@
                     <v-text-field
                         v-model="seccion.questions[index].value"
                         v-if="item.type == 'Fecha'"
-                        type="datetime-local"
+                        type="date"
                         :format="dateFormat"
                     ></v-text-field>
                     <v-file-input
@@ -170,7 +170,7 @@ export default {
     seccions: [],
     latitude: null,
     longitude: null,
-    dateFormat: "YYYY-MM-DD HH:mm",
+    dateFormat: "YYYY-MM-DD",
     online: navigator.onLine,
     db: null,
     items: [],

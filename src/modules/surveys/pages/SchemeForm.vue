@@ -109,7 +109,7 @@
                 readonly
                 v-model="seccion.questions[index].value"
                 v-if="item.type == 'Fecha'"
-                type="datetime-local"
+                type="date"
                 :format="dateFormat"
                 append-icon="mdi-delete-circle-outline"
                 @click:append="onClear(item, index)"
@@ -185,7 +185,7 @@ export default {
     dialogSeccion: false,
     currentSeccion: null,
     seccions: [],
-    dateFormat: "YYYY-MM-DD HH:mm",
+    dateFormat: "YYYY-MM-DD",
   }),
   computed: {
     formData() {
