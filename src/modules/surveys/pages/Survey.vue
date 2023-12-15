@@ -115,6 +115,7 @@
                         accept="image/*"
                         variant="filled"
                         prepend-icon="mdi-camera"
+                        @mousedown:control="imgFocus(seccion.questions[index], index)"
                         @click:prepend="imgFocus(seccion.questions[index], index)"
                     ></v-file-input>
                   </v-col>
