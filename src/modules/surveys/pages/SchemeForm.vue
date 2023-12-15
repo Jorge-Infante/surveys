@@ -123,6 +123,36 @@
                 append-icon="mdi-delete-circle-outline"
                 @click:append="onClear(item, index)"
               ></v-file-input>
+              <v-select
+                readonly
+                v-if="item.type == 'Seleccion dependiente'"
+                :items="item.optionsDep"
+                item-title="valor"
+                item-value="clave"
+                append-icon="mdi-delete-circle-outline"
+                @click:append="onClear(item, index)"
+              ></v-select>
+              <div
+                v-if="item.childLabel"
+                class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
+              >
+                {{ item.childLabel }}
+              </div>
+              <div
+                v-if="item.childDescrip"
+                class="text-subtitle-2 text-medium-emphasis d-flex align-center justify-space-between"
+              >
+                {{ item.childDescrip }}
+              </div>
+              <v-select
+                readonly
+                v-if="item.type == 'Seleccion dependiente'"
+                :items="item.optionsDepChild"
+                item-title="valor"
+                item-value="clave"
+                append-icon="mdi-delete-circle-outline"
+                @click:append="onClear(item, index)"
+              ></v-select>
             </v-col>
           </v-row>
           <v-card-actions>
