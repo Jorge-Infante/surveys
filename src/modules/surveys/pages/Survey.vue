@@ -188,7 +188,7 @@ export default {
     this.$watch(
       "seccions",
       (newValue, oldValue) => {
-        if (this.sectionToFind) {
+        if (this.sectionToFind && this.seccions) {
           let seccion = this.findObjectById(this.sectionToFind.idSeccion);
           this.sectionToFind.seccionIdx = this.findIndexById(
             this.sectionToFind.idSeccion
