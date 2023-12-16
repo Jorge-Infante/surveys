@@ -6,7 +6,7 @@ import store from "./store";
 import router from "./router";
 import './assets/scss/styles.scss'
 if(navigator.serviceWorker){
-  navigator.serviceWorker.register('/sw.js')
+  navigator.serviceWorker.register('/service-worker.js')
     .then((registration) => {
         registration.addEventListener('updatefound', () => {
             const newWorker = registration.installing;

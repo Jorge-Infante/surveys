@@ -34,96 +34,98 @@
           min-height="300"
           elevation="0"
         >
-
-          <v-expansion-panels
-              variant="accordion" v-model="panel"
-          >
-            <v-expansion-panel v-for="(seccion, index) in seccions" :key="index">
+          <v-expansion-panels variant="accordion" v-model="panel">
+            <v-expansion-panel
+              v-for="(seccion, index) in seccions"
+              :key="index"
+            >
               <v-expansion-panel-title>
                 <v-row>
                   <v-col cols="12">
                     <div
-                        class="text-h6 d-flex align-center justify-space-between ml-2"
+                      class="text-h6 d-flex align-center justify-space-between ml-2"
                     >
                       {{ seccion.nombre }}
                     </div>
-
                   </v-col>
                 </v-row>
               </v-expansion-panel-title>
               <v-expansion-panel-text>
                 <v-row class="ma-2">
                   <v-col
-                      cols="12"
-                      class=" d-flex align-center justify-space-between ml-2 "
+                    cols="12"
+                    class="d-flex align-center justify-space-between ml-2"
                   >
                     {{ seccion.descripcion }}
                   </v-col>
                   <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                      v-for="(item, index) in seccion.questions"
-                      :key="index"
+                    cols="12"
+                    sm="6"
+                    md="4"
+                    v-for="(item, index) in seccion.questions"
+                    :key="index"
                   >
                     <div
-                        v-if="item.label"
-                        class="d-flex align-center justify-space-between label-form"
+                      v-if="item.label"
+                      class="d-flex align-center justify-space-between label-form"
                     >
                       {{ item.label }}
                     </div>
                     <div
-                        v-if="item.descripcion"
-                        class="d-flex align-center justify-space-between label-form semi-bold"
+                      v-if="item.descripcion"
+                      class="d-flex align-center justify-space-between label-form semi-bold"
                     >
                       {{ item.descripcion }}
                     </div>
                     <v-text-field
-                        v-model="seccion.questions[index].value"
-                        v-if="item.type == 'Texto'"
+                      v-model="seccion.questions[index].value"
+                      v-if="item.type == 'Texto'"
                     ></v-text-field>
                     <v-text-field
-                        v-model="seccion.questions[index].value"
-                        v-if="item.type == 'Numerico'"
-                        type="number"
-                        :rules="[rules.numbers]"
+                      v-model="seccion.questions[index].value"
+                      v-if="item.type == 'Numerico'"
+                      type="number"
+                      :rules="[rules.numbers]"
                     ></v-text-field>
                     <v-select
-                        v-model="seccion.questions[index].value"
-                        v-if="item.type == 'Seleccion simple'"
-                        :items="item.options"
-                        item-title="valor"
-                        item-value="clave"
+                      v-model="seccion.questions[index].value"
+                      v-if="item.type == 'Seleccion simple'"
+                      :items="item.options"
+                      item-title="valor"
+                      item-value="clave"
                     ></v-select>
                     <v-combobox
-                        v-model="seccion.questions[index].value"
-                        v-if="item.type == 'Selecccion multiple'"
-                        :items="item.options"
-                        item-title="valor"
-                        item-value="clave"
-                        multiple
+                      v-model="seccion.questions[index].value"
+                      v-if="item.type == 'Selecccion multiple'"
+                      :items="item.options"
+                      item-title="valor"
+                      item-value="clave"
+                      multiple
                     ></v-combobox>
                     <v-text-field
-                        v-model="seccion.questions[index].value"
-                        v-if="item.type == 'Fecha'"
-                        type="datetime-local"
-                        :format="dateFormat"
+                      v-model="seccion.questions[index].value"
+                      v-if="item.type == 'Fecha'"
+                      type="date"
+                      :format="dateFormat"
                     ></v-text-field>
                     <v-file-input
-                        v-model="seccion.questions[index].value"
-                        v-if="item.type == 'Imagen'"
-                        accept="image/*"
-                        variant="filled"
-                        prepend-icon="mdi-camera"
-                        @click:prepend="imgFocus(seccion.questions[index], index)"
+                      v-model="seccion.questions[index].value"
+                      :loading="loadingImage"
+                      :disabled="loadingImage"
+                      v-if="item.type == 'Imagen'"
+                      accept="image/*"
+                      variant="filled"
+                      prepend-icon="mdi-camera"
+                      @mousedown:control="
+                        imgFocus(seccion.questions[index], index)
+                      "
+                      @click:prepend="imgFocus(seccion.questions[index], index)"
                     ></v-file-input>
                   </v-col>
                 </v-row>
               </v-expansion-panel-text>
             </v-expansion-panel>
-
           </v-expansion-panels>
-
         </v-card>
       </v-row>
     </v-card>
@@ -150,6 +152,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import {toastInfo} from "@/helpers/sweetalert2"
 import Swal from "sweetalert2";
 import isOnline from "is-online";
 import SeccionConfig from "../components/SeccionConfig.vue";
@@ -161,6 +164,7 @@ export default {
     formScheme: [],
     countFields: 0,
     titulo: null,
+    slug_name: null,
     inputTitle: null,
     loading: false,
     success: false,
@@ -169,13 +173,14 @@ export default {
     seccions: [],
     latitude: null,
     longitude: null,
-    dateFormat: "YYYY-MM-DD HH:mm",
+    dateFormat: "YYYY-MM-DD",
     online: navigator.onLine,
     db: null,
     items: [],
     isConnected: true,
     sectionToFind: null,
     currentUrl: null,
+    loadingImage: false,
     panel: [0],
     rules: {
       numbers: (value) =>
@@ -186,7 +191,7 @@ export default {
     this.$watch(
       "seccions",
       (newValue, oldValue) => {
-        if (this.sectionToFind) {
+        if (this.sectionToFind && this.seccions) {
           let seccion = this.findObjectById(this.sectionToFind.idSeccion);
           this.sectionToFind.seccionIdx = this.findIndexById(
             this.sectionToFind.idSeccion
@@ -220,6 +225,7 @@ export default {
     formData() {
       let data = {
         name: this.titulo,
+        slug_name: this.slug_name,
         data: {
           localizacion: { latitud: this.latitude, longitud: this.longitude },
           survey: this.seccions,
@@ -233,7 +239,7 @@ export default {
     SeccionConfig,
   },
   methods: {
-    ...mapActions("survey_store", ["saveSurvey", "uploadFile","formToFill"]),
+    ...mapActions("survey_store", ["saveSurvey", "uploadFile", "formToFill"]),
     imgFocus(input, indexArg) {
       this.sectionToFind = {
         idSeccion: input.idSeccion,
@@ -325,12 +331,12 @@ export default {
       this.titulo = this.inputTitle;
     },
     clearData() {
-      console.log('*** CLEAR DATA ***')
+      console.log("*** CLEAR DATA ***");
       this.titulo = null;
       this.formScheme = [];
       this.inputTitle = null;
       this.seccions = [];
-      const toFill={}
+      const toFill = {};
       this.formToFill(toFill);
     },
     handleAddSeccion() {
@@ -375,10 +381,25 @@ export default {
       this.online = navigator.onLine;
     },
     async uploadImage(file, seccion, question) {
+      this.loadingImage = true;
       let params = { file };
-      let res = await this.uploadFile(params);
-      console.log("LA QUESTION: ", res);
-      this.currentUrl = res.url;
+      try {
+        let res = await this.uploadFile(params);
+        console.log("LA QUESTION: ", res);
+        this.currentUrl = res.url;
+        this.loadingImage = false;
+        toastInfo.fire({
+          icon: "success",
+          title: "¡Imagen guardada!",
+        });
+      } catch (error) {
+        toastInfo.fire({
+          icon: "error",
+          title: "¡Error guardando imagen!",
+        });
+        this.loadingImage = false;
+        console.log("ERROR CARGANDO IMAGEN: ", error);
+      }
     },
   },
   watch: {
@@ -386,6 +407,7 @@ export default {
       console.log("nuevo valor: ", nuevo);
       this.titulo = nuevo.name;
       this.seccions = nuevo.data;
+      this.slug_name = nuevo.slug_name;
     },
     latitude(nuevo) {
       console.log("aqui va: ", nuevo);
