@@ -10,6 +10,7 @@
         src="@/assets/images/logo-o.jpg"
       ></v-img>
       </v-toolbar-title>
+      Version 1.1
 
       <v-spacer></v-spacer>
 
@@ -65,7 +66,7 @@
           v-show="administrador"
           @click="handleCloseDrawer"
           prepend-icon="mdi-file-document-plus"
-          title="Reeeec encuesta"
+          title="Crear encuesta"
           class="text-left"
           value="create-survey"
           :to="{ name: 'survey-form' }"
