@@ -1,3 +1,5 @@
+const CACHE_VERSION = 'v1';
+
 importScripts(
   "https://storage.googleapis.com/workbox-cdn/releases/6.2.0/workbox-sw.js"
 );
@@ -22,6 +24,17 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("activate", (event)=>{
   console.log('AHORA ESTÁ ACTIVO EL SERVICE WORKER')
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_VERSION) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
 })
 self.addEventListener("fetch", (event) => {
   console.log('EVENT LISTERNET FETCH: ',event)
@@ -33,5 +46,11 @@ self.addEventListener("fetch", (event) => {
       return resp
     })
     event.respondWith(res)
+  }
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data.action === 'skipWaiting') {
+    self.skipWaiting();
   }
 });
