@@ -10,7 +10,7 @@
         src="@/assets/images/logo-o.jpg"
       ></v-img>
       </v-toolbar-title>
-      Version 1.1
+      Version 1.2
 
       <v-spacer></v-spacer>
 
@@ -117,13 +117,13 @@
         ></v-list-item>
       </v-list>
 
-      <template v-slot:append>
+      <!-- <template v-slot:append>
         <div class="pa-2">
           <v-btn :loading="loading" block @click="handleLogOut" class="btn-outline-primary">
             Cerrar sesión
           </v-btn>
         </div>
-      </template>
+      </template> -->
     </v-navigation-drawer>
 
     <v-main
