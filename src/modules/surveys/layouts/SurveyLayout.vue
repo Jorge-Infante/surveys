@@ -65,7 +65,7 @@
           v-show="administrador"
           @click="handleCloseDrawer"
           prepend-icon="mdi-file-document-plus"
-          title="Crear encuesta"
+          title="Crear encuestasssss"
           class="text-left"
           value="create-survey"
           :to="{ name: 'survey-form' }"
