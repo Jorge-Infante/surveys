@@ -1,5 +1,6 @@
 import axios from "axios";
 import { refreshAccessToken } from "./auth_api";
+import router from '@/router';
 export const authClient = axios.create({
   baseURL: "https://test-apiothras.djsoftwaremakers.com/api/",
   withCredentials: false,
@@ -43,6 +44,16 @@ apiClient.interceptors.response.use(
   async (error) => {
     // Check if the error is due to an expired token
     console.log("___________EL ERRRRORRRRRR : ", error);
+    console.log(
+      "_________________dato _________________ >",
+      error.response.data.detail
+    );
+    if (error.response.data.detail === "El token es inválido o ha expirado") {
+      localStorage.removeItem("refresh");
+      localStorage.removeItem("access");
+      // console.log("EL RESULTADO DEL LOGUT: ", res);
+      router.push({ name: "auth-login" });
+    }
     if (error.response) {
       if (error.response.status === 401) {
         try {
@@ -61,7 +72,6 @@ apiClient.interceptors.response.use(
         }
       }
     }
-
     // Handle other errors
     return Promise.reject(error);
   }
@@ -123,7 +133,6 @@ imgClient.interceptors.response.use(
 export const downloadCsvApi = axios.create({
   baseURL: "https://test-apiothras.djsoftwaremakers.com/api/",
   withCredentials: false,
-
 });
 
 downloadCsvApi.interceptors.request.use(
