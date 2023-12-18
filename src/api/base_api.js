@@ -48,7 +48,7 @@ apiClient.interceptors.response.use(
       "_________________dato _________________ >",
       error.response.data.detail
     );
-    if (error.response.data.detail === "El token es inválido o ha expirado") {
+    if (error.response.data.detail === "El token está en lista negra") {
       localStorage.removeItem("refresh");
       localStorage.removeItem("access");
       // console.log("EL RESULTADO DEL LOGUT: ", res);
