@@ -10,7 +10,7 @@
         src="@/assets/images/logo-o.jpg"
       ></v-img>
       </v-toolbar-title>
-      Version 1.5
+      Version 1.6
 
       <v-spacer></v-spacer>
 
@@ -250,12 +250,12 @@ export default {
   },
   mounted() {
     try {
-      // this.refreshToken().then((resp) => {
-      this.getForms();
-      this.getSurveys();
-      this.refillUser();
-      // console.log(error);
-      // });
+      this.refreshToken().then((resp) => {
+        this.getForms();
+        this.getSurveys();
+        this.refillUser();
+        console.log(error);
+      });
     } catch (error) {
       if (error.code == "ERR_NETWORK") {
         console.log("SIN INTERNET");
