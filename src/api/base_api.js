@@ -1,6 +1,6 @@
 import axios from "axios";
-import { refreshAccessToken } from "./auth_api";
-import router from '@/router';
+// import { refreshAccessToken } from "./auth_api";
+// import router from '@/router';
 export const authClient = axios.create({
   baseURL: "https://test-apiothras.djsoftwaremakers.com/api/",
   withCredentials: false,
@@ -20,7 +20,7 @@ export const apiClient = axios.create({
 });
 
 // Request interceptor
-apiClient.interceptors.request.use(
+/*apiClient.interceptors.request.use(
   async (config) => {
     // Get the access token from where you stored it
     const accessToken = localStorage.getItem("access");
@@ -34,10 +34,10 @@ apiClient.interceptors.request.use(
   (error) => {
     return Promise.reject(error);
   }
-);
+);*/
 
 // Response interceptor
-apiClient.interceptors.response.use(
+/*apiClient.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -75,14 +75,14 @@ apiClient.interceptors.response.use(
     // Handle other errors
     return Promise.reject(error);
   }
-);
+);*/
 
 export const imgClient = axios.create({
   baseURL: "https://test-apiothras.djsoftwaremakers.com/api/",
   withCredentials: false,
 });
 
-imgClient.interceptors.request.use(
+/*imgClient.interceptors.request.use(
   async (config) => {
     // Get the access token from where you stored it
     const accessToken = localStorage.getItem("access");
@@ -128,7 +128,7 @@ imgClient.interceptors.response.use(
     // Handle other errors
     return Promise.reject(error);
   }
-);
+);*/
 
 export const downloadCsvApi = axios.create({
   baseURL: "https://test-apiothras.djsoftwaremakers.com/api/",
