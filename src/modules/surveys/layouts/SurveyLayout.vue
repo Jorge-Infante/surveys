@@ -135,6 +135,7 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import isOnline from "is-online";
+import { refreshAccessToken } from "@/api/auth_api";
 import Survey from "../pages/Survey.vue";
 import localforage from "localforage";
 export default {
@@ -237,19 +238,24 @@ export default {
       }
     },
     async refillUser() {
-      
       const key = "your-vuex-key";  
       const value = await localforage.getItem(key);
       let nuevo = JSON.parse(value);
       console.log('REFILLuSER',nuevo)
       this.reSetUser(nuevo.survey_store.user);
     },
+    async refreshToken() {
+      await refreshAccessToken();
+    },
   },
   mounted() {
     try {
+      // this.refreshToken().then((resp) => {
       this.getForms();
       this.getSurveys();
       this.refillUser();
+      // console.log(error);
+      // });
     } catch (error) {
       if (error.code == "ERR_NETWORK") {
         console.log("SIN INTERNET");

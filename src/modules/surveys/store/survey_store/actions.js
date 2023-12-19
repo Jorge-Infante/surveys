@@ -37,6 +37,7 @@ export const getForms = async ({ commit }) => {
     return res;
   } catch (error) {
     console.log(error);
+    return false;
   }
 };
 export const getSurveys = async ({ commit }) => {

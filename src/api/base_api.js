@@ -1,6 +1,6 @@
 import axios from "axios";
-// import { refreshAccessToken } from "./auth_api";
-// import router from '@/router';
+import { refreshAccessToken } from "./auth_api";
+import router from '@/router';
 export const authClient = axios.create({
   baseURL: "https://test-apiothras.djsoftwaremakers.com/api/",
   withCredentials: false,
@@ -59,15 +59,27 @@ apiClient.interceptors.response.use(
         try {
           // Attempt to refresh the access token
           console.log("interceptando API CLIENT");
-          const newAccessToken = await refreshAccessToken();
-          // console.log("MI NUEVO ACESS: ", newAccessToken);
-          // Retry the original request with the new access token
-          const originalRequest = error.config;
-          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-          return apiClient(originalRequest);
+          refreshAccessToken().then((resp) => {
+            console.log("MI NUEVO ACCESS: ", resp);
+            if (resp !== false) {
+              // Retry the original request with the new access token
+              const originalRequest = error.config;
+              originalRequest.headers.Authorization = `Bearer ${resp}`;
+              apiClient(originalRequest);
+              return 'success'
+            } else {
+              localStorage.removeItem("refresh");
+              localStorage.removeItem("access");
+              // console.log("EL RESULTADO DEL LOGUT: ", res);
+              router.push({ name: "auth-login" });
+            }
+          })
+          .catch((error) => {
+            console.error("Error refreshing access token:", error);
+            return Promise.reject(error);
+          });
         } catch (refreshError) {
           console.error("Error refreshing access token:", refreshError);
-
           return Promise.reject(refreshError);
         }
       }
