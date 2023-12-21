@@ -10,7 +10,7 @@ export const updateSurvey = async ({ commit }, params) => {
   console.log("  --- UPDATE SURVEY DATA: ", params.data);
   const url = `v1/survey/${params.id}/`;
   const res = await apiClient.put(url, params.data);
-  
+  commit("updateSurvey",res.data)
   return res;
 };
 export const deleteFormSurvey = async ({ commit }, id) => {

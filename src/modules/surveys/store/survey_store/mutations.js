@@ -22,3 +22,7 @@ export const setUser = (state, user) => {
 export const deleteForm = (state, id) => {
   state.forms = state.forms.filter((form) => form.id !== id);
 };
+export const updateSurvey=(state,surveyUpdate)=>{
+  let index = state.surveysList.findIndex(survey => survey.id === surveyUpdate.id);
+  state.surveysList[index]=surveyUpdate
+}

@@ -113,6 +113,8 @@
                       :loading="loadingImage"
                       :disabled="loadingImage"
                       v-if="item.type == 'Imagen'"
+                      :hint="item.url"
+                      persistent-hint
                       accept="image/*"
                       variant="filled"
                       prepend-icon="mdi-camera"
