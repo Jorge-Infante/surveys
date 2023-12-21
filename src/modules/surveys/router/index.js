@@ -15,6 +15,20 @@ export default {
         ),
     },
     {
+      path: "surveyFillEdit/:survey",
+      name: "survey-fill-out-edit",
+      component: () =>
+        import(
+          /* webpackChunkName: "survey-form" */ "@/modules/surveys/pages/Survey.vue"
+        ),
+      props: (route) => {
+        return {
+          survey: route.params.survey,
+          item: route.query.item,
+        };
+      },
+    },
+    {
       path: "surveyForm",
       name: "survey-form",
       component: () =>

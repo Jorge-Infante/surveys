@@ -6,6 +6,13 @@ export const saveSurvey = async ({ commit }, data) => {
   commit("addSurvey", res.data);
   return res;
 };
+export const updateSurvey = async ({ commit }, params) => {
+  console.log("  --- UPDATE SURVEY DATA: ", params.data);
+  const url = `v1/survey/${params.id}`;
+  const res = await apiClient.put(url, params.data);
+  
+  return res;
+};
 export const deleteFormSurvey = async ({ commit }, id) => {
   const url = `v1/survey-form/${id}/`;
   const res = await apiClient.delete(url);

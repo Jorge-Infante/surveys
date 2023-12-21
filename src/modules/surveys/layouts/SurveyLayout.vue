@@ -210,9 +210,7 @@ export default {
       const key = "your-vuex-key";
       await this.checkInternetConnection();
       console.log("ASI EL INTERNET: ", this.isConnected);
-      if (!this.isConnected) {
-        //Refill los datos del store
-        try {
+      try {
           const value = await localforage.getItem(key);
           let nuevo = JSON.parse(value);
           console.log("LOS FORMULARIOS EN INDEXED: ", nuevo.survey_store.forms);
@@ -227,7 +225,6 @@ export default {
         } catch (error) {
           console.error("Error retrieving data:", error);
         }
-      }
     },
     async checkInternetConnection() {
       try {
@@ -254,7 +251,7 @@ export default {
         this.getForms();
         this.getSurveys();
         this.refillUser();
-        console.log(error);
+        
       });
     } catch (error) {
       if (error.code == "ERR_NETWORK") {

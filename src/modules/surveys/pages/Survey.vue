@@ -152,7 +152,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-import {toastInfo} from "@/helpers/sweetalert2"
+import { toastInfo } from "@/helpers/sweetalert2";
 import Swal from "sweetalert2";
 import isOnline from "is-online";
 import SeccionConfig from "../components/SeccionConfig.vue";
@@ -161,6 +161,7 @@ import db from "@/services/pouchdb";
 export default {
   data: () => ({
     dialogConfig: false,
+    surveyToUpdate: null,
     formScheme: [],
     countFields: 0,
     titulo: null,
@@ -212,8 +213,8 @@ export default {
       },
       { deep: true }
     );
-    this.titulo = this.surveyToFill.name;
-    this.seccions = this.surveyToFill.data;
+    // this.titulo = this.surveyToFill.name;
+    // this.seccions = this.surveyToFill.data;
   },
   created() {
     this.getLocation();
@@ -238,8 +239,14 @@ export default {
     ConfigSurvey,
     SeccionConfig,
   },
+  props: {
+    item: {
+      type: String,
+      required: false,
+    },
+  },
   methods: {
-    ...mapActions("survey_store", ["saveSurvey", "uploadFile", "formToFill"]),
+    ...mapActions("survey_store", ["saveSurvey", "uploadFile", "formToFill","updateSurvey"]),
     imgFocus(input, indexArg) {
       this.sectionToFind = {
         idSeccion: input.idSeccion,
@@ -306,24 +313,30 @@ export default {
         });
         this.clearData();
       } else {
-        try {
-          const res = await this.saveSurvey(this.formData);
-          if (res.status == 201) {
-            console.log(" ---- EL RESPONSE 2: ", res.status);
+        if (this.surveyToUpdate) {
+          const params = {id:this.surveyToUpdate.id, data:this.formData}
+          const upRes = await this.updateSurvey(params)
+          console.log('RESPOSE UPDATE:  ',upRes)
+        } else {
+          try {
+            const res = await this.saveSurvey(this.formData);
+            if (res.status == 201) {
+              console.log(" ---- EL RESPONSE 2: ", res.status);
+              this.loading = false;
+              Swal.fire({
+                title: "¡Registrado exitosamente!",
+                icon: "success",
+              });
+            }
+          } catch (error) {
             this.loading = false;
             Swal.fire({
-              title: "¡Registrado exitosamente!",
-              icon: "success",
+              title: "¡Error al registrarlo!",
+              icon: "error",
             });
+          } finally {
+            this.clearData();
           }
-        } catch (error) {
-          this.loading = false;
-          Swal.fire({
-            title: "¡Error al registrarlo!",
-            icon: "error",
-          });
-        } finally {
-          this.clearData();
         }
       }
     },
@@ -403,6 +416,27 @@ export default {
     },
   },
   watch: {
+    "$route.query": {
+      immediate: true, // Trigger the watcher immediately on component mount
+      handler(newQuery, oldQuery) {
+        if (newQuery.item) {
+          const survey = JSON.parse(newQuery.item);
+          this.surveyToUpdate = survey;
+          this.titulo = survey.name;
+          this.seccions = survey.data.survey;
+          this.slug_name = survey.slug_name;
+          console.log(
+            "TITULO NUEVO: ",
+            this.titulo,
+            "SECCIONES: ",
+            this.seccions,
+            "SLUG: ",
+            survey.slug_name
+          );
+          console.log("cambiando query params:", survey);
+        }
+      },
+    },
     surveyToFill(nuevo) {
       console.log("nuevo valor: ", nuevo);
       this.titulo = nuevo.name;
@@ -423,6 +457,9 @@ export default {
       //reeemplazar seccion en las secciones
       this.seccions[this.sectionToFind.seccionIdx] = seccion;
       console.log("LAS SECCIONES: ", this.seccions);
+    },
+    titulo(titulo) {
+      console.log("CHANGE TITULOOOOOOO", titulo);
     },
   },
 };

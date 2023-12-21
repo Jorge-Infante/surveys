@@ -1,69 +1,71 @@
 <template>
   <div>
-    <v-expansion-panels
-        v-model="panel"
-        multiple
-    >
+    <v-expansion-panels v-model="panel" multiple>
       <v-expansion-panel>
         <v-expansion-panel-title>Encuestas en la nube</v-expansion-panel-title>
         <v-expansion-panel-text>
           <v-table class="mt-5 mr-5" fixed-header density="compact">
             <thead>
-            <tr>
-              <th class="text-center">Id</th>
-              <th class="text-center">Id encuesta</th>
-              <th class="text-center">Nombre</th>
-              <th class="text-center">Autor</th>
-              <th class="text-center">Configuración</th>
-            </tr>
+              <tr>
+                <th class="text-center">Id</th>
+                <th class="text-center">Id encuesta</th>
+                <th class="text-center">Nombre</th>
+                <th class="text-center">Autor</th>
+                <th class="text-center">Configuración</th>
+              </tr>
             </thead>
             <tbody>
-            <tr v-for="item in surveysList" :key="item.id">
-              <td>{{ item.id }}</td>
-              <td>{{ item.survey_id }}</td>
-              <td>{{ item.name }}</td>
-              <td>{{ item.author_username }}</td>
-              <td>
-                <v-btn icon size="x-small"
-                ><v-icon>mdi-cog-outline</v-icon></v-btn
-                >
-              </td>
-            </tr>
+              <tr v-for="item in surveysList" :key="item.id">
+                <td>{{ item.id }}</td>
+                <td>{{ item.survey_id }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.author_username }}</td>
+                <td>
+                  <v-btn
+                    icon
+                    size="x-small"
+                    :to="{ name: 'survey-fill-out' }"
+                    @click="hadleEditSurvey(item)"
+                    ><v-icon>mdi-cog-outline</v-icon></v-btn
+                  >
+                </td>
+              </tr>
             </tbody>
           </v-table>
         </v-expansion-panel-text>
       </v-expansion-panel>
 
       <v-expansion-panel>
-        <v-expansion-panel-title>Encuestas por sincronizar</v-expansion-panel-title>
+        <v-expansion-panel-title
+          >Encuestas por sincronizar</v-expansion-panel-title
+        >
         <v-expansion-panel-text>
           <v-table class="mt-5" fixed-header density="compact">
             <thead>
-            <tr>
-              <th class="text-center">Nombre</th>
-              <th class="text-center">Configuración</th>
-            </tr>
+              <tr>
+                <th class="text-center">Nombre</th>
+                <th class="text-center">Configuración</th>
+              </tr>
             </thead>
             <tbody>
-            <tr v-for="item in items" :key="item.id">
-              <td>{{ item.name.name }}</td>
-              <td>
-                <v-btn
+              <tr v-for="item in items" :key="item.id">
+                <td>{{ item.name.name }}</td>
+                <td>
+                  <v-btn
                     :loading="loading"
                     icon
                     size="x-small"
                     @click="handleSync(item)"
-                ><v-icon>mdi-upload</v-icon></v-btn
-                >
-              </td>
-            </tr>
+                    ><v-icon>mdi-upload</v-icon></v-btn
+                  >
+                </td>
+              </tr>
             </tbody>
           </v-table>
         </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
   </div>
-
 </template>
 <script>
 import { mapActions, mapState } from "vuex";
@@ -82,7 +84,7 @@ export default {
     ...mapState("survey_store", ["surveysList"]),
   },
   methods: {
-    ...mapActions("survey_store", ["saveSurvey"]),
+    ...mapActions("survey_store", ["saveSurvey", "formToFill"]),
     async fetchItems() {
       try {
         const result = await this.db.allDocs({ include_docs: true });
@@ -139,6 +141,21 @@ export default {
       //   .catch((error) => {
       //     console.error("Error eliminando del index", error);
       //   });
+    },
+    hadleEditSurvey(item) {
+      console.log("el param: ", item);
+      item.update=true
+      const survey_id = item.survey_id;
+
+      // const id = item.id
+      this.$router.push({
+        name: "survey-fill-out-edit",
+        params: { survey: survey_id },
+        query: {
+          item: JSON.stringify(item)
+          
+        },
+      });
     },
   },
   mounted() {},
