@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v1.6';
+const CACHE_VERSION = 'v1.7';
 
 importScripts(
   "https://storage.googleapis.com/workbox-cdn/releases/6.2.0/workbox-sw.js"
