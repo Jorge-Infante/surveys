@@ -26,7 +26,9 @@
                     size="x-small"
                     :to="{ name: 'survey-fill-out' }"
                     @click="hadleEditSurvey(item)"
-                    ><v-icon>mdi-cog-outline</v-icon></v-btn
+                    ><v-tooltip activator="parent" location="start"
+                      >Actualizar encuesta</v-tooltip
+                    ><v-icon>mdi-file-document-refresh-outline</v-icon></v-btn
                   >
                 </td>
               </tr>
@@ -144,7 +146,7 @@ export default {
     },
     hadleEditSurvey(item) {
       console.log("el param: ", item);
-      item.update=true
+      item.update = true;
       const survey_id = item.survey_id;
 
       // const id = item.id
@@ -152,8 +154,7 @@ export default {
         name: "survey-fill-out-edit",
         params: { survey: survey_id },
         query: {
-          item: JSON.stringify(item)
-          
+          item: JSON.stringify(item),
         },
       });
     },

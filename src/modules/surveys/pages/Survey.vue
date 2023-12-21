@@ -246,7 +246,12 @@ export default {
     },
   },
   methods: {
-    ...mapActions("survey_store", ["saveSurvey", "uploadFile", "formToFill","updateSurvey"]),
+    ...mapActions("survey_store", [
+      "saveSurvey",
+      "uploadFile",
+      "formToFill",
+      "updateSurvey",
+    ]),
     imgFocus(input, indexArg) {
       this.sectionToFind = {
         idSeccion: input.idSeccion,
@@ -314,9 +319,24 @@ export default {
         this.clearData();
       } else {
         if (this.surveyToUpdate) {
-          const params = {id:this.surveyToUpdate.id, data:this.formData}
-          const upRes = await this.updateSurvey(params)
-          console.log('RESPOSE UPDATE:  ',upRes)
+          const params = { id: this.surveyToUpdate.id, data: this.formData };
+          try {
+            const upRes = await this.updateSurvey(params);
+            console.log("RESPOSE UPDATE:  ", upRes);
+            if (upRes.status == 200) {
+              this.loading = false;
+              Swal.fire({
+                title: "Actualizado exitosamente!",
+                icon: "success",
+              });
+            }
+          } catch (error) {
+            this.loading = false;
+            Swal.fire({
+              title: "¡Error al actualizar!",
+              icon: "error",
+            });
+          }
         } else {
           try {
             const res = await this.saveSurvey(this.formData);
