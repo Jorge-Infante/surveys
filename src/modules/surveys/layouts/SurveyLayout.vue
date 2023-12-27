@@ -2,13 +2,13 @@
   <v-app>
     <v-app-bar app class="main-header">
       <v-app-bar-nav-icon @click="toggleDrawer"></v-app-bar-nav-icon>
-      <v-toolbar-title >
+      <v-toolbar-title>
         <v-img
-        class="mx-auto text-center"
-        :width="60"
-        cover
-        src="@/assets/images/logo-o.jpg"
-      ></v-img>
+          class="mx-auto text-center"
+          :width="60"
+          cover
+          src="@/assets/images/logo-o.jpg"
+        ></v-img>
       </v-toolbar-title>
       Version 1.8
 
@@ -34,7 +34,8 @@
         text
         class="hidden-sm-and-down"
         :to="{ name: 'survey-fill-out' }"
-        > Diligenciar encuesta
+      >
+        Diligenciar encuesta
         <v-menu
           v-model="menuTop"
           :close-on-content-click="false"
@@ -119,7 +120,12 @@
 
       <template v-slot:append>
         <div class="pa-2">
-          <v-btn :loading="loading" block @click="handleLogOut" class="btn-outline-primary">
+          <v-btn
+            :loading="loading"
+            block
+            @click="handleLogOut"
+            class="btn-outline-primary"
+          >
             Cerrar sesión
           </v-btn>
         </div>
@@ -211,20 +217,21 @@ export default {
       await this.checkInternetConnection();
       console.log("ASI EL INTERNET: ", this.isConnected);
       try {
-          const value = await localforage.getItem(key);
-          let nuevo = JSON.parse(value);
-          console.log("LOS FORMULARIOS EN INDEXED: ", nuevo.survey_store.forms);
-          console.log(
-            "LOS ENCUESTAS EN INDEXED: ",
-            nuevo.survey_store.surveysList
-          );
-          console.log("EL USER EN INDEXED: ", nuevo.survey_store.user);
-          this.reSetForms(nuevo.survey_store.forms);
-          this.reSetSurveys(nuevo.survey_store.surveysList);
-          this.reSetUser(nuevo.survey_store.user);
-        } catch (error) {
-          console.error("Error retrieving data:", error);
-        }
+        const value = await localforage.getItem(key);
+        let nuevo = JSON.parse(value);
+        console.log("LOS FORMULARIOS EN INDEXED: ", nuevo.survey_store.forms);
+        console.log(
+          "LOS ENCUESTAS EN INDEXED: ",
+          nuevo.survey_store.surveysList
+        );
+        console.log("EL USER EN INDEXED: ", nuevo.survey_store.user);
+        this.reSetForms(nuevo.survey_store.forms);
+        this.reSetSurveys(nuevo.survey_store.surveysList);
+        this.reSetUser(nuevo.survey_store.user);
+      } catch (error) {
+        console.error("Error retrieving data:", error);
+      }
+      this.getNetwork();
     },
     async checkInternetConnection() {
       try {
@@ -235,29 +242,34 @@ export default {
       }
     },
     async refillUser() {
-      const key = "your-vuex-key";  
+      const key = "your-vuex-key";
       const value = await localforage.getItem(key);
       let nuevo = JSON.parse(value);
-      console.log('REFILLuSER',nuevo)
+      console.log("REFILLuSER", nuevo);
       this.reSetUser(nuevo.survey_store.user);
     },
     async refreshToken() {
       await refreshAccessToken();
     },
+    getNetwork() {
+      try {
+        this.refreshToken().then((resp) => {
+          try {
+            this.getForms();
+            this.getSurveys();
+            this.refillUser();
+          } catch (error) {
+            console.log('error en network')
+          }
+        });
+      } catch (error) {
+        if (error.code == "ERR_NETWORK") {
+          console.log("SIN INTERNET");
+        }
+      }
+    },
   },
   mounted() {
-    try {
-      this.refreshToken().then((resp) => {
-        this.getForms();
-        this.getSurveys();
-        this.refillUser();
-        
-      });
-    } catch (error) {
-      if (error.code == "ERR_NETWORK") {
-        console.log("SIN INTERNET");
-      }
-    }
     this.getData();
   },
   unmounted() {

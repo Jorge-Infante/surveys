@@ -185,6 +185,7 @@ export default {
     currentUrl: null,
     loadingImage: false,
     panel: [0],
+    arrImages: [],
     rules: {
       numbers: (value) =>
         !value || /[0-9]+$/.test(value) || "Solo permite numeros",
@@ -206,6 +207,14 @@ export default {
             if (question.type === "Imagen") {
               console.log("ES UNA IMAGEN EN ARRAY: ", question);
               if (!question.url) {
+                let img = {
+                  idSeccion: this.sectionToFind.idSeccion,
+                  idxQuestion: this.sectionToFind.questionIdx,
+                  img: question.value[0],
+                };
+                this.setImagesList(img)
+                // this.arrImages.push(img);
+                console.log("ARRAY DE IMAGENES: ", this.arrImages);
                 this.uploadImage(question.value[0], seccion, question);
               }
             }
@@ -253,6 +262,7 @@ export default {
       "uploadFile",
       "formToFill",
       "updateSurvey",
+      "setImagesList",
     ]),
     imgFocus(input, indexArg) {
       this.sectionToFind = {

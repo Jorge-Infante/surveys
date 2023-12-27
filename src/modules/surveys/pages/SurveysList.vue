@@ -73,6 +73,7 @@
 import { mapActions, mapState } from "vuex";
 import Swal from "sweetalert2";
 import db from "@/services/pouchdb";
+import localforage from "localforage";
 export default {
   data() {
     return {
@@ -80,6 +81,7 @@ export default {
       items: [],
       loading: false,
       panel: [0],
+      urls:[]
     };
   },
   computed: {
@@ -95,6 +97,16 @@ export default {
       } catch (error) {
         console.error("Error fetching items:", error);
       }
+    },
+    async bulkImages() {
+      const key = "your-vuex-key";
+      const value = await localforage.getItem(key);
+      let nuevo = JSON.parse(value);
+      // nuevo.survey_store.images.forEach(image => {
+        
+      // });
+      
+      console.log('IMAGENES EN EL LOCALFORAGE: ',nuevo.survey_store.images)
     },
     async handleSync(item) {
       this.loading = true;

@@ -10,7 +10,7 @@ export const updateSurvey = async ({ commit }, params) => {
   console.log("  --- UPDATE SURVEY DATA: ", params.data);
   const url = `v1/survey/${params.id}/`;
   const res = await apiClient.put(url, params.data);
-  commit("updateSurvey",res.data)
+  commit("updateSurvey", res.data);
   return res;
 };
 export const deleteFormSurvey = async ({ commit }, id) => {
@@ -85,7 +85,7 @@ export const reSetSurveys = ({ commit }, surveys) => {
   commit("setSurveys", surveys);
 };
 export const reSetUser = ({ commit }, user) => {
-  console.log('el user que llega: ',user)
+  console.log("el user que llega: ", user);
   commit("setUser", user);
 };
 export const uploadFile = async ({ commit }, params) => {
@@ -97,4 +97,8 @@ export const uploadFile = async ({ commit }, params) => {
   const res = await imgClient.post(url, data);
   console.log("RESPONSE URL:", res.data.urls[0]);
   return res.data.urls[0];
+};
+export const setImagesList = ({ commit }, images) => {
+  console.log(images)
+  commit("setImages", images);
 };
