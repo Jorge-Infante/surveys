@@ -41,6 +41,12 @@
         <v-expansion-panel-title
           >Encuestas por sincronizar</v-expansion-panel-title
         >
+        <v-progress-linear
+          v-if="loadImages"
+          indeterminate
+          color="yellow-darken-2"
+        ></v-progress-linear>
+
         <v-expansion-panel-text>
           <v-table class="mt-5" fixed-header density="compact">
             <thead>
@@ -74,6 +80,7 @@ import { mapActions, mapState } from "vuex";
 import Swal from "sweetalert2";
 import db from "@/services/pouchdb";
 import localforage from "localforage";
+import { generarUUID } from "@/modules/surveys/utils/utils";
 export default {
   data() {
     return {
@@ -81,14 +88,15 @@ export default {
       items: [],
       loading: false,
       panel: [0],
-      urls:[]
+      urls: [],
+      loadImages: false,
     };
   },
   computed: {
     ...mapState("survey_store", ["surveysList"]),
   },
   methods: {
-    ...mapActions("survey_store", ["saveSurvey", "formToFill"]),
+    ...mapActions("survey_store", ["saveSurvey", "formToFill", "uploadFile"]),
     async fetchItems() {
       try {
         const result = await this.db.allDocs({ include_docs: true });
@@ -98,17 +106,39 @@ export default {
         console.error("Error fetching items:", error);
       }
     },
-    async bulkImages() {
-      const key = "your-vuex-key";
-      const value = await localforage.getItem(key);
-      let nuevo = JSON.parse(value);
-      // nuevo.survey_store.images.forEach(image => {
-        
-      // });
-      
-      console.log('IMAGENES EN EL LOCALFORAGE: ',nuevo.survey_store.images)
-    },
-    async handleSync(item) {
+    async bulkImages(item) {
+      let quest = [];
+
+      for (let seccion of item.name.data.survey) {
+        for (let question of seccion.questions) {
+          if (question.type == "Imagen") {
+            this.loadImages = true;
+            quest.push(question);
+            let idImg = generarUUID();
+            const file = new File([question.value[0]], `${idImg}.jpeg`, {
+              type: "image/jpeg",
+            });
+            console.log(
+              "LA QUESTION: ",
+              question,
+              "el archivo: ",
+              file,
+              "el tipo : ",
+              typeof file
+            );
+            try {
+              let params = { file };
+              console.log("PARAMETROS: ", params);
+              const res = await this.uploadFile(params);
+              question.url = res.url;
+            } catch (error) {
+              console.log("error al cargar la imagen: ", error);
+            }
+          }
+        }
+      }
+      this.loadImages = false;
+      console.log("FILTRADOS: ", quest, "NUEVO VALOR DEL ITEM", item);
       this.loading = true;
       const { name } = item;
       console.log("vamos a sincronizar: ", name);
@@ -143,18 +173,43 @@ export default {
         });
         console.log(error);
       }
-
-      // this.db.remove("my_database", item._id);
-      // this.db.get(item._id)
-      //   .then((doc) => {
-      //     return db.remove(doc);
-      //   })
-      //   .then((result) => {
-      //     console.log("Eliminado", result);
-      //   })
-      //   .catch((error) => {
-      //     console.error("Error eliminando del index", error);
+    },
+    async handleSync(item) {
+      await this.bulkImages(item);
+      // this.loading = true;
+      // const { name } = item;
+      // console.log("vamos a sincronizar: ", name);
+      // try {
+      //   const res = await this.saveSurvey(name);
+      //   console.log(" ---- EL RESPONSE: ", res);
+      //   if (res.status == 201) {
+      //     console.log(" ---- EL RESPONSE 2: ", res.status);
+      //     this.db
+      //       .get(item._id)
+      //       .then((doc) => {
+      //         return db.remove(doc);
+      //       })
+      //       .then((result) => {
+      //         console.log("Eliminado", result);
+      //         this.fetchItems();
+      //       })
+      //       .catch((error) => {
+      //         console.error("Error eliminando del index", error);
+      //       });
+      //   }
+      //   this.loading = false;
+      //   Swal.fire({
+      //     title: "¡Encuesta sincronizada!",
+      //     icon: "success",
       //   });
+      // } catch (error) {
+      //   this.loading = false;
+      //   Swal.fire({
+      //     title: "¡Error al sincronizar!",
+      //     icon: "error",
+      //   });
+      //   console.log(error);
+      // }
     },
     hadleEditSurvey(item) {
       console.log("el param: ", item);

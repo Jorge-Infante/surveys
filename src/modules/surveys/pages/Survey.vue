@@ -212,7 +212,7 @@ export default {
                   idxQuestion: this.sectionToFind.questionIdx,
                   img: question.value[0],
                 };
-                this.setImagesList(img)
+                this.setImagesList(img);
                 // this.arrImages.push(img);
                 console.log("ARRAY DE IMAGENES: ", this.arrImages);
                 this.uploadImage(question.value[0], seccion, question);
@@ -438,12 +438,21 @@ export default {
           title: "¡Imagen guardada!",
         });
       } catch (error) {
-        toastInfo.fire({
-          icon: "error",
-          title: "¡Error guardando imagen!",
-        });
+        await this.checkInternetConnection();
+        if (!this.isConnected) {
+          toastInfo.fire({
+            icon: "success",
+            title: "¡Imagen preparada para sincronizar!",
+          });
+        } else {
+          toastInfo.fire({
+            icon: "error",
+            title: "¡Error guardando imagen!",
+          });
+          this.loadingImage = false;
+          console.log("ERROR CARGANDO IMAGEN: ", error);
+        }
         this.loadingImage = false;
-        console.log("ERROR CARGANDO IMAGEN: ", error);
       }
     },
   },
