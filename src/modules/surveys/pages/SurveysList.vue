@@ -111,10 +111,12 @@ export default {
 
       for (let seccion of item.name.data.survey) {
         for (let question of seccion.questions) {
-          if (question.type == "Imagen") {
+          if (question.type == "Imagen" && question.value !== null ) {
             this.loadImages = true;
             quest.push(question);
+
             let idImg = generarUUID();
+            console.log(question.value);
             const file = new File([question.value[0]], `${idImg}.jpeg`, {
               type: "image/jpeg",
             });
