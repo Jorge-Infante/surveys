@@ -1,6 +1,10 @@
 <template>
   <div>
-      <v-toolbar title="Formularios" density="compact" class="card-title"></v-toolbar>
+    <v-toolbar
+      title="Formularios"
+      density="compact"
+      class="card-title"
+    ></v-toolbar>
 
     <v-table class="mt-5" fixed-header height="300px" density="compact">
       <thead>
@@ -19,7 +23,13 @@
           <td>{{ item.slug_name }}</td>
           <td>{{ item.author_username }}</td>
           <td>
-            <v-btn class="mr-2" icon size="x-small" @click="handleDownloadCsv(item.slug_name, item.name)">
+            <v-btn
+              class="mr-2"
+              icon
+              size="x-small"
+              :loading="loading"
+              @click="handleDownloadCsv(item.slug_name, item.name)"
+            >
               <v-icon>mdi-download-outline</v-icon>
             </v-btn>
             <v-btn icon size="x-small" @click="handleDeleteForm(item.id)">
@@ -36,7 +46,9 @@ import { mapActions, mapState } from "vuex";
 import Swal from "sweetalert2";
 export default {
   data() {
-    return {};
+    return {
+      loading: false,
+    };
   },
   computed: {
     ...mapState("survey_store", ["forms"]),
@@ -71,29 +83,32 @@ export default {
       //
     },
     handleDownloadCsv(slugName, name) {
+      this.loading = true;
       this.downloadCsv(slugName)
-        .then(response => {
+        .then((response) => {
           // Crear un objeto URL para el blob
           const url = window.URL.createObjectURL(new Blob([response.data]));
 
           // Crear un enlace temporal y hacer clic para descargar
-          const link = document.createElement('a');
+          const link = document.createElement("a");
           link.href = url;
-          link.setAttribute('download', `${name}.csv`);
+          link.setAttribute("download", `${name}.csv`);
           document.body.appendChild(link);
           link.click();
 
           // Limpiar el enlace y el objeto URL después de la descarga
           document.body.removeChild(link);
           window.URL.revokeObjectURL(url);
+          this.loading = false;
         })
-        .catch(error => {
-          console.error('Error al descargar el archivo:', error);
+        .catch((error) => {
+          this.loading = false;
+          console.error("Error al descargar el archivo:", error);
         });
     },
   },
   mounted() {
-    console.log('LOA FOORMS: ',this.forms)
+    console.log("LOA FOORMS: ", this.forms);
   },
 };
 </script>

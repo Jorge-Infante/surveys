@@ -94,14 +94,15 @@
                       item-title="valor"
                       item-value="clave"
                     ></v-select>
-                    <v-combobox
+                    <v-autocomplete
                       v-model="seccion.questions[index].value"
                       v-if="item.type == 'Selecccion multiple'"
                       :items="item.options"
                       item-title="valor"
+                      return-object
                       item-value="clave"
                       multiple
-                    ></v-combobox>
+                    ></v-autocomplete>
                     <v-text-field
                       v-model="seccion.questions[index].value"
                       v-if="item.type == 'Fecha'"
