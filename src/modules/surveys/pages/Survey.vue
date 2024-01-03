@@ -187,6 +187,7 @@ export default {
     loadingImage: false,
     panel: [0],
     arrImages: [],
+    imgFlag: false,
     rules: {
       numbers: (value) =>
         !value || /[0-9]+$/.test(value) || "Solo permite numeros",
@@ -207,7 +208,7 @@ export default {
             this.sectionToFind.question = question;
             if (question.type === "Imagen") {
               console.log("ES UNA IMAGEN EN ARRAY: ", question);
-              if (!question.url) {
+              if (!question.url || this.imgFlag) {
                 let img = {
                   idSeccion: this.sectionToFind.idSeccion,
                   idxQuestion: this.sectionToFind.questionIdx,
@@ -266,6 +267,7 @@ export default {
       "setImagesList",
     ]),
     imgFocus(input, indexArg) {
+      this.imgFlag = true;
       this.sectionToFind = {
         idSeccion: input.idSeccion,
         questionIdx: indexArg,
@@ -499,6 +501,7 @@ export default {
       //reeemplazar seccion en las secciones
       this.seccions[this.sectionToFind.seccionIdx] = seccion;
       console.log("LAS SECCIONES: ", this.seccions);
+      this.imgFlag = false;
     },
     titulo(titulo) {
       console.log("CHANGE TITULOOOOOOO", titulo);
