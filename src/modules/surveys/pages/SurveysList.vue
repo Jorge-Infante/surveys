@@ -226,7 +226,6 @@ export default {
       });
     },
   },
-  mounted() {},
   created() {
     this.db = db;
     this.fetchItems();
