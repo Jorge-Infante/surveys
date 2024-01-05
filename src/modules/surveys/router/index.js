@@ -15,7 +15,7 @@ export default {
         ),
     },
     {
-      path: "surveyFillEdit/:survey",
+      path: "surveyFillEdit/:id",
       name: "survey-fill-out-edit",
       component: () =>
         import(
@@ -23,8 +23,7 @@ export default {
         ),
       props: (route) => {
         return {
-          survey: route.params.survey,
-          item: route.query.item,
+          id: route.params.id,
         };
       },
     },

@@ -228,6 +228,9 @@ export default {
     );
     // this.titulo = this.surveyToFill.name;
     // this.seccions = this.surveyToFill.data;
+    if (this.id) {
+      this.selectSurvey(this.id);
+    }
   },
   created() {
     this.getLocation();
@@ -235,7 +238,7 @@ export default {
     // this.fetchItems();
   },
   computed: {
-    ...mapState("survey_store", ["surveyToFill"]),
+    ...mapState("survey_store", ["surveyToFill", "surveysList"]),
     formData() {
       let data = {
         name: this.titulo,
@@ -255,6 +258,9 @@ export default {
   props: {
     item: {
       type: String,
+      required: false,
+    },
+    id: {
       required: false,
     },
   },
@@ -351,6 +357,9 @@ export default {
               title: "¡Error al actualizar!",
               icon: "error",
             });
+          } finally {
+            this.$router.go(-1);
+            this.clearData();
           }
         } else {
           try {
@@ -386,6 +395,19 @@ export default {
       this.seccions = [];
       const toFill = {};
       this.formToFill(toFill);
+      this.surveyToUpdate = null;
+    },
+    selectSurvey(id) {
+      let survey = this.surveysList.find((item) => item.id == id);
+      if (!survey) {
+        this.$router.go(-1);
+      } else {
+        console.log("la encuesta seleccionda: ", survey, id);
+        this.surveyToUpdate = survey;
+        this.titulo = survey.name;
+        this.seccions = survey.data.survey;
+        this.slug_name = survey.slug_name;
+      }
     },
     handleAddSeccion() {
       this.dialogSeccion = true;
@@ -506,6 +528,9 @@ export default {
     titulo(titulo) {
       console.log("CHANGE TITULOOOOOOO", titulo);
     },
+  },
+  unmounted() {
+    this.clearData();
   },
 };
 </script>

@@ -216,15 +216,13 @@ export default {
     hadleEditSurvey(item) {
       console.log("el param: ", item);
       item.update = true;
-      const survey_id = item.survey_id;
+      const survey_id = item.id;
 
       // const id = item.id
       this.$router.push({
         name: "survey-fill-out-edit",
-        params: { survey: survey_id },
-        query: {
-          item: JSON.stringify(item),
-        },
+        params: { id: survey_id },
+        
       });
     },
   },
