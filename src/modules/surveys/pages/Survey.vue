@@ -238,12 +238,13 @@ export default {
     // this.fetchItems();
   },
   computed: {
-    ...mapState("survey_store", ["surveyToFill", "surveysList"]),
+    ...mapState("survey_store", ["surveyToFill", "surveysList","appVersion"]),
     formData() {
       let data = {
         name: this.titulo,
         slug_name: this.slug_name,
         data: {
+          appVersion:this.appVersion,
           localizacion: { latitud: this.latitude, longitud: this.longitude },
           survey: this.seccions,
         },

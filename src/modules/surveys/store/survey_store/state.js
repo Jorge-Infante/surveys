@@ -4,5 +4,6 @@ export default ()=>({
     surveysList:[],
     surveyToFill:{},
     user:null,
-    images:[]
+    images:[],
+    appVersion:2.3
 })
