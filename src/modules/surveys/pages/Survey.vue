@@ -124,6 +124,23 @@
                       "
                       @click:prepend="imgFocus(seccion.questions[index], index)"
                     ></v-file-input>
+                    <v-select
+                      v-model="seccion.questions[index].value"
+                      v-if="item.order == 'questionMain'"
+                      :items="item.options"
+                      item-title="valor"
+                      item-value="clave"
+                      return-object
+                      @update:modelValue="selectQuestionMain(index, item)"
+                    ></v-select>
+                    <v-select
+                      v-model="seccion.questions[index].value"
+                      v-if="item.order == 'questionDep'"
+                      :items="item.showOptions"
+                      item-title="valor"
+                      item-value="clave"
+                      return-object
+                    ></v-select>
                   </v-col>
                 </v-row>
               </v-expansion-panel-text>
@@ -238,13 +255,13 @@ export default {
     // this.fetchItems();
   },
   computed: {
-    ...mapState("survey_store", ["surveyToFill", "surveysList","appVersion"]),
+    ...mapState("survey_store", ["surveyToFill", "surveysList", "appVersion"]),
     formData() {
       let data = {
         name: this.titulo,
         slug_name: this.slug_name,
         data: {
-          appVersion:this.appVersion,
+          appVersion: this.appVersion,
           localizacion: { latitud: this.latitude, longitud: this.longitude },
           survey: this.seccions,
         },
@@ -273,6 +290,31 @@ export default {
       "updateSurvey",
       "setImagesList",
     ]),
+    selectQuestionMain(index, question) {
+      let seccion = this.findObjectById(question.idSeccion);
+      console.log(
+        "SECCION: ",
+        seccion,
+        "index: ",
+        index,
+        "question: ",
+        question.idShared
+      );
+      for (let [index,item] of seccion.questions.entries()) {
+        if (item.idShared == question.idShared && item.order=='questionDep') {
+          console.log("LA PREGUNTA: ", item);
+          const questionDep = item.options.filter((dep)=> dep.idPrincipal == question.value.id)
+          console .log(questionDep,index)
+          console .log(seccion.questions[index])
+          seccion.questions[index].showOptions=questionDep
+          // seccion.questions
+        }
+      }
+      // let preguntas = seccion.questions.filter((item) =>
+      //   item.idShared == question.idShared
+      // );
+      // console.log("PREGUNTAS: ", preguntas);
+    },
     imgFocus(input, indexArg) {
       this.imgFlag = true;
       this.sectionToFind = {

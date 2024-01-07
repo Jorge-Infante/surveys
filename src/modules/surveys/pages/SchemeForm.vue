@@ -125,29 +125,17 @@
               ></v-file-input>
               <v-select
                 readonly
-                v-if="item.type == 'Seleccion dependiente'"
-                :items="item.optionsDep"
+                v-if="item.order == 'questionMain'"
+                :items="item.options"
                 item-title="valor"
                 item-value="clave"
                 append-icon="mdi-delete-circle-outline"
                 @click:append="onClear(item, index)"
               ></v-select>
-              <div
-                v-if="item.childLabel"
-                class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
-              >
-                {{ item.childLabel }}
-              </div>
-              <div
-                v-if="item.childDescrip"
-                class="text-subtitle-2 text-medium-emphasis d-flex align-center justify-space-between"
-              >
-                {{ item.childDescrip }}
-              </div>
               <v-select
                 readonly
-                v-if="item.type == 'Seleccion dependiente'"
-                :items="item.optionsDepChild"
+                v-if="item.order == 'questionDep'"
+                :items="item.options"
                 item-title="valor"
                 item-value="clave"
                 append-icon="mdi-delete-circle-outline"
@@ -203,6 +191,7 @@ import { mapActions } from "vuex";
 import SeccionConfig from "../components/SeccionConfig.vue";
 import ConfigSurvey from "../components/ConfigSurvey.vue";
 import Swal from "sweetalert2";
+import { generarUUID } from "@/modules/surveys/utils/utils";
 export default {
   data: () => ({
     dialogConfig: false,
@@ -258,7 +247,37 @@ export default {
         idxSeccion
       );
       // this.formScheme.push(nuevo);
-      this.seccions[idxSeccion].questions.push(nuevo);
+      if (nuevo.type == "Seleccion dependiente") {
+        let idShared = generarUUID()
+        let questionMain = {
+          label: nuevo.label,
+          descripcion: nuevo.descripcion,
+          idSeccion:nuevo.idSeccion,
+          options: nuevo.optionsDep,
+          type: nuevo.type,
+          value: nuevo.value,
+          order: "questionMain",
+          idShared
+        };
+        let questionDep = {
+          label: nuevo.childLabel,
+          idSeccion:nuevo.idSeccion,
+          descripcion: nuevo.childDescrip,
+          options: nuevo.optionsDepChild,
+          type: nuevo.type,
+          value: nuevo.value,
+          order: "questionDep",
+          idShared,
+          showOptions:[]
+        };
+        console.log("LA MAIN: ", questionMain);
+        console.log("LA DEPENDIENTE: ", questionDep);
+        this.seccions[idxSeccion].questions.push(questionMain);
+        this.seccions[idxSeccion].questions.push(questionDep);
+      } else {
+        this.seccions[idxSeccion].questions.push(nuevo);
+      }
+
       this.dialogConfig = false;
     },
     onClear(item, idx) {
