@@ -8,7 +8,7 @@
             <template v-slot:text>
               <v-text-field
                 v-model="search"
-                label="Search"
+                label="Buscar encuesta en la nube"
                 prepend-inner-icon="mdi-magnify"
                 single-line
                 variant="outlined"
@@ -22,12 +22,25 @@
               :search="search"
             >
               <template v-slot:item.actions="{ item }">
-                <v-icon size="small" class="me-2" @click="hadleEditSurvey(item)">
+                <v-btn
+                  icon
+                  size="x-small"
+                  :to="{ name: 'survey-fill-out' }"
+                  @click="hadleEditSurvey(item)"
+                  ><v-tooltip activator="parent" location="start"
+                    >Actualizar encuesta</v-tooltip
+                  ><v-icon>mdi-file-document-refresh-outline</v-icon></v-btn
+                >
+                <!-- <v-icon
+                  size="small"
+                  class="me-2"
+                  @click="hadleEditSurvey(item)"
+                >
                   mdi-pencil
                 </v-icon>
                 <v-icon size="small" @click="deleteItem(item)">
                   mdi-delete
-                </v-icon>
+                </v-icon> -->
               </template></v-data-table
             >
           </v-card>
@@ -76,7 +89,7 @@
         ></v-progress-linear>
 
         <v-expansion-panel-text>
-          <v-table class="mt-5" fixed-header density="compact">
+          <!-- <v-table class="mt-5" fixed-header density="compact">
             <thead>
               <tr>
                 <th class="text-center">Nombre</th>
@@ -97,7 +110,35 @@
                 </td>
               </tr>
             </tbody>
-          </v-table>
+          </v-table> -->
+          <v-card flat>
+            <template v-slot:text>
+              <v-text-field
+                v-model="searchSync"
+                label="Buscar encuestas local"
+                prepend-inner-icon="mdi-magnify"
+                single-line
+                variant="outlined"
+                hide-details
+              ></v-text-field>
+            </template>
+
+            <v-data-table
+              :headers="headersSync"
+              :items="items"
+              :search="searchSync"
+            >
+              <template v-slot:item.options="{ item }">
+                <v-btn
+                  :loading="loading"
+                  icon
+                  size="x-small"
+                  @click="handleSync(item)"
+                  ><v-icon>mdi-upload</v-icon></v-btn
+                >
+              </template></v-data-table
+            >
+          </v-card>
         </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -114,6 +155,7 @@ export default {
     return {
       db: null,
       search: "",
+      searchSync: "",
       items: [],
       loading: false,
       panel: [0],
@@ -137,6 +179,17 @@ export default {
         { align: "center", key: "author_username", title: "Usuario" },
         { align: "center", key: "created", title: "Creación" },
         { title: "Actions", key: "actions", sortable: false },
+      ];
+    },
+    headersSync() {
+      return [
+        {
+          align: "center",
+          key: "name.name",
+          sortable: true,
+          title: "Nombre",
+        },
+        { title: "Opciones", key: "options", sortable: false },
       ];
     },
   },
