@@ -58,6 +58,17 @@ export const getSurveys = async ({ commit }) => {
     console.log(error);
   }
 };
+export const getDashboard = async ({ commit }) => {
+  try {
+    const url = "v1/get-dashboard/";
+    const res = await apiClient.get(url);
+    console.log("  --- RES SURVEYS: ", res);
+    commit("setDashBoard", res.data);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
 export const formToFill = ({ commit }, formToFill) => {
   commit("setFormToFill", formToFill);
 };
@@ -99,6 +110,6 @@ export const uploadFile = async ({ commit }, params) => {
   return res.data.urls[0];
 };
 export const setImagesList = ({ commit }, images) => {
-  console.log(images)
+  console.log(images);
   commit("setImages", images);
 };

@@ -32,3 +32,7 @@ export const setImages = (state,images) => {
   state.images = [images, ...state.images];
   console.log('IMAGES INTO STATE: ',state.images)
 };
+
+export const setDashBoard = (state, dashData) => {
+  state.dashBoardData = dashData;
+};

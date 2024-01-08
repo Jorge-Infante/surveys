@@ -5,5 +5,6 @@ export default ()=>({
     surveyToFill:{},
     user:null,
     images:[],
-    appVersion:2.3
+    appVersion:2.3,
+    dashBoardData:[]
 })

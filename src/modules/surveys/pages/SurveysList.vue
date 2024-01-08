@@ -4,7 +4,35 @@
       <v-expansion-panel>
         <v-expansion-panel-title>Encuestas en la nube</v-expansion-panel-title>
         <v-expansion-panel-text>
-          <v-table class="mt-5 mr-5" fixed-header density="compact">
+          <v-card flat>
+            <template v-slot:text>
+              <v-text-field
+                v-model="search"
+                label="Search"
+                prepend-inner-icon="mdi-magnify"
+                single-line
+                variant="outlined"
+                hide-details
+              ></v-text-field>
+            </template>
+
+            <v-data-table
+              :headers="headers"
+              :items="surveysList"
+              :search="search"
+            >
+              <template v-slot:item.actions="{ item }">
+                <v-icon size="small" class="me-2" @click="hadleEditSurvey(item)">
+                  mdi-pencil
+                </v-icon>
+                <v-icon size="small" @click="deleteItem(item)">
+                  mdi-delete
+                </v-icon>
+              </template></v-data-table
+            >
+          </v-card>
+
+          <!-- <v-table class="mt-5 mr-5" fixed-header density="compact">
             <thead>
               <tr>
                 <th class="text-center">Id</th>
@@ -33,7 +61,7 @@
                 </td>
               </tr>
             </tbody>
-          </v-table>
+          </v-table> -->
         </v-expansion-panel-text>
       </v-expansion-panel>
 
@@ -85,6 +113,7 @@ export default {
   data() {
     return {
       db: null,
+      search: "",
       items: [],
       loading: false,
       panel: [0],
@@ -94,6 +123,22 @@ export default {
   },
   computed: {
     ...mapState("survey_store", ["surveysList"]),
+    headers() {
+      return [
+        {
+          align: "center",
+          key: "id",
+          sortable: true,
+          title: "Id",
+        },
+        { align: "center", key: "name", title: "Nombre" },
+        { align: "center", key: "survey_id", title: "Id encuesta" },
+        { align: "center", key: "slug_name", title: "Slug name" },
+        { align: "center", key: "author_username", title: "Usuario" },
+        { align: "center", key: "created", title: "Creación" },
+        { title: "Actions", key: "actions", sortable: false },
+      ];
+    },
   },
   methods: {
     ...mapActions("survey_store", ["saveSurvey", "formToFill", "uploadFile"]),
@@ -111,7 +156,7 @@ export default {
 
       for (let seccion of item.name.data.survey) {
         for (let question of seccion.questions) {
-          if (question.type == "Imagen" && question.value !== null ) {
+          if (question.type == "Imagen" && question.value !== null) {
             this.loadImages = true;
             quest.push(question);
 
@@ -222,7 +267,6 @@ export default {
       this.$router.push({
         name: "survey-fill-out-edit",
         params: { id: survey_id },
-        
       });
     },
   },

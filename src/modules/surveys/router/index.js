@@ -51,5 +51,13 @@ export default {
           /* webpackChunkName: "list-surveys" */ "@/modules/surveys/pages/SurveysList.vue"
         ),
     },
+    {
+      path: "dashBoard",
+      name: "dashBoard-surveys",
+      component: () =>
+        import(
+          /* webpackChunkName: "dashBoard-surveys" */ "@/modules/surveys/pages/DashBoard.vue"
+        ),
+    },
   ],
 };

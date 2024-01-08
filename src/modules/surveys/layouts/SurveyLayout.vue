@@ -116,6 +116,15 @@
           value="encuestas"
           :to="{ name: 'list-surveys' }"
         ></v-list-item>
+        <v-list-item
+          v-show="administrador"
+          @click="handleCloseDrawer"
+          prepend-icon="mdi-file-document-plus"
+          title="DashBoard"
+          class="text-left"
+          value="dashBoard-surveys"
+          :to="{ name: 'dashBoard-surveys' }"
+        ></v-list-item>
       </v-list>
 
       <template v-slot:append>
@@ -259,7 +268,7 @@ export default {
             this.getSurveys();
             this.refillUser();
           } catch (error) {
-            console.log('error en network')
+            console.log("error en network");
           }
         });
       } catch (error) {
