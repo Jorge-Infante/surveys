@@ -229,6 +229,7 @@ export default {
         },
         { align: "center", key: "name", title: "Nombre" },
         { align: "center", key: "survey_id", title: "Id encuesta" },
+        { align: "center", key: "Usuario", title: "Documento" },
         { align: "center", key: "Departamento", title: "Departamento" },
         { align: "center", key: "Municipio", title: "Municipio" },
         { align: "center", key: "author_username", title: "Usuario" },
