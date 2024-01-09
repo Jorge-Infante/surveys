@@ -7,7 +7,7 @@ export const saveSurvey = async ({ commit }, data) => {
   return res;
 };
 export const downloadRecords = async ({ commit }, ids) => {
-  const url = `/v1/get-report-record?ids=${ids}`;
+  const url = `/v1/get-report-record/?ids=${ids}`;
   console.log("  --- HALANDO RECORDS: ", url);
   const res = await apiClient.get(url);
 
