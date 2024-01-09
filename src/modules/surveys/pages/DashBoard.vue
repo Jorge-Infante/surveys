@@ -32,17 +32,44 @@
         <v-row>
           <v-col
             cols="6"
-            v-for="item in departamentos"
-            :key="item.departamento"
+            v-for="item in  dashBoardData.total_by_state.departamento"
+            :key="item.nombre"
           >
             <v-card class="text-left text-capitalize">
               <div class="d-flex align-center justify-space-between ml-2">
-                {{ item.departamento }}
+                {{ item.Nombre }}
               </div>
               <v-row>
                 <v-card-text>
                   <v-col cols="6">
-                    <p>Realizadas: {{ item.cantidad }}</p>
+                    <p>Realizadas: {{ item.Realizadas }}</p>
+                    <p>Aprobadas: {{ item.Aprobadas }}</p>
+                  </v-col>
+                </v-card-text>
+              </v-row>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-expansion-panel-text>
+    </v-expansion-panel>
+    <v-expansion-panel>
+      <v-expansion-panel-title>Municipios</v-expansion-panel-title>
+      <v-expansion-panel-text>
+        <v-row>
+          <v-col
+            cols="6"
+            v-for="item in  dashBoardData.total_by_state.municipio"
+            :key="item.nombre"
+          >
+            <v-card class="text-left text-capitalize">
+              <div class="d-flex align-center justify-space-between ml-2">
+                {{ item.Nombre }}
+              </div>
+              <v-row>
+                <v-card-text>
+                  <v-col cols="6">
+                    <p>Realizadas: {{ item.Realizadas }}</p>
+                    <p>Aprobadas: {{ item.Aprobadas }}</p>
                   </v-col>
                 </v-card-text>
               </v-row>
@@ -146,41 +173,6 @@ export default {
       "downloadRecords",
       "finishSurvey",
     ]),
-    departments() {
-      let dptosValues = Object.values(
-        this.dashBoardData.total_by_state.departamento
-      );
-      let dptosKeys = Object.keys(
-        this.dashBoardData.total_by_state.departamento
-      );
-
-      const mix = dptosKeys.map((key, index) => {
-        let valor = {
-          departamento: key,
-          cantidad: dptosValues[index],
-        };
-        return valor;
-      });
-
-      console.log("myList ---- ", mix);
-      this.departamentos = mix;
-    },
-    mun() {
-      let munValues = Object.values(
-        this.dashBoardData.total_by_state.municipio
-      );
-      let munKeys = Object.keys(this.dashBoardData.total_by_state.municipio);
-
-      const mix = munKeys.map((key, index) => {
-        let valor = {
-          municipio: key,
-          cantidad: munValues[index],
-        };
-        return valor;
-      });
-      this.municipios = mix;
-      console.log("myList ---- ", mix);
-    },
     hadleEditSurvey(item) {
       console.log("el param: ", item);
       item.update = true;
@@ -217,7 +209,8 @@ export default {
         },
         { align: "center", key: "name", title: "Nombre" },
         { align: "center", key: "survey_id", title: "Id encuesta" },
-        { align: "center", key: "slug_name", title: "Slug name" },
+        { align: "center", key: "Departamento", title: "Departamento" },
+        { align: "center", key: "Municipio", title: "Municipio" },
         { align: "center", key: "author_username", title: "Usuario" },
         { align: "center", key: "created", title: "Creación" },
         { title: "Actions", key: "actions", sortable: false },
@@ -238,8 +231,7 @@ export default {
   },
   watch: {
     dashBoardData() {
-      this.departments();
-      this.mun();
+      
     },
     selected(selectNew) {
       this.idsList = this.selected.join(",");
