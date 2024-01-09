@@ -1,4 +1,4 @@
-import { apiClient, imgClient, downloadCsvApi } from "@/api/base_api";
+import { apiClient, imgClient, downloadCsvApi, downloadZipApi } from "@/api/base_api";
 export const saveSurvey = async ({ commit }, data) => {
   const url = "v1/survey/";
   const res = await apiClient.post(url, data);
@@ -9,7 +9,7 @@ export const saveSurvey = async ({ commit }, data) => {
 export const downloadRecords = async ({ commit }, ids) => {
   const url = `/v1/get-report-record/?ids=${ids}`;
   console.log("  --- HALANDO RECORDS: ", url);
-  const res = await apiClient.get(url);
+  const res = await downloadZipApi.get(url);
 
   // commit("addSurvey", res.data);
   return res;

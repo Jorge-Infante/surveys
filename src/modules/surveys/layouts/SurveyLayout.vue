@@ -117,7 +117,7 @@
           :to="{ name: 'list-surveys' }"
         ></v-list-item>
         <v-list-item
-          v-show="administrador"
+          v-show="coordinador || administrador"
           @click="handleCloseDrawer"
           prepend-icon="mdi-file-document-plus"
           title="DashBoard"
@@ -164,6 +164,7 @@ export default {
     isConnected: true,
     extensionista: null,
     administrador: null,
+    coordinador: null,
     formularios: null,
   }),
   components: {
@@ -294,6 +295,8 @@ export default {
         this.administrador = true;
       } else if (this.user.group === "extensionistas") {
         this.extensionista = true;
+      } else if (this.user.group === "coordinador") {
+        this.coordinador = true;
       }
     },
     forms() {

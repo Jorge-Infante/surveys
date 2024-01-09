@@ -185,7 +185,27 @@ export default {
       });
     },
     HandleDownloadRecords() {
-      this.downloadRecords(this.idsList);
+      this.downloadRecords(this.idsList)
+      .then((response) => {
+          // Crear un objeto URL para el blob
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+
+          // Crear un enlace temporal y hacer clic para descargar
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", `Archivos.zip`);
+          document.body.appendChild(link);
+          link.click();
+
+          // Limpiar el enlace y el objeto URL después de la descarga
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+          this.loading = false;
+        })
+        .catch((error) => {
+          this.loading = false;
+          console.error("Error al descargar el archivo:", error);
+        });
     },
     handleFinishSurvey(item) {
       console.log("EL ITEM: ", item);
