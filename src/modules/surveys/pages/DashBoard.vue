@@ -32,7 +32,7 @@
         <v-row>
           <v-col
             cols="6"
-            v-for="item in  dashBoardData.total_by_state.departamento"
+            v-for="item in dashBoardData.total_by_state.departamento"
             :key="item.nombre"
           >
             <v-card class="text-left text-capitalize">
@@ -58,7 +58,7 @@
         <v-row>
           <v-col
             cols="6"
-            v-for="item in  dashBoardData.total_by_state.municipio"
+            v-for="item in dashBoardData.total_by_state.municipio"
             :key="item.nombre"
           >
             <v-card class="text-left text-capitalize">
@@ -148,7 +148,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-
+import Swal from "sweetalert2";
 export default {
   data() {
     return {
@@ -186,7 +186,7 @@ export default {
     },
     HandleDownloadRecords() {
       this.downloadRecords(this.idsList)
-      .then((response) => {
+        .then((response) => {
           // Crear un objeto URL para el blob
           const url = window.URL.createObjectURL(new Blob([response.data]));
 
@@ -214,7 +214,19 @@ export default {
       this.dialog = true;
     },
     handleChangeSurveyState() {
-      this.finishSurvey(this.formData);
+      try {
+        this.finishSurvey(this.formData);
+        this.dialog = false;
+        Swal.fire({
+          title: "¡Finalizado exitosamente!",
+          icon: "success",
+        });
+      } catch (error) {
+        Swal.fire({
+          title: "¡Error al finalizar la encuesta!",
+          icon: "error",
+        });
+      }
     },
   },
   computed: {
@@ -251,9 +263,7 @@ export default {
     this.getDashboard();
   },
   watch: {
-    dashBoardData() {
-      
-    },
+    dashBoardData() {},
     selected(selectNew) {
       this.idsList = this.selected.join(",");
       console.log("uno mas", selectNew, "con join", this.idsList);
