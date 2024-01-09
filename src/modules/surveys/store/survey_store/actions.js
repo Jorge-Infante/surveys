@@ -6,6 +6,21 @@ export const saveSurvey = async ({ commit }, data) => {
   commit("addSurvey", res.data);
   return res;
 };
+export const downloadRecords = async ({ commit }, ids) => {
+  const url = `/v1/get-report-record?ids=${ids}`;
+  console.log("  --- HALANDO RECORDS: ", url);
+  const res = await apiClient.get(url);
+
+  // commit("addSurvey", res.data);
+  return res;
+};
+export const finishSurvey = async ({ commit }, data) => {
+  const url = `/v1/change-survey-state/`;
+  const res = await apiClient.put(url, data);
+  console.log("  --- finalizada la encuesta : ", res);
+  // commit("addSurvey", res.data);
+  return res;
+};
 export const updateSurvey = async ({ commit }, params) => {
   console.log("  --- UPDATE SURVEY DATA: ", params.data);
   const url = `v1/survey/${params.id}/`;
@@ -62,7 +77,7 @@ export const getDashboard = async ({ commit }) => {
   try {
     const url = "v1/get-dashboard/";
     const res = await apiClient.get(url);
-    console.log("  --- RES SURVEYS: ", res);
+    console.log("  --- RES DASH-BOARD: ", res);
     commit("setDashBoard", res.data);
     return res;
   } catch (error) {
