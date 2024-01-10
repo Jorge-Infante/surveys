@@ -22,15 +22,28 @@
               :search="search"
             >
               <template v-slot:item.actions="{ item }">
-                <v-btn
-                  icon
-                  size="x-small"
-                  :to="{ name: 'survey-fill-out' }"
-                  @click="hadleEditSurvey(item)"
-                  ><v-tooltip activator="parent" location="start"
-                    >Actualizar encuesta</v-tooltip
-                  ><v-icon>mdi-file-document-refresh-outline</v-icon></v-btn
-                >
+                <v-row>
+                  <v-btn
+                    v-if="!item.approved_by"
+                    icon
+                    size="x-small"
+                    :to="{ name: 'survey-fill-out' }"
+                    @click="hadleEditSurvey(item)"
+                    ><v-tooltip activator="parent" location="start"
+                      >Actualizar encuesta</v-tooltip
+                    ><v-icon>mdi-file-document-refresh-outline</v-icon></v-btn
+                  >
+                  <v-btn
+                    v-if="!item.approved_by"
+                    icon
+                    size="x-small"
+                    class="ml-1"
+                    @click="showDeleteDialog(item.id)"
+                    ><v-tooltip activator="parent" location="start"
+                      >Eliiminar encuesta</v-tooltip
+                    ><v-icon>mdi-trash-can-outline</v-icon></v-btn
+                  >
+                </v-row>
                 <!-- <v-icon
                   size="small"
                   class="me-2"
@@ -143,6 +156,24 @@
       </v-expansion-panel>
     </v-expansion-panels>
   </div>
+  <v-dialog v-model="dialog" persistent width="auto">
+    <template v-slot:activator="{ props }">
+      <v-btn color="primary" v-bind="props"> Open Dialog </v-btn>
+    </template>
+    <v-card>
+      <v-card-title class="text-h5"> ¡Aviso importante! </v-card-title>
+      <v-card-text>¡No podra revertir los cambios!</v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="green-darken-1" variant="text" @click="dialog = false">
+          Disagree
+        </v-btn>
+        <v-btn color="green-darken-1" variant="text" @click="handleDetele">
+          Agree
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 <script>
 import { mapActions, mapState } from "vuex";
@@ -161,6 +192,8 @@ export default {
       panel: [0],
       urls: [],
       loadImages: false,
+      dialog: false,
+      idDelete: null,
     };
   },
   computed: {
@@ -194,7 +227,32 @@ export default {
     },
   },
   methods: {
-    ...mapActions("survey_store", ["saveSurvey", "formToFill", "uploadFile"]),
+    ...mapActions("survey_store", [
+      "saveSurvey",
+      "formToFill",
+      "uploadFile",
+      "deleteSurvey",
+    ]),
+    showDeleteDialog(id) {
+      this.idDelete = id;
+      this.dialog = true;
+    },
+    handleDetele() {
+      try {
+        this.deleteSurvey(this.idDelete);
+        this.dialog = false;
+        Swal.fire({
+          title: "¡Eliminado correctamente!",
+          icon: "success",
+        });
+      } catch (error) {
+        this.dialog = false;
+        Swal.fire({
+          title: "¡Error al eliminar la encuesta!",
+          icon: "error",
+        });
+      }
+    },
     async fetchItems() {
       try {
         const result = await this.db.allDocs({ include_docs: true });

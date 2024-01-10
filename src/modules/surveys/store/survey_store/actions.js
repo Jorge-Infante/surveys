@@ -1,9 +1,21 @@
-import { apiClient, imgClient, downloadCsvApi } from "@/api/base_api";
+import {
+  apiClient,
+  imgClient,
+  downloadCsvApi,
+  downloadZipApi,
+} from "@/api/base_api";
 export const saveSurvey = async ({ commit }, data) => {
   const url = "v1/survey/";
   const res = await apiClient.post(url, data);
   console.log("  --- SAVE SURVEY DATA: ", data);
   commit("addSurvey", res.data);
+  return res;
+};
+export const deleteSurvey = async ({ commit }, id) => {
+  const url = `v1/survey/${id}/`;
+  const res = await apiClient.delete(url);
+  console.log("  --- DELETE SURVEY: ", res);
+  commit("deleteSurvey", id);
   return res;
 };
 export const downloadRecords = async ({ commit }, ids) => {

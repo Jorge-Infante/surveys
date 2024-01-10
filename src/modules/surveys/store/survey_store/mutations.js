@@ -28,11 +28,15 @@ export const updateSurvey = (state, surveyUpdate) => {
   );
   state.surveysList[index] = surveyUpdate;
 };
-export const setImages = (state,images) => {
+export const setImages = (state, images) => {
   state.images = [images, ...state.images];
-  console.log('IMAGES INTO STATE: ',state.images)
+  console.log("IMAGES INTO STATE: ", state.images);
 };
 
 export const setDashBoard = (state, dashData) => {
   state.dashBoardData = dashData;
+};
+
+export const deleteSurvey = (state, id) => {
+  state.surveysList = state.surveysList.filter((item) => item.id != id);
 };
