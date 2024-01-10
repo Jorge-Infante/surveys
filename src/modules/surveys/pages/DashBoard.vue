@@ -95,32 +95,53 @@
             ></v-text-field>
           </template>
 
-          <v-data-table
-            v-model="selected"
-            :headers="headers"
-            :items="surveysList"
-            :search="search"
-            show-select
-          >
-            <template v-slot:item.actions="{ item }">
-              <v-row v-if="!item.approved_by">
-                <v-btn
-                  icon
-                  size="x-small"
-                  :to="{ name: 'survey-fill-out' }"
-                  @click="hadleEditSurvey(item)"
-                  ><v-tooltip activator="parent" location="start"
-                    >Actualizar encuesta</v-tooltip
-                  ><v-icon>mdi-file-document-refresh-outline</v-icon></v-btn
-                >
-                <v-btn icon size="x-small" @click="handleFinishSurvey(item)"
-                  ><v-tooltip activator="parent" location="start"
-                    >Finalizar encuesta</v-tooltip
-                  ><v-icon>mdi-check</v-icon></v-btn
-                >
-              </v-row>
-            </template></v-data-table
-          >
+            <v-data-table
+              v-model="selected"
+              :headers="headers"
+              :items="surveysList"
+              :search="search"
+              show-select
+            >
+              <template v-slot:item.actions="{ item }">
+                <v-row>
+                  <v-btn
+                    icon
+                    size="x-small"
+                    :to="{ name: 'survey-fill-out' }"
+                    @click="hadleEditSurvey(item)"
+                    ><v-tooltip activator="parent" location="start"
+                      >Actualizar encuesta</v-tooltip
+                    ><v-icon>mdi-file-document-refresh-outline</v-icon></v-btn
+                  >
+                  <v-btn icon size="x-small" @click="handleFinishSurvey(item)"
+                    ><v-tooltip activator="parent" location="start"
+                      >Finalizar encuesta</v-tooltip
+                    ><v-icon>mdi-check</v-icon></v-btn
+                  >
+                </v-row>
+              </template></v-data-table
+            >
+          </v-card>
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+    </v-expansion-panels>
+    <v-dialog v-model="dialog" width="800">
+      <v-container>
+        <v-card title="Finalización de encuestas">
+          <v-row class="ma-2">
+            <v-col cols="6">
+              <v-select :items="options" label="Opción" v-model="selectState">
+              </v-select>
+            </v-col>
+            <v-col cols="6">
+              <v-textarea v-model="observation" label="Observación"></v-textarea>
+            </v-col>
+          </v-row>
+          <v-card-actions class="justify-end ma-2">
+            <v-btn class="btn-primary" @click="handleChangeSurveyState"
+              >Finalizar</v-btn
+            >
+          </v-card-actions>
         </v-card>
       </v-container>
     </v-dialog>

@@ -161,15 +161,15 @@
       <v-btn color="primary" v-bind="props"> Open Dialog </v-btn>
     </template>
     <v-card>
-      <v-card-title class="text-h5"> ¡Aviso importante! </v-card-title>
-      <v-card-text>¡No podra revertir los cambios!</v-card-text>
+      <v-card-title class="text-h5"> ¡Aviso! </v-card-title>
+      <v-card-text>No podrá revertir los cambios...</v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="green-darken-1" variant="text" @click="dialog = false">
-          Disagree
+          Calcelar
         </v-btn>
-        <v-btn color="green-darken-1" variant="text" @click="handleDetele">
-          Agree
+        <v-btn color="primary" variant="text" @click="handleDetele">
+          Aceptar
         </v-btn>
       </v-card-actions>
     </v-card>
