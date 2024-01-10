@@ -102,7 +102,7 @@
             show-select
           >
             <template v-slot:item.actions="{ item }">
-              <v-row>
+              <v-row v-if="!item.approved_by">
                 <v-btn
                   icon
                   size="x-small"
@@ -172,6 +172,8 @@ export default {
       "getDashboard",
       "downloadRecords",
       "finishSurvey",
+      "getSurveys",
+      "deleteSurvey"
     ]),
     hadleEditSurvey(item) {
       console.log("el param: ", item);
@@ -221,6 +223,7 @@ export default {
           title: "¡Finalizado exitosamente!",
           icon: "success",
         });
+        this.getSurveys()
       } catch (error) {
         Swal.fire({
           title: "¡Error al finalizar la encuesta!",
