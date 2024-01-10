@@ -82,7 +82,8 @@
     <v-expansion-panel>
       <v-expansion-panel-title>Filtros</v-expansion-panel-title>
       <v-expansion-panel-text>
-        <v-btn @click="HandleDownloadRecords">exportar varios</v-btn>
+        <v-btn @click="HandleDownloadExcel">Exportar Excel</v-btn>
+        <v-btn @click="HandleDownloadRecords">Exportar Records</v-btn>
         <v-card flat>
           <template v-slot:text>
             <v-text-field
@@ -173,6 +174,7 @@ export default {
     ...mapActions("survey_store", [
       "getDashboard",
       "downloadRecords",
+      "downloadExcel",
       "finishSurvey",
     ]),
     hadleEditSurvey(item) {
@@ -202,6 +204,28 @@ export default {
           // Limpiar el enlace y el objeto URL después de la descarga
           document.body.removeChild(link);
           window.URL.revokeObjectURL(url);
+          this.loading = false;
+        })
+        .catch((error) => {
+          this.loading = false;
+          console.error("Error al descargar el archivo:", error);
+        });
+    },
+    HandleDownloadExcel() {
+      this.downloadExcel()
+      .then((response) => {
+          // Crear un objeto URL para el blob
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+
+          // Crear un enlace temporal y hacer clic para descargar
+          const link = document.createElement("a");
+          link.href = url;
+          let filename = response.headers.get("filename")
+          link.setAttribute("download", filename);
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+
           this.loading = false;
         })
         .catch((error) => {

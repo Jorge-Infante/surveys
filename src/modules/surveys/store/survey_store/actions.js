@@ -36,6 +36,12 @@ export const deleteFormSurvey = async ({ commit }, id) => {
   // commit("addSurvey", res.data);
   return res;
 };
+export const downloadExcel = async ({ commit }) => {
+  const url = `v1/get-excel/`;
+  const res = await apiClient.get(url, { responseType: 'arraybuffer' });
+  // commit("addSurvey", res.data);
+  return res;
+};
 export const downloadCsv = async ({ commit }, slugName) => {
   const url = `v1/csv-download/?slug_name=${slugName}`;
   const res = await downloadCsvApi.get(url);
