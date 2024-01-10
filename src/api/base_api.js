@@ -162,28 +162,3 @@ downloadCsvApi.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
-export const downloadZipApi = axios.create({
-  baseURL: "https://test-apiothras.djsoftwaremakers.com/api/",
-  withCredentials: false,
-  responseType: 'arraybuffer', // Important
-  headers: {
-    'Content-Type': 'application/gzip'
-  }
-});
-
-downloadZipApi.interceptors.request.use(
-  async (config) => {
-    // Get the access token from where you stored it
-    const accessToken = localStorage.getItem("access");
-
-    // Add the access token to the Authorization header
-    config.headers.Authorization = `Bearer ${accessToken}`;
-    // console.log("CON ESTE ACCESS: ", accessToken);
-
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
