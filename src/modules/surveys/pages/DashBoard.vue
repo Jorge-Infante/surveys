@@ -1,105 +1,144 @@
 <template>
-<div>
-  <v-expansion-panels v-model="panel" multiple>
-    <v-expansion-panel>
-      <v-expansion-panel-title>Encuestas</v-expansion-panel-title>
-      <v-expansion-panel-text>
-        <v-row>
-          <v-col
-            cols="6"
-            v-for="item in dashBoardData.total_by_ext"
-            :key="item.name"
-          >
-            <v-card class="text-left text-capitalize">
-              <div class="d-flex align-center justify-space-between ml-2">
-                {{ item.name }}
-              </div>
-              <v-row>
-                <v-card-text>
-                  <v-col cols="6">
-                    <p>Realizadas: {{ item.total }}</p>
-                    <p>Aprobadas: {{ item.aprobadas }}</p>
-                  </v-col>
-                </v-card-text>
-              </v-row>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-expansion-panel-text>
-    </v-expansion-panel>
-    <v-expansion-panel>
-      <v-expansion-panel-title>Departamentos</v-expansion-panel-title>
-      <v-expansion-panel-text>
-        <v-row>
-          <v-col
-            cols="6"
-            v-for="item in dashBoardData.total_by_state.departamento"
-            :key="item.nombre"
-          >
-            <v-card class="text-left text-capitalize">
-              <div class="d-flex align-center justify-space-between ml-2">
-                {{ item.Nombre }}
-              </div>
-              <v-row>
-                <v-card-text>
-                  <v-col cols="6">
-                    <p>Realizadas: {{ item.Realizadas }}</p>
-                    <p>Aprobadas: {{ item.Aprobadas }}</p>
-                  </v-col>
-                </v-card-text>
-              </v-row>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-expansion-panel-text>
-    </v-expansion-panel>
-    <v-expansion-panel>
-      <v-expansion-panel-title>Municipios</v-expansion-panel-title>
-      <v-expansion-panel-text>
-        <v-row>
-          <v-col
-            cols="6"
-            v-for="item in dashBoardData.total_by_state.municipio"
-            :key="item.nombre"
-          >
-            <v-card class="text-left text-capitalize">
-              <div class="d-flex align-center justify-space-between ml-2">
-                {{ item.Nombre }}
-              </div>
-              <v-row>
-                <v-card-text>
-                  <v-col cols="6">
-                    <p>Realizadas: {{ item.Realizadas }}</p>
-                    <p>Aprobadas: {{ item.Aprobadas }}</p>
-                  </v-col>
-                </v-card-text>
-              </v-row>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-expansion-panel-text>
-    </v-expansion-panel>
-    <v-expansion-panel>
-      <v-expansion-panel-title>Filtros</v-expansion-panel-title>
-      <v-expansion-panel-text>
-        <v-btn @click="HandleDownloadExcel">Exportar Excel</v-btn>
-        <v-btn @click="HandleDownloadRecords">Exportar Records</v-btn>
-        <v-card flat>
-          <template v-slot:text>
-            <v-text-field
-              v-model="search"
-              label="Buscar encuesta en la nube"
-              prepend-inner-icon="mdi-magnify"
-              single-line
-              variant="outlined"
-              hide-details
-            ></v-text-field>
-          </template>
+  <div>
+    <v-expansion-panels v-model="panel" multiple>
+      <v-expansion-panel>
+        <v-expansion-panel-title>Encuestas</v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <v-row>
+            <v-col
+              cols="6"
+              v-for="item in dashBoardData.total_by_ext"
+              :key="item.name"
+            >
+              <v-card class="text-left text-capitalize">
+                <div class="d-flex align-center justify-space-between ml-2">
+                  {{ item.name }}
+                </div>
+                <v-row>
+                  <v-card-text>
+                    <v-col cols="6">
+                      <p>Realizadas: {{ item.total }}</p>
+                      <p>Aprobadas: {{ item.aprobadas }}</p>
+                    </v-col>
+                  </v-card-text>
+                </v-row>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>Departamentos</v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <v-row>
+            <v-col
+              cols="6"
+              v-for="item in dashBoardData.total_by_state.departamento"
+              :key="item.nombre"
+            >
+              <v-card class="text-left text-capitalize">
+                <div class="d-flex align-center justify-space-between ml-2">
+                  {{ item.Nombre }}
+                </div>
+                <v-row>
+                  <v-card-text>
+                    <v-col cols="6">
+                      <p>Realizadas: {{ item.Realizadas }}</p>
+                      <p>Aprobadas: {{ item.Aprobadas }}</p>
+                    </v-col>
+                  </v-card-text>
+                </v-row>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>Municipios</v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <v-row>
+            <v-col
+              cols="6"
+              v-for="item in dashBoardData.total_by_state.municipio"
+              :key="item.nombre"
+            >
+              <v-card class="text-left text-capitalize">
+                <div class="d-flex align-center justify-space-between ml-2">
+                  {{ item.Nombre }}
+                </div>
+                <v-row>
+                  <v-card-text>
+                    <v-col cols="6">
+                      <p>Realizadas: {{ item.Realizadas }}</p>
+                      <p>Aprobadas: {{ item.Aprobadas }}</p>
+                    </v-col>
+                  </v-card-text>
+                </v-row>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>Filtros</v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <v-row>
+            <v-col cols="4"
+              ><v-select
+                v-model="selectSurvey"
+                label="Encuesta"
+                :items="encuestas"
+              ></v-select
+            ></v-col>
+            <v-col cols="4"
+              ><v-select
+                v-model="selectDep"
+                label="Departamento"
+                :items="departamentos"
+              ></v-select
+            ></v-col>
+            <v-col cols="4"
+              ><v-select
+                v-model="selectMun"
+                label="Municipio"
+                :items="municipios"
+              ></v-select
+            ></v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="4"
+              ><v-select
+                v-model="selectExt"
+                label="Extensionista"
+                :items="usuarios"
+              ></v-select
+            ></v-col>
+            <v-col cols="2"
+              ><v-btn @click="HandleDownloadExcel">Exportar Excel</v-btn></v-col
+            >
+            <v-col cols="2">
+              <v-btn @click="HandleDownloadRecords"
+                >Exportar Records</v-btn
+              ></v-col
+            >
+          </v-row>
+
+          <v-card flat>
+            <template v-slot:text>
+              <v-text-field
+                v-model="search"
+                label="Buscar encuesta en la nube"
+                prepend-inner-icon="mdi-magnify"
+                single-line
+                variant="outlined"
+                hide-details
+              ></v-text-field>
+            </template>
 
             <v-data-table
               v-model="selected"
               :headers="headers"
-              :items="surveysList"
+              :items="listReport"
               :search="search"
               show-select
             >
@@ -135,7 +174,10 @@
               </v-select>
             </v-col>
             <v-col cols="6">
-              <v-textarea v-model="observation" label="Observación"></v-textarea>
+              <v-textarea
+                v-model="observation"
+                label="Observación"
+              ></v-textarea>
             </v-col>
           </v-row>
           <v-card-actions class="justify-end ma-2">
@@ -155,6 +197,10 @@ import Swal from "sweetalert2";
 export default {
   data() {
     return {
+      selectExt: '',
+      selectSurvey: '',
+      selectDep: '',
+      selectMun: '',
       panel: [0],
       departamentos: [],
       municipios: [],
@@ -168,6 +214,9 @@ export default {
       user: null,
       observation: null,
       selectState: null,
+      usuarios: [],
+      encuestas: [],
+      listReport: [],
     };
   },
   methods: {
@@ -177,7 +226,7 @@ export default {
       "downloadExcel",
       "finishSurvey",
       "getSurveys",
-      "deleteSurvey"
+      "deleteSurvey",
     ]),
     hadleEditSurvey(item) {
       console.log("el param: ", item);
@@ -215,14 +264,14 @@ export default {
     },
     HandleDownloadExcel() {
       this.downloadExcel()
-      .then((response) => {
+        .then((response) => {
           // Crear un objeto URL para el blob
           const url = window.URL.createObjectURL(new Blob([response.data]));
 
           // Crear un enlace temporal y hacer clic para descargar
           const link = document.createElement("a");
           link.href = url;
-          let filename = response.headers.get("filename")
+          let filename = response.headers.get("filename");
           link.setAttribute("download", filename);
           document.body.appendChild(link);
           link.click();
@@ -249,13 +298,21 @@ export default {
           title: "¡Finalizado exitosamente!",
           icon: "success",
         });
-        this.getSurveys()
+        this.getSurveys();
       } catch (error) {
         Swal.fire({
           title: "¡Error al finalizar la encuesta!",
           icon: "error",
         });
       }
+    },
+    mapUniqueValues(arrayConRepetidos) {
+      const valoresUnicos = new Set(arrayConRepetidos);
+      const arraySinRepetidos = Array.from(valoresUnicos);
+      const arraySinNulos = arraySinRepetidos.filter(
+        (item) => item !== null && item !== ""
+      );
+      return arraySinNulos;
     },
   },
   computed: {
@@ -287,8 +344,18 @@ export default {
       };
       return data;
     },
+    formFilter() {
+      let data = {
+        departamento: this.selectDep,
+        municipio: this.selectMun,
+        extensionista: this.selectExt,
+        encuesta: this.selectSurvey,
+      };
+      return data;
+    },
   },
   mounted() {
+    this.listReport = this.surveysList;
     this.getDashboard();
   },
   watch: {
@@ -308,6 +375,45 @@ export default {
     },
     formData(nuevo) {
       console.log("El form Data: ", nuevo);
+    },
+    formFilter(nuevo) {
+      console.log("CHANGE FORM FILTER: ", nuevo);
+      let newList = this.surveysList.filter(
+        (item) =>
+          item.Departamento == nuevo.departamento ||
+          item.Municipio == nuevo.municipio ||
+          item.author_username == nuevo.extensionista ||
+          item.name == nuevo.encuesta && item!=null
+      );
+
+      this.listReport = newList;
+    },
+
+    surveysList(nuevo) {
+      this.listReport = nuevo;
+      let usuarios = nuevo.map((elemento) => {
+        return elemento.author_username;
+      });
+      this.usuarios = this.mapUniqueValues(usuarios);
+
+      let departamentos = nuevo.map((elemento) => {
+        return elemento.Departamento;
+      });
+      this.departamentos = this.mapUniqueValues(departamentos);
+      let municipios = nuevo.map((elemento) => {
+        return elemento.Municipio;
+      });
+      this.municipios = this.mapUniqueValues(municipios);
+      let encuestas = nuevo.map((elemento) => {
+        return elemento.name;
+      });
+      this.encuestas = this.mapUniqueValues(encuestas);
+      console.log(
+        this.usuarios,
+        this.departamentos,
+        this.municipios,
+        this.encuestas
+      );
     },
   },
 };
