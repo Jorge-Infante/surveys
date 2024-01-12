@@ -267,7 +267,7 @@ export default {
           try {
             this.getForms();
             this.getSurveys();
-            this.refillUser();
+            //this.refillUser();
           } catch (error) {
             console.log("error en network");
           }
