@@ -33,7 +33,7 @@
                       >Actualizar encuesta</v-tooltip
                     ><v-icon>mdi-file-document-refresh-outline</v-icon></v-btn
                   >
-                  <v-btn
+                  <!-- <v-btn
                     v-if="!item.approved_by"
                     icon
                     size="x-small"
@@ -42,7 +42,7 @@
                     ><v-tooltip activator="parent" location="start"
                       >Eliiminar encuesta</v-tooltip
                     ><v-icon>mdi-trash-can-outline</v-icon></v-btn
-                  >
+                  > -->
                 </v-row>
                 <!-- <v-icon
                   size="small"
@@ -157,16 +157,13 @@
     </v-expansion-panels>
   </div>
   <v-dialog v-model="dialog" persistent width="auto">
-    <template v-slot:activator="{ props }">
-      <v-btn color="primary" v-bind="props"> Open Dialog </v-btn>
-    </template>
     <v-card>
       <v-card-title class="text-h5"> ¡Aviso! </v-card-title>
       <v-card-text>No podrá revertir los cambios...</v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="green-darken-1" variant="text" @click="dialog = false">
-          Calcelar
+          Cancelar
         </v-btn>
         <v-btn color="primary" variant="text" @click="handleDetele">
           Aceptar
@@ -208,9 +205,9 @@ export default {
         },
         { align: "center", key: "name", title: "Nombre" },
         { align: "center", key: "survey_id", title: "Id encuesta" },
-        { align: "center", key: "slug_name", title: "Slug name" },
         { align: "center", key: "author_username", title: "Usuario" },
-        { align: "center", key: "created", title: "Creación" },
+        { align: "center", key: "Usuario", title: "Documento" },
+        { align: "center", key: "observation", title: "Observación" },
         { title: "Actions", key: "actions", sortable: false },
       ];
     },

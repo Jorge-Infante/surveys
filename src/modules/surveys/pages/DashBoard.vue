@@ -158,6 +158,15 @@
                       >Finalizar encuesta</v-tooltip
                     ><v-icon>mdi-check</v-icon></v-btn
                   >
+                  <v-btn
+                    icon
+                    size="x-small"
+                    class="ml-1"
+                    @click="showDeleteDialog(item.id)"
+                    ><v-tooltip activator="parent" location="start"
+                      >Eliiminar encuesta</v-tooltip
+                    ><v-icon>mdi-trash-can-outline</v-icon></v-btn
+                  >
                 </v-row>
               </template></v-data-table
             >
@@ -189,6 +198,21 @@
       </v-container>
     </v-dialog>
   </div>
+  <v-dialog v-model="dialogDelete" persistent width="auto">
+    <v-card>
+      <v-card-title class="text-h5"> ¡Aviso! </v-card-title>
+      <v-card-text>No podrá revertir los cambios...</v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="green-darken-1" variant="text" @click="dialog = false">
+          Cancelar
+        </v-btn>
+        <v-btn color="primary" variant="text" @click="handleDetele">
+          Aceptar
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -197,10 +221,10 @@ import Swal from "sweetalert2";
 export default {
   data() {
     return {
-      selectExt: '',
-      selectSurvey: '',
-      selectDep: '',
-      selectMun: '',
+      selectExt: null,
+      selectSurvey: null,
+      selectDep: null,
+      selectMun: null,
       panel: [0],
       departamentos: [],
       municipios: [],
@@ -217,6 +241,8 @@ export default {
       usuarios: [],
       encuestas: [],
       listReport: [],
+      dialogDelete: false,
+      idDelete: null,
     };
   },
   methods: {
@@ -228,6 +254,26 @@ export default {
       "getSurveys",
       "deleteSurvey",
     ]),
+    showDeleteDialog(id) {
+      this.idDelete = id;
+      this.dialogDelete = true;
+    },
+    handleDetele() {
+      try {
+        this.deleteSurvey(this.idDelete);
+        this.dialogDelete = false;
+        Swal.fire({
+          title: "¡Eliminado correctamente!",
+          icon: "success",
+        });
+      } catch (error) {
+        this.dialogDelete = false;
+        Swal.fire({
+          title: "¡Error al eliminar la encuesta!",
+          icon: "error",
+        });
+      }
+    },
     hadleEditSurvey(item) {
       console.log("el param: ", item);
       item.update = true;
@@ -314,6 +360,32 @@ export default {
       );
       return arraySinNulos;
     },
+    loadFilters(nuevo) {
+      this.listReport = nuevo;
+      let usuarios = nuevo.map((elemento) => {
+        return elemento.author_username;
+      });
+      this.usuarios = this.mapUniqueValues(usuarios);
+
+      let departamentos = nuevo.map((elemento) => {
+        return elemento.Departamento;
+      });
+      this.departamentos = this.mapUniqueValues(departamentos);
+      let municipios = nuevo.map((elemento) => {
+        return elemento.Municipio;
+      });
+      this.municipios = this.mapUniqueValues(municipios);
+      let encuestas = nuevo.map((elemento) => {
+        return elemento.name;
+      });
+      this.encuestas = this.mapUniqueValues(encuestas);
+      console.log(
+        this.usuarios,
+        this.departamentos,
+        this.municipios,
+        this.encuestas
+      );
+    },
   },
   computed: {
     ...mapState("survey_store", ["dashBoardData", "surveysList"]),
@@ -357,6 +429,7 @@ export default {
   mounted() {
     this.listReport = this.surveysList;
     this.getDashboard();
+    this.loadFilters(this.surveysList);
   },
   watch: {
     dashBoardData() {},
@@ -380,40 +453,19 @@ export default {
       console.log("CHANGE FORM FILTER: ", nuevo);
       let newList = this.surveysList.filter(
         (item) =>
-          item.Departamento == nuevo.departamento ||
-          item.Municipio == nuevo.municipio ||
-          item.author_username == nuevo.extensionista ||
-          item.name == nuevo.encuesta && item!=null
+          (item.Departamento !== null &&
+            item.Departamento == nuevo.departamento) ||
+          (item.Municipio !== null && item.Municipio == nuevo.municipio) ||
+          (item.author_username !== null &&
+            item.author_username == nuevo.extensionista) ||
+          (item.name !== null && item.name == nuevo.encuesta)
       );
 
       this.listReport = newList;
     },
 
     surveysList(nuevo) {
-      this.listReport = nuevo;
-      let usuarios = nuevo.map((elemento) => {
-        return elemento.author_username;
-      });
-      this.usuarios = this.mapUniqueValues(usuarios);
-
-      let departamentos = nuevo.map((elemento) => {
-        return elemento.Departamento;
-      });
-      this.departamentos = this.mapUniqueValues(departamentos);
-      let municipios = nuevo.map((elemento) => {
-        return elemento.Municipio;
-      });
-      this.municipios = this.mapUniqueValues(municipios);
-      let encuestas = nuevo.map((elemento) => {
-        return elemento.name;
-      });
-      this.encuestas = this.mapUniqueValues(encuestas);
-      console.log(
-        this.usuarios,
-        this.departamentos,
-        this.municipios,
-        this.encuestas
-      );
+      this.loadFilters(nuevo);
     },
   },
 };
