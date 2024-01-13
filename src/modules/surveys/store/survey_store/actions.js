@@ -118,6 +118,8 @@ export const me = async ({ commit }) => {
     res.data.group = "administradores";
   } else if (res.data.groups[0] === "extensionistas") {
     res.data.group = "extensionistas";
+  } else if (res.data.groups[0] === "coordinador") {
+    res.data.group = "coordinador";
   }
 
   commit("setUser", res.data);

@@ -291,6 +291,7 @@ export default {
   watch: {
     user(nuevo) {
       console.log("SI CAMBIA CUANDO RECARGO");
+      console.log(this.user.group)
       if (this.user.group === "administradores") {
         this.administrador = true;
       } else if (this.user.group === "extensionistas") {
