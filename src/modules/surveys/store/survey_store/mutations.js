@@ -7,6 +7,9 @@ export const setForms = (state, forms) => {
 export const setSurveys = (state, surveys) => {
   state.surveysList = surveys;
 };
+export const setTotalSurveys = (state, total) => {
+  state.totalSurveys = total;
+};
 export const setFormToFill = (state, surveyToFill) => {
   state.surveyToFill = surveyToFill;
 };

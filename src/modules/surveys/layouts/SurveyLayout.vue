@@ -225,6 +225,7 @@ export default {
     async getData() {
       const key = "your-vuex-key";
       await this.checkInternetConnection();
+      var user = '';
       console.log("ASI EL INTERNET: ", this.isConnected);
       try {
         const value = await localforage.getItem(key);
@@ -235,13 +236,14 @@ export default {
           nuevo.survey_store.surveysList
         );
         console.log("EL USER EN INDEXED: ", nuevo.survey_store.user);
+        user = nuevo.survey_store.user;
         this.reSetForms(nuevo.survey_store.forms);
         this.reSetSurveys(nuevo.survey_store.surveysList);
         this.reSetUser(nuevo.survey_store.user);
       } catch (error) {
         console.error("Error retrieving data:", error);
       }
-      this.getNetwork();
+      this.getNetwork(user);
     },
     async checkInternetConnection() {
       try {
@@ -261,12 +263,14 @@ export default {
     async refreshToken() {
       await refreshAccessToken();
     },
-    getNetwork() {
+    getNetwork(user) {
       try {
         this.refreshToken().then((resp) => {
           try {
             this.getForms();
-            this.getSurveys();
+            if (user.group === "extensionista") {
+              this.getSurveys();
+            }
             //this.refillUser();
           } catch (error) {
             console.log("error en network");

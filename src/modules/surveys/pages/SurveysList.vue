@@ -17,6 +17,7 @@
             </template>
 
             <v-data-table
+              v-show="extensionista"
               :headers="headers"
               :items="surveysList"
               :search="search"
@@ -54,8 +55,61 @@
                 <v-icon size="small" @click="deleteItem(item)">
                   mdi-delete
                 </v-icon> -->
-              </template></v-data-table
+              </template>
+            </v-data-table>
+
+            <v-data-table
+              v-show="coordinador || administrador"
+              :headers="headers"
+              :items="surveysList"
+              :search="search"
+              :items-per-page-options="[10, 50, 100]"
+              :items-per-page="itemsPerPage"
+              :page="page"
             >
+              <template v-slot:item.actions="{ item }">
+                <v-row>
+                  <v-btn
+                    v-if="!item.approved_by"
+                    icon
+                    size="x-small"
+                    :to="{ name: 'survey-fill-out' }"
+                    @click="hadleEditSurvey(item)"
+                    ><v-tooltip activator="parent" location="start"
+                      >Actualizar encuesta</v-tooltip
+                    ><v-icon>mdi-file-document-refresh-outline</v-icon></v-btn
+                  >
+                  <!-- <v-btn
+                    v-if="!item.approved_by"
+                    icon
+                    size="x-small"
+                    class="ml-1"
+                    @click="showDeleteDialog(item.id)"
+                    ><v-tooltip activator="parent" location="start"
+                      >Eliiminar encuesta</v-tooltip
+                    ><v-icon>mdi-trash-can-outline</v-icon></v-btn
+                  > -->
+                </v-row>
+                <!-- <v-icon
+                  size="small"
+                  class="me-2"
+                  @click="hadleEditSurvey(item)"
+                >
+                  mdi-pencil
+                </v-icon>
+                <v-icon size="small" @click="deleteItem(item)">
+                  mdi-delete
+                </v-icon> -->
+              </template>
+              <template v-slot:bottom>
+                <div class="text-center pt-2">
+                  <v-pagination
+                    v-model="page"
+                    :length="pageCount"
+                  ></v-pagination>
+                </div>
+              </template>
+            </v-data-table>
           </v-card>
 
           <!-- <v-table class="mt-5 mr-5" fixed-header density="compact">
@@ -91,7 +145,7 @@
         </v-expansion-panel-text>
       </v-expansion-panel>
 
-      <v-expansion-panel>
+      <v-expansion-panel v-show="extensionista">
         <v-expansion-panel-title
           >Encuestas por sincronizar</v-expansion-panel-title
         >
@@ -191,10 +245,15 @@ export default {
       loadImages: false,
       dialog: false,
       idDelete: null,
+      itemsPerPage: 50,
+      administrador: null,
+      coordinador: null,
+      extensionista: null,
+      page: 1,
     };
   },
   computed: {
-    ...mapState("survey_store", ["surveysList"]),
+    ...mapState("survey_store", ["surveysList", "totalSurveys", "user"]),
     headers() {
       return [
         {
@@ -222,6 +281,10 @@ export default {
         { title: "Opciones", key: "options", sortable: false },
       ];
     },
+    pageCount () {
+      this.getSurveys(`page=${this.page}&page_size=${this.itemsPerPage}`);
+      return Math.ceil(this.totalSurveys / this.itemsPerPage)
+    },
   },
   methods: {
     ...mapActions("survey_store", [
@@ -229,6 +292,7 @@ export default {
       "formToFill",
       "uploadFile",
       "deleteSurvey",
+      "getSurveys",
     ]),
     showDeleteDialog(id) {
       this.idDelete = id;
@@ -251,7 +315,7 @@ export default {
       }
     },
     async fetchItems() {
-      try {
+      try {        
         const result = await this.db.allDocs({ include_docs: true });
         this.items = result.rows.map((row) => row.doc);
         console.log("los items: ", this.items);
@@ -377,6 +441,17 @@ export default {
         params: { id: survey_id },
       });
     },
+  },
+  watch: {
+    user(nuevo) {
+      if (this.user.group === "administradores") {
+        this.administrador = true;
+      } else if (this.user.group === "extensionistas") {
+        this.extensionista = true;
+      } else if (this.user.group === "coordinador") {
+        this.coordinador = true;
+      }
+    },  
   },
   created() {
     this.db = db;

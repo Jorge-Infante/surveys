@@ -140,6 +140,9 @@
               :headers="headers"
               :items="listReport"
               :search="search"
+              :items-per-page-options="[10, 50, 100]"
+              :items-per-page="itemsPerPage"
+              :page="page"
               show-select
             >
               <template v-slot:item.actions="{ item }">
@@ -168,8 +171,16 @@
                     ><v-icon>mdi-trash-can-outline</v-icon></v-btn
                   >
                 </v-row>
-              </template></v-data-table
-            >
+              </template>
+              <template v-slot:bottom>
+                <div class="text-center pt-2">
+                  <v-pagination
+                    v-model="page"
+                    :length="pageCount"
+                  ></v-pagination>
+                </div>
+              </template>
+            </v-data-table>
           </v-card>
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -243,6 +254,11 @@ export default {
       listReport: [],
       dialogDelete: false,
       idDelete: null,
+      itemsPerPage: 50,
+      administrador: null,
+      coordinador: null,
+      extensionista: null,
+      page: 1,
     };
   },
   methods: {
@@ -388,7 +404,7 @@ export default {
     },
   },
   computed: {
-    ...mapState("survey_store", ["dashBoardData", "surveysList"]),
+    ...mapState("survey_store", ["dashBoardData", "surveysList", "totalSurveys"]),
     headers() {
       return [
         {
@@ -424,6 +440,10 @@ export default {
         encuesta: this.selectSurvey,
       };
       return data;
+    },
+    pageCount () {
+      this.getSurveys(`page=${this.page}&page_size=${this.itemsPerPage}`);
+      return Math.ceil(this.totalSurveys / this.itemsPerPage)
     },
   },
   mounted() {
@@ -466,7 +486,7 @@ export default {
 
     surveysList(nuevo) {
       this.loadFilters(nuevo);
-    },
+    }, 
   },
 };
 </script>

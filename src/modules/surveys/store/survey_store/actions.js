@@ -80,12 +80,13 @@ export const getForms = async ({ commit }) => {
     return false;
   }
 };
-export const getSurveys = async ({ commit }) => {
+export const getSurveys = async ({ commit }, params) => {
   try {
-    const url = "v1/survey/";
+    const url = `v1/survey/?${params}`;
     const res = await apiClient.get(url);
-    console.log("  --- RES SURVEYS: ", res);
-    commit("setSurveys", res.data);
+    console.log("  --- RES SURVEYS: ", res.data);
+    commit("setSurveys", res.data.data);
+    commit("setTotalSurveys", res.data.total);
     return res;
   } catch (error) {
     console.log(error);
