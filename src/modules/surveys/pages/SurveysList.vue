@@ -246,9 +246,9 @@ export default {
       dialog: false,
       idDelete: null,
       itemsPerPage: 50,
-      administrador: null,
-      coordinador: null,
-      extensionista: null,
+      administrador: false,
+      coordinador: false,
+      extensionista: true,
       page: 1,
     };
   },
@@ -285,6 +285,15 @@ export default {
       this.getSurveys(`page=${this.page}&page_size=${this.itemsPerPage}`);
       return Math.ceil(this.totalSurveys / this.itemsPerPage)
     },
+    // administrador() {
+    //   return this.user.group === "administradores"
+    // },
+    // coordinador() {
+    //   return this.user.group === "coordinador"
+    // },
+    // extensionista() {
+    //   return this.user.group === "extensionistas"
+    // },
   },
   methods: {
     ...mapActions("survey_store", [
@@ -319,6 +328,19 @@ export default {
         const result = await this.db.allDocs({ include_docs: true });
         this.items = result.rows.map((row) => row.doc);
         console.log("los items: ", this.items);
+        if (this.user.group === "administradores") {
+        this.administrador = true;
+        this.extensionista = false;
+        this.coordinador = false;
+      } else if (this.user.group === "extensionistas") {
+        this.extensionista = true;
+        this.administrador = false;
+        this.coordinador = false;
+      } else if (this.user.group === "coordinador") {
+        this.coordinador = true;
+        this.administrador = false;
+        this.extensionista = false;
+      }
       } catch (error) {
         console.error("Error fetching items:", error);
       }
@@ -446,10 +468,16 @@ export default {
     user(nuevo) {
       if (this.user.group === "administradores") {
         this.administrador = true;
+        this.extensionista = false;
+        this.coordinador = false;
       } else if (this.user.group === "extensionistas") {
         this.extensionista = true;
+        this.administrador = false;
+        this.coordinador = false;
       } else if (this.user.group === "coordinador") {
         this.coordinador = true;
+        this.administrador = false;
+        this.extensionista = false;
       }
     },  
   },
@@ -457,5 +485,8 @@ export default {
     this.db = db;
     this.fetchItems();
   },
+  // mounted() {
+  //   this.assignUserGroup();
+  // },
 };
 </script>

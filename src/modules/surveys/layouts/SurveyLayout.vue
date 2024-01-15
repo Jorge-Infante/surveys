@@ -10,7 +10,7 @@
           src="@/assets/images/logo-o.jpg"
         ></v-img>
       </v-toolbar-title>
-      Version 3.3
+      Version 3.4
 
       <v-spacer></v-spacer>
 
@@ -271,7 +271,7 @@ export default {
             if (user.group === "extensionista") {
               this.getSurveys();
             }
-            //this.refillUser();
+            // this.refillUser();
           } catch (error) {
             console.log("error en network");
           }
