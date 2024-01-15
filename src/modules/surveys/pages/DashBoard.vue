@@ -239,6 +239,8 @@ export default {
       panel: [0],
       departamentos: [],
       municipios: [],
+      initialDepartamentos: [],
+      initialMunicipios: [],
       search: "",
       selected: [],
       idsList: "",
@@ -251,6 +253,8 @@ export default {
       selectState: null,
       usuarios: [],
       encuestas: [],
+      initialUsuarios: [],
+      initialEncuestas: [],
       listReport: [],
       dialogDelete: false,
       idDelete: null,
@@ -396,6 +400,17 @@ export default {
       }
       this.encuestas = this.mapUniqueValues(this.encuestas);
     },
+    initialFilters() {
+      this.initialUsuarios = this.usuarios;
+      this.initialDepartamentos = this.departamentos;
+      this.initialMunicipios = this.municipios;
+      this.initialEncuestas= this.encuestas;
+    },
+    loadInitialFilters() {
+      this.usuarios = this.initialUsuarios;
+      this.departamentos = this.initialDepartamentos;
+      this.municipios = this.initialMunicipios;
+    },
   },
   computed: {
     ...mapState("survey_store", [
@@ -445,6 +460,7 @@ export default {
     this.listReport = this.surveysList;
     this.getDashboard();
     this.loadFilters(this.surveysList);
+    this.initialFilters();
   },
   watch: {
     dashBoardData() {},
@@ -485,6 +501,9 @@ export default {
     },
     page(nuevo) {
       this.getSurveys(`page=${nuevo}&page_size=${this.itemsPerPage}`);
+    },
+    selectSurvey(nuevo){
+      this.loadInitialFilters();
     },
   },
 };
