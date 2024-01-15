@@ -303,7 +303,7 @@ export default {
       // const id = item.id
       this.$router.push({
         name: "survey-fill-out-edit",
-        params: { id: survey_id },
+        params: { id: survey_id, showSurvey: true },
       });
     },
     HandleDownloadRecords() {
@@ -382,6 +382,17 @@ export default {
       return arraySinNulos;
     },
     loadFilters(nuevo) {
+      nuevo.map((element) => {
+        if (element.rejected_by) {
+          element.estado = "Rechazado";
+        } else if (element.approved_by) {
+          element.estado = "Aprobado";
+        } else {
+          element.estado = "Pendiente";
+        }
+        return element;
+      });
+      console.log("LAS ENCUESTAS CON ESTADO: ", nuevo);
       this.listReport = nuevo;
       let usuarios = nuevo.map((elemento) => {
         return elemento.author_username;
@@ -438,6 +449,7 @@ export default {
         { align: "center", key: "Municipio", title: "Municipio" },
         { align: "center", key: "author_username", title: "Usuario" },
         { align: "center", key: "created", title: "Creación" },
+        { align: "center", key: "estado", title: "Estado" },
         { title: "Actions", key: "actions", sortable: false },
       ];
     },

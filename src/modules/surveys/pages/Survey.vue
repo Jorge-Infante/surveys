@@ -152,7 +152,7 @@
 
     <v-card-actions class="d-flex justify-end" v-if="titulo">
       <v-btn
-        v-show="showSurvey == 'true'"
+        v-show="showSurvey == 'true' || fillSurvey"
         @click="printForm"
         class="btn-primary"
         >Guardar</v-btn
@@ -216,6 +216,7 @@ export default {
     panel: [0],
     arrImages: [],
     imgFlag: false,
+    fillSurvey: false,
     rules: {
       numbers: (value) =>
         !value || /[0-9]+$/.test(value) || "Solo permite numeros",
@@ -456,6 +457,7 @@ export default {
       const toFill = {};
       this.formToFill(toFill);
       this.surveyToUpdate = null;
+      this.fillSurvey = false;
     },
     selectSurvey(id) {
       let survey = this.surveysList.find((item) => item.id == id);
@@ -564,6 +566,7 @@ export default {
       },
     },
     surveyToFill(nuevo) {
+      this.fillSurvey = true;
       console.log("nuevo valor: ", nuevo);
       this.titulo = nuevo.name;
       this.seccions = nuevo.data;
