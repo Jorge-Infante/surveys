@@ -7,18 +7,19 @@
           <v-row>
             <v-col
               cols="6"
-              v-for="item in dashBoardData.total_by_ext"
-              :key="item.name"
+              v-for="item in dashBoardData.total_project"
+              :key="item.format_slug_name"
             >
               <v-card class="text-left text-capitalize">
                 <div class="d-flex align-center justify-space-between ml-2">
-                  {{ item.name }}
+                  {{ item.format_name }}
                 </div>
                 <v-row>
                   <v-card-text>
                     <v-col cols="6">
-                      <p>Realizadas: {{ item.total }}</p>
-                      <p>Aprobadas: {{ item.aprobadas }}</p>
+                      <p>Realizadas: {{ item.total_surveys }}</p>
+                      <p>Aprobadas: {{ item.total_surveys_approved }}</p>
+                      <p>Total del proyecto: {{ item.total_project }}</p>
                     </v-col>
                   </v-card-text>
                 </v-row>
@@ -396,7 +397,7 @@ export default {
       });
       this.municipios = this.mapUniqueValues(municipios);
       for (let enc of this.forms) {
-        this.encuestas.push(enc.name)
+        this.encuestas.push(enc.name);
       }
       this.encuestas = this.mapUniqueValues(this.encuestas);
     },
@@ -404,21 +405,24 @@ export default {
       this.initialUsuarios = this.usuarios;
       this.initialDepartamentos = this.departamentos;
       this.initialMunicipios = this.municipios;
-      this.initialEncuestas= this.encuestas;
+      this.initialEncuestas = this.encuestas;
     },
     loadInitialFilters() {
       this.usuarios = this.initialUsuarios;
       this.departamentos = this.initialDepartamentos;
       this.municipios = this.initialMunicipios;
-      this.selectDep = '';
-      this.selectMun = '';
-      this.selectExt = '';
+      this.selectDep = "";
+      this.selectMun = "";
+      this.selectExt = "";
     },
   },
   computed: {
     ...mapState("survey_store", [
-        "dashBoardData", "surveysList", "totalSurveys", "forms"
-      ]),
+      "dashBoardData",
+      "surveysList",
+      "totalSurveys",
+      "forms",
+    ]),
     headers() {
       return [
         {
@@ -455,8 +459,8 @@ export default {
       };
       return data;
     },
-    pageCount () {
-      return Math.ceil(this.totalSurveys / this.itemsPerPage)
+    pageCount() {
+      return Math.ceil(this.totalSurveys / this.itemsPerPage);
     },
   },
   mounted() {
@@ -486,7 +490,7 @@ export default {
     },
     formFilter(nuevo) {
       console.log("CHANGE FORM FILTER: ", nuevo);
-      let params = `page=${this.page}&page_size=${this.itemsPerPage}&extensionista=${nuevo.extensionista}&encuesta=${nuevo.encuesta}&municipio=${nuevo.municipio}&departamento=${nuevo.departamento}`
+      let params = `page=${this.page}&page_size=${this.itemsPerPage}&extensionista=${nuevo.extensionista}&encuesta=${nuevo.encuesta}&municipio=${nuevo.municipio}&departamento=${nuevo.departamento}`;
       this.getSurveys(params);
       // let newList = this.surveysList.filter(
       //   (item) =>
@@ -504,9 +508,11 @@ export default {
       this.loadFilters(nuevo);
     },
     page(nuevo) {
-      this.getSurveys(`page=${nuevo}&page_size=${this.itemsPerPage}&extensionista=${nuevo.extensionista}&encuesta=${nuevo.encuesta}&municipio=${nuevo.municipio}&departamento=${nuevo.departamento}`);
+      this.getSurveys(
+        `page=${nuevo}&page_size=${this.itemsPerPage}&extensionista=${nuevo.extensionista}&encuesta=${nuevo.encuesta}&municipio=${nuevo.municipio}&departamento=${nuevo.departamento}`
+      );
     },
-    selectSurvey(nuevo){
+    selectSurvey(nuevo) {
       this.loadInitialFilters();
     },
   },
