@@ -504,7 +504,7 @@ export default {
       this.loadFilters(nuevo);
     },
     page(nuevo) {
-      this.getSurveys(`page=${nuevo}&page_size=${this.itemsPerPage}`);
+      this.getSurveys(`page=${nuevo}&page_size=${this.itemsPerPage}&extensionista=${nuevo.extensionista}&encuesta=${nuevo.encuesta}&municipio=${nuevo.municipio}&departamento=${nuevo.departamento}`);
     },
     selectSurvey(nuevo){
       this.loadInitialFilters();
