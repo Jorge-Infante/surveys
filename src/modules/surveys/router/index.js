@@ -15,15 +15,17 @@ export default {
         ),
     },
     {
-      path: "surveyFillEdit/:id",
+      path: "surveyFillEdit/:id/:showSurvey",
       name: "survey-fill-out-edit",
       component: () =>
         import(
           /* webpackChunkName: "survey-form" */ "@/modules/surveys/pages/Survey.vue"
         ),
       props: (route) => {
+        console.log('LOS PARAMS: ',route.params)
         return {
           id: route.params.id,
+          showSurvey: route.params.showSurvey,
         };
       },
     },
