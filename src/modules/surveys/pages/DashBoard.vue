@@ -391,20 +391,16 @@ export default {
         return elemento.Municipio;
       });
       this.municipios = this.mapUniqueValues(municipios);
-      let encuestas = nuevo.map((elemento) => {
-        return elemento.name;
-      });
-      this.encuestas = this.mapUniqueValues(encuestas);
-      console.log(
-        this.usuarios,
-        this.departamentos,
-        this.municipios,
-        this.encuestas
-      );
+      for (let enc of this.forms) {
+        this.encuestas.push(enc.name)
+      }
+      this.encuestas = this.mapUniqueValues(this.encuestas);
     },
   },
   computed: {
-    ...mapState("survey_store", ["dashBoardData", "surveysList", "totalSurveys"]),
+    ...mapState("survey_store", [
+        "dashBoardData", "surveysList", "totalSurveys", "forms"
+      ]),
     headers() {
       return [
         {
@@ -442,7 +438,6 @@ export default {
       return data;
     },
     pageCount () {
-      this.getSurveys(`page=${this.page}&page_size=${this.itemsPerPage}`);
       return Math.ceil(this.totalSurveys / this.itemsPerPage)
     },
   },
@@ -471,22 +466,26 @@ export default {
     },
     formFilter(nuevo) {
       console.log("CHANGE FORM FILTER: ", nuevo);
-      let newList = this.surveysList.filter(
-        (item) =>
-          (item.Departamento !== null &&
-            item.Departamento == nuevo.departamento) ||
-          (item.Municipio !== null && item.Municipio == nuevo.municipio) ||
-          (item.author_username !== null &&
-            item.author_username == nuevo.extensionista) ||
-          (item.name !== null && item.name == nuevo.encuesta)
-      );
+      let params = `page=${this.page}&page_size=${this.itemsPerPage}&extensionista=${nuevo.extensionista}&encuesta=${nuevo.encuesta}&municipio=${nuevo.municipio}&departamento=${nuevo.departamento}`
+      this.getSurveys(params);
+      // let newList = this.surveysList.filter(
+      //   (item) =>
+      //     (item.Departamento !== null &&
+      //       item.Departamento == nuevo.departamento) ||
+      //     (item.Municipio !== null && item.Municipio == nuevo.municipio) ||
+      //     (item.author_username !== null &&
+      //       item.author_username == nuevo.extensionista) ||
+      //     (item.name !== null && item.name == nuevo.encuesta)
+      // );
 
-      this.listReport = newList;
+      this.listReport = this.surveysList;
     },
-
     surveysList(nuevo) {
       this.loadFilters(nuevo);
-    }, 
+    },
+    page(nuevo) {
+      this.getSurveys(`page=${nuevo}&page_size=${this.itemsPerPage}`);
+    },
   },
 };
 </script>
