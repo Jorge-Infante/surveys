@@ -410,6 +410,9 @@ export default {
       this.usuarios = this.initialUsuarios;
       this.departamentos = this.initialDepartamentos;
       this.municipios = this.initialMunicipios;
+      this.selectDep = '';
+      this.selectMun = '';
+      this.selectExt = '';
     },
   },
   computed: {
