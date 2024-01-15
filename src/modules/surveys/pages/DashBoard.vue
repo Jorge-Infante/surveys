@@ -460,6 +460,7 @@ export default {
     },
   },
   mounted() {
+    this.getSurveys(`page=${1}&page_size=${this.itemsPerPage}`);
     this.listReport = this.surveysList;
     this.getDashboard();
     this.loadFilters(this.surveysList);
