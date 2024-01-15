@@ -89,6 +89,15 @@
                       >Eliiminar encuesta</v-tooltip
                     ><v-icon>mdi-trash-can-outline</v-icon></v-btn
                   > -->
+                  <v-btn
+                    icon
+                    size="x-small"
+                    class="ml-1"
+                    @click="hadleShowSurvey(item)"
+                    ><v-tooltip activator="parent" location="start"
+                      >Ver detalle</v-tooltip
+                    ><v-icon>mdi-eye-outline</v-icon></v-btn
+                  >
                 </v-row>
                 <!-- <v-icon
                   size="small"
@@ -281,9 +290,9 @@ export default {
         { title: "Opciones", key: "options", sortable: false },
       ];
     },
-    pageCount () {
+    pageCount() {
       this.getSurveys(`page=${this.page}&page_size=${this.itemsPerPage}`);
-      return Math.ceil(this.totalSurveys / this.itemsPerPage)
+      return Math.ceil(this.totalSurveys / this.itemsPerPage);
     },
   },
   methods: {
@@ -315,7 +324,7 @@ export default {
       }
     },
     async fetchItems() {
-      try {        
+      try {
         const result = await this.db.allDocs({ include_docs: true });
         this.items = result.rows.map((row) => row.doc);
         console.log("los items: ", this.items);
@@ -438,7 +447,17 @@ export default {
       // const id = item.id
       this.$router.push({
         name: "survey-fill-out-edit",
-        params: { id: survey_id },
+        params: { id: survey_id, showSurvey: true },
+      });
+    },
+    hadleShowSurvey(item) {
+      console.log("show detail el param: ", item);
+      const survey_id = item.id;
+
+      // const id = item.id
+      this.$router.push({
+        name: "survey-fill-out-edit",
+        params: { id: survey_id, showSurvey: false },
       });
     },
   },
@@ -451,7 +470,7 @@ export default {
       } else if (this.user.group === "coordinador") {
         this.coordinador = true;
       }
-    },  
+    },
   },
   created() {
     this.db = db;

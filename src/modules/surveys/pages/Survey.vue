@@ -151,7 +151,18 @@
     </v-card>
 
     <v-card-actions class="d-flex justify-end" v-if="titulo">
-      <v-btn @click="printForm" class="btn-primary">Guardar</v-btn>
+      <v-btn
+        v-show="showSurvey == 'true'"
+        @click="printForm"
+        class="btn-primary"
+        >Guardar</v-btn
+      >
+      <v-btn
+        v-show="showSurvey == 'false'"
+        @click="$router.go(-1)"
+        class="btn-primary"
+        >Ir atrás</v-btn
+      >
     </v-card-actions>
     <!-- <v-row class="d-flex justify-center" v-if="success">
       <v-col cols="2">
@@ -248,6 +259,7 @@ export default {
     if (this.id) {
       this.selectSurvey(this.id);
     }
+    console.log(" ### ---- showSurvey ---- ### :", this.showSurvey);
   },
   created() {
     this.getLocation();
@@ -281,6 +293,9 @@ export default {
     id: {
       required: false,
     },
+    showSurvey: {
+      required: false,
+    },
   },
   methods: {
     ...mapActions("survey_store", [
@@ -300,13 +315,15 @@ export default {
         "question: ",
         question.idShared
       );
-      for (let [index,item] of seccion.questions.entries()) {
-        if (item.idShared == question.idShared && item.order=='questionDep') {
+      for (let [index, item] of seccion.questions.entries()) {
+        if (item.idShared == question.idShared && item.order == "questionDep") {
           console.log("LA PREGUNTA: ", item);
-          const questionDep = item.options.filter((dep)=> dep.idPrincipal == question.value.id)
-          console .log(questionDep,index)
-          console .log(seccion.questions[index])
-          seccion.questions[index].showOptions=questionDep
+          const questionDep = item.options.filter(
+            (dep) => dep.idPrincipal == question.value.id
+          );
+          console.log(questionDep, index);
+          console.log(seccion.questions[index]);
+          seccion.questions[index].showOptions = questionDep;
           // seccion.questions
         }
       }
