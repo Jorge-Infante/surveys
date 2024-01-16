@@ -85,34 +85,34 @@
         <v-expansion-panel-text>
           <v-row>
             <v-col cols="4"
-              ><v-select
+              ><v-autocomplete
                 v-model="selectSurvey"
                 label="Encuesta"
                 :items="encuestas"
-              ></v-select
+              ></v-autocomplete
             ></v-col>
             <v-col cols="4"
-              ><v-select
+              ><v-autocomplete
                 v-model="selectDep"
                 label="Departamento"
                 :items="departamentos"
-              ></v-select
+              ></v-autocomplete
             ></v-col>
             <v-col cols="4"
-              ><v-select
+              ><v-autocomplete
                 v-model="selectMun"
                 label="Municipio"
                 :items="municipios"
-              ></v-select
+              ></v-autocomplete
             ></v-col>
           </v-row>
           <v-row>
             <v-col cols="4"
-              ><v-select
+              ><v-autocomplete
                 v-model="selectExt"
                 label="Extensionista"
                 :items="usuarios"
-              ></v-select
+              ></v-autocomplete
             ></v-col>
             <v-col cols="2"
               ><v-btn @click="HandleDownloadExcel">Exportar Excel</v-btn></v-col
@@ -172,6 +172,12 @@
                     ><v-icon>mdi-trash-can-outline</v-icon></v-btn
                   >
                 </v-row>
+              </template>
+              <template v-slot:item.estado="{ item }">
+                <div v-if="item.approved_by">Aprobada</div>
+                <div v-else-if="item.rejected_by">Rechazada</div>
+                <div v-else-if="item.ended_by">Finalizada</div>
+                <div v-else>Pendiente</div>
               </template>
               <template v-slot:bottom>
                 <div class="text-center pt-2">
@@ -240,13 +246,10 @@ export default {
       panel: [0],
       departamentos: [],
       municipios: [],
-      initialDepartamentos: [],
-      initialMunicipios: [],
       search: "",
       selected: [],
       idsList: "",
       dialog: false,
-      options: ["Aprobado", "Terminado", "Rechazado"],
       id: null,
       state: null,
       user: null,
@@ -254,8 +257,6 @@ export default {
       selectState: null,
       usuarios: [],
       encuestas: [],
-      initialUsuarios: [],
-      initialEncuestas: [],
       listReport: [],
       dialogDelete: false,
       idDelete: null,
@@ -274,6 +275,7 @@ export default {
       "finishSurvey",
       "getSurveys",
       "deleteSurvey",
+      "getFilters",
     ]),
     showDeleteDialog(id) {
       this.idDelete = id;
@@ -381,50 +383,18 @@ export default {
       );
       return arraySinNulos;
     },
-    loadFilters(nuevo) {
-      nuevo.map((element) => {
-        if (element.rejected_by) {
-          element.estado = "Rechazado";
-        } else if (element.approved_by) {
-          element.estado = "Aprobado";
-        } else {
-          element.estado = "Pendiente";
-        }
-        return element;
-      });
-      console.log("LAS ENCUESTAS CON ESTADO: ", nuevo);
-      this.listReport = nuevo;
-      let usuarios = nuevo.map((elemento) => {
-        return elemento.author_username;
-      });
-      this.usuarios = this.mapUniqueValues(usuarios);
-
-      let departamentos = nuevo.map((elemento) => {
-        return elemento.Departamento;
-      });
-      this.departamentos = this.mapUniqueValues(departamentos);
-      let municipios = nuevo.map((elemento) => {
-        return elemento.Municipio;
-      });
-      this.municipios = this.mapUniqueValues(municipios);
-      for (let enc of this.forms) {
-        this.encuestas.push(enc.name);
-      }
-      this.encuestas = this.mapUniqueValues(this.encuestas);
+    async initialFilters() {
+      const filters = await this.getFilters();
+      this.usuarios = filters.users;
+      this.departamentos = filters.departamentos;
+      this.municipios = filters.municipios;
+      this.encuestas = filters.forms;
     },
-    initialFilters() {
-      this.initialUsuarios = this.usuarios;
-      this.initialDepartamentos = this.departamentos;
-      this.initialMunicipios = this.municipios;
-      this.initialEncuestas = this.encuestas;
-    },
-    loadInitialFilters() {
-      this.usuarios = this.initialUsuarios;
-      this.departamentos = this.initialDepartamentos;
-      this.municipios = this.initialMunicipios;
-      this.selectDep = "";
-      this.selectMun = "";
-      this.selectExt = "";
+    async updateSurveys() {
+      await this.getSurveys(
+        `page=${this.page}&page_size=${this.itemsPerPage}&extensionista=${this.selectExt}&encuesta=${this.selectSurvey}&municipio=${this.selectMun}&departamento=${this.selectDep}`
+      );
+      this.listReport = this.surveysList;
     },
   },
   computed: {
@@ -479,7 +449,6 @@ export default {
     this.getSurveys(`page=${1}&page_size=${this.itemsPerPage}`);
     this.listReport = this.surveysList;
     this.getDashboard();
-    this.loadFilters(this.surveysList);
     this.initialFilters();
   },
   watch: {
@@ -500,32 +469,34 @@ export default {
     formData(nuevo) {
       console.log("El form Data: ", nuevo);
     },
-    formFilter(nuevo) {
-      console.log("CHANGE FORM FILTER: ", nuevo);
-      let params = `page=${this.page}&page_size=${this.itemsPerPage}&extensionista=${nuevo.extensionista}&encuesta=${nuevo.encuesta}&municipio=${nuevo.municipio}&departamento=${nuevo.departamento}`;
-      this.getSurveys(params);
-      // let newList = this.surveysList.filter(
-      //   (item) =>
-      //     (item.Departamento !== null &&
-      //       item.Departamento == nuevo.departamento) ||
-      //     (item.Municipio !== null && item.Municipio == nuevo.municipio) ||
-      //     (item.author_username !== null &&
-      //       item.author_username == nuevo.extensionista) ||
-      //     (item.name !== null && item.name == nuevo.encuesta)
-      // );
-
-      this.listReport = this.surveysList;
-    },
-    surveysList(nuevo) {
-      this.loadFilters(nuevo);
-    },
     page(nuevo) {
       this.getSurveys(
         `page=${nuevo}&page_size=${this.itemsPerPage}&extensionista=${nuevo.extensionista}&encuesta=${nuevo.encuesta}&municipio=${nuevo.municipio}&departamento=${nuevo.departamento}`
       );
     },
+    surveysList(nuevo) {
+      this.listReport = nuevo;
+    },
     selectSurvey(nuevo) {
-      this.loadInitialFilters();
+      this.selectDep = '';
+      this.selectMun = '';
+      this.selectExt = '';
+      this.updateSurveys();
+    },
+    selectMun(nuevo) {
+      if (nuevo) {
+        this.updateSurveys();
+      };
+    },
+    selectDep(nuevo) {
+      if (nuevo) {
+        this.updateSurveys();
+      };
+    },
+    selectExt(nuevo) {
+      if (nuevo) {
+        this.updateSurveys();
+      };
     },
   },
 };

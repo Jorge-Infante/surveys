@@ -2,7 +2,6 @@ import {
   apiClient,
   imgClient,
   downloadCsvApi,
-  downloadZipApi,
 } from "@/api/base_api";
 export const saveSurvey = async ({ commit }, data) => {
   const url = "v1/survey/";
@@ -88,6 +87,15 @@ export const getSurveys = async ({ commit }, params) => {
     commit("setSurveys", res.data.data);
     commit("setTotalSurveys", res.data.total);
     return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getFilters = async ({ commit }, params) => {
+  try {
+    const url = `v1/get-filters/`;
+    const res = await apiClient.get(url);
+    return res.data;
   } catch (error) {
     console.log(error);
   }

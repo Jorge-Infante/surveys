@@ -291,7 +291,6 @@ export default {
       ];
     },
     pageCount() {
-      this.getSurveys(`page=${this.page}&page_size=${this.itemsPerPage}`);
       return Math.ceil(this.totalSurveys / this.itemsPerPage);
     },
     // administrador() {
@@ -498,6 +497,11 @@ export default {
         this.administrador = false;
         this.extensionista = false;
       }
+    },
+    page(nuevo) {
+      this.getSurveys(
+        `page=${nuevo}&page_size=${this.itemsPerPage}`
+      );
     },
   },
   created() {
