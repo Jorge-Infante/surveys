@@ -268,9 +268,8 @@ export default {
         this.refreshToken().then((resp) => {
           try {
             this.getForms();
-            if (user.group === "extensionistas") {
-              this.getSurveys();
-            }
+            this.getSurveys();
+            
             // this.refillUser();
           } catch (error) {
             console.log("error en network");
