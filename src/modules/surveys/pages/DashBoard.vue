@@ -260,7 +260,7 @@ export default {
       listReport: [],
       dialogDelete: false,
       idDelete: null,
-      itemsPerPage: 50,
+      itemsPerPage: 20,
       administrador: null,
       coordinador: null,
       extensionista: null,

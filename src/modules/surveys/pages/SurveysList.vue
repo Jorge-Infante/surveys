@@ -254,7 +254,7 @@ export default {
       loadImages: false,
       dialog: false,
       idDelete: null,
-      itemsPerPage: 50,
+      itemsPerPage: 20,
       administrador: false,
       coordinador: false,
       extensionista: true,
