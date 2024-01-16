@@ -471,7 +471,7 @@ export default {
     },
     page(nuevo) {
       this.getSurveys(
-        `page=${nuevo}&page_size=${this.itemsPerPage}&extensionista=${nuevo.extensionista}&encuesta=${nuevo.encuesta}&municipio=${nuevo.municipio}&departamento=${nuevo.departamento}`
+        `page=${nuevo}&page_size=${this.itemsPerPage}&extensionista=${this.selectExt}&encuesta=${this.selectSurvey}&municipio=${this.selectMun}&departamento=${this.selectDep}`
       );
     },
     surveysList(nuevo) {
