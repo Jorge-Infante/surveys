@@ -384,7 +384,8 @@ export default {
       return arraySinNulos;
     },
     async initialFilters() {
-      const filters = await this.getFilters();
+      const filters = await this.getDashboard();
+      console.log(filters)
       this.usuarios = filters.users;
       this.departamentos = filters.departamentos;
       this.municipios = filters.municipios;
@@ -448,7 +449,6 @@ export default {
   mounted() {
     this.getSurveys(`page=${1}&page_size=${this.itemsPerPage}`);
     this.listReport = this.surveysList;
-    this.getDashboard();
     this.initialFilters();
   },
   watch: {

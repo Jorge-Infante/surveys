@@ -91,22 +91,13 @@ export const getSurveys = async ({ commit }, params) => {
     console.log(error);
   }
 };
-export const getFilters = async ({ commit }, params) => {
-  try {
-    const url = `v1/get-filters/`;
-    const res = await apiClient.get(url);
-    return res.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
 export const getDashboard = async ({ commit }) => {
   try {
     const url = "v1/get-dashboard/";
     const res = await apiClient.get(url);
     console.log("  --- RES DASH-BOARD: ", res);
     commit("setDashBoard", res.data);
-    return res;
+    return res.data.filters;
   } catch (error) {
     console.log(error);
   }
