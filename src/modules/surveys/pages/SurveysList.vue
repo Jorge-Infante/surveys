@@ -336,19 +336,19 @@ export default {
         const result = await this.db.allDocs({ include_docs: true });
         this.items = result.rows.map((row) => row.doc);
         console.log("los items: ", this.items);
-      //   if (this.user.group === "administradores") {
-      //   this.administrador = true;
-      //   this.extensionista = false;
-      //   this.coordinador = false;
-      // } else if (this.user.group === "extensionistas") {
-      //   this.extensionista = true;
-      //   this.administrador = false;
-      //   this.coordinador = false;
-      // } else if (this.user.group === "coordinador") {
-      //   this.coordinador = true;
-      //   this.administrador = false;
-      //   this.extensionista = false;
-      // }
+        if (this.user.group === "administradores") {
+        this.administrador = true;
+        this.extensionista = false;
+        this.coordinador = false;
+      } else if (this.user.group === "extensionistas") {
+        this.extensionista = true;
+        this.administrador = false;
+        this.coordinador = false;
+      } else if (this.user.group === "coordinador") {
+        this.coordinador = true;
+        this.administrador = false;
+        this.extensionista = false;
+      }
       } catch (error) {
         console.error("Error fetching items:", error);
       }
