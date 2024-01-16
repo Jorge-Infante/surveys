@@ -97,7 +97,8 @@ export const getDashboard = async ({ commit }) => {
     const res = await apiClient.get(url);
     console.log("  --- RES DASH-BOARD: ", res);
     commit("setDashBoard", res.data);
-    return res.data.filters;
+    commit("setDashBoardFilters", res.data.filters);
+    return res.data;
   } catch (error) {
     console.log(error);
   }

@@ -384,12 +384,13 @@ export default {
       return arraySinNulos;
     },
     async initialFilters() {
-      const filters = await this.getDashboard();
-      console.log(filters)
-      this.usuarios = filters.users;
-      this.departamentos = filters.departamentos;
-      this.municipios = filters.municipios;
-      this.encuestas = filters.forms;
+      await this.getDashboard();
+      await this.getSurveys(`page=${1}&page_size=${this.itemsPerPage}`);
+      this.listReport = this.surveysList;  
+      this.usuarios = this.filters.users;
+      this.departamentos = this.filters.departamentos;
+      this.municipios = this.filters.municipios;
+      this.encuestas = this.filters.forms;
     },
     async updateSurveys() {
       await this.getSurveys(
@@ -404,6 +405,7 @@ export default {
       "surveysList",
       "totalSurveys",
       "forms",
+      "filters",
     ]),
     headers() {
       return [
@@ -447,8 +449,6 @@ export default {
     },
   },
   mounted() {
-    this.getSurveys(`page=${1}&page_size=${this.itemsPerPage}`);
-    this.listReport = this.surveysList;
     this.initialFilters();
   },
   watch: {

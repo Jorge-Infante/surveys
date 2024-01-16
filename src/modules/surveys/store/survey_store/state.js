@@ -7,5 +7,6 @@ export default ()=>({
     user:null,
     images:[],
     appVersion:2.3,
-    dashBoardData:[]
+    dashBoardData:[],
+    filters: [],
 })

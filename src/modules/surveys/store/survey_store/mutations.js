@@ -40,6 +40,10 @@ export const setDashBoard = (state, dashData) => {
   state.dashBoardData = dashData;
 };
 
+export const setDashBoardFilters = (state, filters) => {
+  state.filters = filters;
+};
+
 export const deleteSurvey = (state, id) => {
   state.surveysList = state.surveysList.filter((item) => item.id != id);
 };
