@@ -268,7 +268,7 @@ export default {
         this.refreshToken().then((resp) => {
           try {
             this.getForms();
-            if (user.group === "extensionista") {
+            if (user.group === "extensionistas") {
               this.getSurveys();
             }
             // this.refillUser();
