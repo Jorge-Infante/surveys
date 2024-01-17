@@ -566,6 +566,7 @@ export default {
       },
     },
     surveyToFill(nuevo) {
+      this.surveyToUpdate = null;
       this.fillSurvey = true;
       console.log("nuevo valor: ", nuevo);
       this.titulo = nuevo.name;
