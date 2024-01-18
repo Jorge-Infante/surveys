@@ -332,7 +332,7 @@ export default {
         });
     },
     HandleDownloadExcel() {
-      this.downloadExcel()
+      this.downloadExcel(this.idsList)
         .then((response) => {
           // Crear un objeto URL para el blob
           const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -340,12 +340,13 @@ export default {
           // Crear un enlace temporal y hacer clic para descargar
           const link = document.createElement("a");
           link.href = url;
-          let filename = response.headers.get("filename");
-          link.setAttribute("download", filename);
+          link.setAttribute("download", `Archivos.zip`);
           document.body.appendChild(link);
           link.click();
           link.remove();
 
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
           this.loading = false;
         })
         .catch((error) => {
@@ -394,7 +395,7 @@ export default {
     },
     async updateSurveys() {
       await this.getSurveys(
-        `page=${this.page}&page_size=${this.itemsPerPage}&extensionista=${this.selectExt}&encuesta=${this.selectSurvey}&municipio=${this.selectMun}&departamento=${this.selectDep}`
+        `page=${this.page}&page_size=${this.itemsPerPage}&extensionista=${this.selectExt}&encuesta=${this.selectSurvey}&municipio=${this.selectMun}&departamento=${this.selectDep}&characters=${this.search}`
       );
       this.listReport = this.surveysList;
     },
@@ -497,6 +498,9 @@ export default {
       if (nuevo) {
         this.updateSurveys();
       };
+    },
+    search(nuevo){
+      this.updateSurveys();
     },
   },
 };
