@@ -255,6 +255,7 @@ export default {
       user: null,
       observation: null,
       selectState: null,
+      options: ["Aprobado", "Terminado", "Rechazado"],
       usuarios: [],
       encuestas: [],
       listReport: [],
