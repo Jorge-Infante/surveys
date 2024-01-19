@@ -115,10 +115,15 @@
               ></v-autocomplete
             ></v-col>
             <v-col cols="2"
-              ><v-btn @click="HandleDownloadExcel">Exportar Excel</v-btn></v-col
+              ><v-btn 
+                :loading="loading"
+                @click="HandleDownloadExcel" 
+                >Exportar Excel</v-btn></v-col
             >
             <v-col cols="2">
-              <v-btn @click="HandleDownloadRecords"
+              <v-btn 
+                :loading="loading"
+                @click="HandleDownloadRecords"
                 >Exportar Records</v-btn
               ></v-col
             >
@@ -239,6 +244,7 @@ import Swal from "sweetalert2";
 export default {
   data() {
     return {
+      loading: false,
       selectExt: null,
       selectSurvey: null,
       selectDep: null,
@@ -310,6 +316,7 @@ export default {
       });
     },
     HandleDownloadRecords() {
+      this.loading=true;
       this.downloadRecords(this.idsList)
         .then((response) => {
           // Crear un objeto URL para el blob
@@ -333,7 +340,9 @@ export default {
         });
     },
     HandleDownloadExcel() {
-      this.downloadExcel(this.idsList)
+      this.loading=true;
+      const params = `ids=${this.idsList}&extensionista=${this.selectExt}&encuesta=${this.selectSurvey}&municipio=${this.selectMun}&departamento=${this.selectDep}&characters=${this.search}`
+      this.downloadExcel(params)
         .then((response) => {
           // Crear un objeto URL para el blob
           const url = window.URL.createObjectURL(new Blob([response.data]));

@@ -47,8 +47,8 @@ export const deleteFormSurvey = async ({ commit }, id) => {
   // commit("addSurvey", res.data);
   return res;
 };
-export const downloadExcel = async ({ commit }, ids) => {
-  const url = `v1/get-excel/?ids=${ids}`;
+export const downloadExcel = async ({ commit }, params) => {
+  const url = `v1/get-excel/?${params}}`;
   const res = await apiClient.get(url, { responseType: 'arraybuffer' });
   // commit("addSurvey", res.data);
   return res;
