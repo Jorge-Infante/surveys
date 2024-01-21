@@ -9,7 +9,10 @@
       ></v-btn> </template
   ></v-toolbar>
   <v-data-table :headers="headers" :items="groups"> </v-data-table>
-  <FormGroup :dialogFormGroup="dialogFormGroup" />
+  <FormGroup
+    :dialogFormGroup="dialogFormGroup"
+    @on:cancelFormGroup="handleCancelFormGroup"
+  />
 </template>
 
 <script>
@@ -37,6 +40,9 @@ export default {
   methods: {
     handleShowFormGroup() {
       this.dialogFormGroup = true;
+    },
+    handleCancelFormGroup() {
+      this.dialogFormGroup = false;
     },
   },
 };

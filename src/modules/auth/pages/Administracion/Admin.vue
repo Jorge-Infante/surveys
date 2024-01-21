@@ -41,8 +41,8 @@
     </v-navigation-drawer>
     <v-main><router-view></router-view></v-main>
   </v-layout>
-  <FormUserVue :dialogFormUser="dialogFormUser" />
-  <FormGroup :dialogFormGroup="dialogFormGroup" />
+  <FormUserVue :dialogFormUser="dialogFormUser"  @on:cancelFormUser="handleCancelFormUser"/>
+  <FormGroup :dialogFormGroup="dialogFormGroup" @on:cancelFormGroup="handleCancelFormGroup" />
 </template>
 
 <script>
@@ -66,6 +66,13 @@ export default {
     handleShowFormUser() {
       this.dialogFormUser = true;
     },
+    handleCancelFormGroup() {
+      this.dialogFormGroup = false;
+    },
+    handleCancelFormUser(){
+      this.dialogFormUser = false;
+    }
+
   },
 };
 </script>
