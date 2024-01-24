@@ -317,7 +317,8 @@ export default {
     },
     HandleDownloadRecords() {
       this.loading=true;
-      this.downloadRecords(this.idsList)
+      const params = `ids=${this.idsList}&extensionista=${this.selectExt}&encuesta=${this.selectSurvey}&municipio=${this.selectMun}&departamento=${this.selectDep}&characters=${this.search}`
+      this.downloadRecords(params)
         .then((response) => {
           // Crear un objeto URL para el blob
           const url = window.URL.createObjectURL(new Blob([response.data]));

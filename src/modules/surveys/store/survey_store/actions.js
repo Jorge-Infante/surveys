@@ -17,8 +17,8 @@ export const deleteSurvey = async ({ commit }, id) => {
   commit("deleteSurvey", id);
   return res;
 };
-export const downloadRecords = async ({ commit }, ids) => {
-  const url = `/v1/get-report-record/?ids=${ids}`;
+export const downloadRecords = async ({ commit }, params) => {
+  const url = `/v1/get-report-record/?${params}`;
   console.log("  --- HALANDO RECORDS: ", url);
   const res = await downloadCsvApi.get(url, { responseType: 'arraybuffer' });
 
