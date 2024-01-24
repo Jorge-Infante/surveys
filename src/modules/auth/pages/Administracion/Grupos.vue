@@ -17,21 +17,20 @@
 
 <script>
 import FormGroup from "../../components/FormGroup.vue";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
-      groups: [
-        { name: "administradores" },
-        { name: "coordinadores" },
-        { name: "extensionista" },
-        { name: "otra" },
-      ],
       dialogFormGroup: false,
     };
   },
   computed: {
+    ...mapState("auth_store", ["groups"]),
     headers() {
-      return [{ align: "left", key: "name", title: "Nombre del grupo" }];
+      return [
+        { align: "center", key: "id", title: "Id grupo" },
+        { align: "center", key: "name", title: "Nombre del grupo" },
+      ];
     },
   },
   components: {

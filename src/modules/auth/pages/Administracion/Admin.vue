@@ -41,13 +41,20 @@
     </v-navigation-drawer>
     <v-main><router-view></router-view></v-main>
   </v-layout>
-  <FormUserVue :dialogFormUser="dialogFormUser"  @on:cancelFormUser="handleCancelFormUser"/>
-  <FormGroup :dialogFormGroup="dialogFormGroup" @on:cancelFormGroup="handleCancelFormGroup" />
+  <FormUserVue
+    :dialogFormUser="dialogFormUser"
+    @on:cancelFormUser="handleCancelFormUser"
+  />
+  <FormGroup
+    :dialogFormGroup="dialogFormGroup"
+    @on:cancelFormGroup="handleCancelFormGroup"
+  />
 </template>
 
 <script>
 import FormGroup from "../../components/FormGroup.vue";
 import FormUserVue from "../../components/FormUser.vue";
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -55,11 +62,20 @@ export default {
       dialogFormGroup: false,
     };
   },
-  components: {
-    FormGroup,
-    FormUserVue,
+  created() {
+    // this.getUsers();
+    this.getGroups();
   },
   methods: {
+    ...mapActions("auth_store", ["getEnty"]),
+    async getUsers() {
+      const params = { url: "users/", mutation1: "setState", enty: "users" };
+      await this.getEnty(params);
+    },
+    async getGroups() {
+      const params = { url: "groups/", mutation1: "setState", enty: "groups" };
+      await this.getEnty(params);
+    },
     handleShowFormGroup() {
       this.dialogFormGroup = true;
     },
@@ -69,10 +85,13 @@ export default {
     handleCancelFormGroup() {
       this.dialogFormGroup = false;
     },
-    handleCancelFormUser(){
+    handleCancelFormUser() {
       this.dialogFormUser = false;
-    }
-
+    },
+  },
+  components: {
+    FormGroup,
+    FormUserVue,
   },
 };
 </script>
