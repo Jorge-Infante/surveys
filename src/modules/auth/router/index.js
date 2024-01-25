@@ -41,6 +41,14 @@ export default {
               /* webpackChunkName: "grupos" */ "@/modules/auth/pages/Administracion/Grupos.vue"
             ),
         },
+        {
+          path: "proyectos",
+          name: "admin-proyectos",
+          component: () =>
+            import(
+              /* webpackChunkName: "proyectos" */ "@/modules/auth/pages/Administracion/Proyectos.vue"
+            ),
+        },
       ],
     },
   ],

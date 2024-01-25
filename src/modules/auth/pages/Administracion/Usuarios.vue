@@ -9,56 +9,31 @@
       ></v-btn> </template
   ></v-toolbar>
   <v-data-table :headers="headers" :items="users"> </v-data-table>
-  <FormUserVue :dialogFormUser="dialogFormUser" @on:cancelFormUser="handleCancelFormUser" />
+  <FormUserVue
+    :dialogFormUser="dialogFormUser"
+    @on:cancelFormUser="handleCancelFormUser"
+  />
 </template>
 
 <script>
+import { mapState } from "vuex";
 import FormUserVue from "../../components/FormUser.vue";
 export default {
   data() {
     return {
       dialogFormUser: false,
-      users: [
-        {
-          username: "louis",
-          email: "louis@gmail.com",
-          first_name: "loius",
-          last_name: "mango",
-        },
-        {
-          username: "louis",
-          email: "louis@gmail.com",
-          first_name: "loius",
-          last_name: "mango",
-        },
-        {
-          username: "louis",
-          email: "louis@gmail.com",
-          first_name: "loius",
-          last_name: "mango",
-        },
-        {
-          username: "louis",
-          email: "louis@gmail.com",
-          first_name: "loius",
-          last_name: "mango",
-        },
-        {
-          username: "louis",
-          email: "louis@gmail.com",
-          first_name: "loius",
-          last_name: "mango",
-        },
-      ],
     };
   },
   computed: {
+    ...mapState("auth_store", ["users"]),
     headers() {
       return [
-        { align: "center", key: "username", title: "Usuario" },
-        { align: "center", key: "email", title: "Correo" },
-        { align: "center", key: "first_name", title: "Nombre" },
-        { align: "center", key: "last_name", title: "Apellido" },
+        { align: "center", key: "id", title: "Id" },
+        { align: "center", key: "user.username", title: "Nombre de usuario" },
+        { align: "center", key: "user.first_name", title: "Nombre" },
+        { align: "center", key: "ext_profile", title: "Perfil" },
+        
+        // { align: "center", key: "last_name", title: "Apellido" },
       ];
     },
   },
@@ -69,9 +44,9 @@ export default {
     handleShowFormUser() {
       this.dialogFormUser = true;
     },
-    handleCancelFormUser(){
+    handleCancelFormUser() {
       this.dialogFormUser = false;
-    }
+    },
   },
 };
 </script>

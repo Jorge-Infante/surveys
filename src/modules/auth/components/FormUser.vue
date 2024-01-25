@@ -3,35 +3,89 @@
     <v-card class="px-6 py-8">
       <v-toolbar title="Creación de usuario"></v-toolbar>
 
-      <v-form class="mt-4">
-        <v-row>
-          <v-col cols="6"
-            ><v-text-field clearable label="Usuario"></v-text-field
-          ></v-col>
-          <v-col cols="6"
-            ><v-text-field clearable label="Nombre"></v-text-field
-          ></v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="6"
-            ><v-text-field clearable label="Cedula"></v-text-field
-          ></v-col>
-          <v-col cols="6"
-            ><v-text-field clearable label="Perfil"></v-text-field
-          ></v-col>
-        </v-row>
+      <v-form class="mt-4" @submit.prevent ref="form">
         <v-row>
           <v-col cols="6"
             ><v-text-field
               clearable
-              label="Contraseña"
-              placeholder="Contraseña del usuario"
+              label="Usuario"
+              v-model="username"
+              autocomplete="off"
+              :rules="[rules.required]"
             ></v-text-field
           ></v-col>
           <v-col cols="6"
             ><v-text-field
               clearable
+              label="Nombre"
+              v-model="first_name"
+              autocomplete="off"
+            ></v-text-field
+          ></v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="6"
+            ><v-text-field
+              clearable
+              label="Cedula"
+              v-model="identification"
+            ></v-text-field
+          ></v-col>
+          <v-col cols="6"
+            ><v-text-field
+              clearable
+              label="Perfil"
+              v-model="ext_profile"
+            ></v-text-field
+          ></v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="6">
+            <v-autocomplete
+              label="Grupos"
+              v-model="groups_select"
+              :items="groups"
+              item-title="name"
+              item-value="id"
+              :returnObject="false"
+              multiple
+            >
+            </v-autocomplete>
+          </v-col>
+          <v-col cols="6">
+            <v-autocomplete
+              v-model="projects_select"
+              label="Proyectos"
+              :items="projects"
+              item-title="name"
+              item-value="id"
+              :returnObject="false"
+              multiple
+            >
+            </v-autocomplete>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="6"
+            ><v-text-field
+              v-model="password"
+              @input="validarIgualdad"
+              clearable
               label="Contraseña"
+              type="password"
+              autocomplete="off"
+              placeholder="Contraseña del usuario"
+              :rules="[rules.required]"
+            ></v-text-field
+          ></v-col>
+          <v-col cols="6"
+            ><v-text-field
+              v-model="password2"
+              :rules="[reglaIgualdad, rules.required]"
+              clearable
+              type="password"
+              label="Contraseña"
+              autocomplete="off"
               placeholder="Repita su contraseña"
             ></v-text-field
           ></v-col>
@@ -39,10 +93,20 @@
       </v-form>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="success" size="small" type="submit" variant="elevated">
+        <v-btn
+          color="success"
+          size="small"
+          variant="elevated"
+          @click="validate"
+        >
           Guardar
         </v-btn>
-        <v-btn color="success" size="small" type="submit" variant="elevated">
+        <v-btn
+          color="success"
+          size="small"
+          @click="dialog = false"
+          variant="elevated"
+        >
           Cancelar
         </v-btn>
       </v-card-actions>
@@ -51,21 +115,84 @@
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
 export default {
   data() {
     return {
       dialog: false,
+      username: null,
+      first_name: null,
+      password: null,
+      password2: null,
+      groups_select: null,
+      identification: null,
+      ext_profile: null,
+      projects_select: null,
+      reglaIgualdad: (v) => v === this.password || "Los campos no son iguales",
+      rules: {
+        required: (value) => !!value || "El campo es obligatorio",
+      },
     };
+  },
+  computed: {
+    ...mapState("auth_store", ["groups", "projects"]),
+    formData() {
+      let data = {
+        user: {
+          username: this.username,
+          first_name: this.first_name,
+          password: this.password,
+          groups: this.groups_select,
+        },
+        identification: this.identification,
+        ext_profile: this.ext_profile,
+        projects: this.projects_select,
+      };
+      return data;
+    },
   },
   props: {
     dialogFormUser: { type: Boolean },
   },
+  methods: {
+    ...mapActions("auth_store", ["saveEnty"]),
+    validarIgualdad() {
+      // Actualiza la regla cuando cambia el valor de campo1
+      this.reglaIgualdad = (v) =>
+        v === this.password || "Los campos no son iguales";
+    },
+    async validate() {
+      const { valid } = await this.$refs.form.validate();
+      if (valid) {
+        console.log("VALIDACIÓN OK OK OK");
+        this.handleSaveUser();
+      }
+    },
+    async handleSaveUser() {
+      const params = {
+        url: "users/",
+        mutation1: "addEnty",
+        enty: "users",
+        data: this.formData,
+      };
+      try {
+        await this.saveEnty(params);
+        this.dialog = false;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+
   watch: {
     dialogFormUser(newValue) {
       this.dialog = newValue;
     },
     dialog(newValue) {
       if (newValue === false) this.$emit("on:cancelFormUser");
+    },
+    formData(newValue) {
+      console.log("Nuevo form data: ", newValue);
     },
   },
 };

@@ -29,12 +29,17 @@
             ></v-btn> </template
         ></v-list-item>
 
-        <v-list-item prepend-icon="mdi-file-sign" title="Proyectos" value=""
+        <v-list-item
+          prepend-icon="mdi-file-sign"
+          title="Proyectos"
+          value=""
+          :to="{ name: 'admin-proyectos' }"
           ><template v-slot:append>
             <v-btn
               size="x-small"
               variant="text"
               icon="mdi-plus"
+              @click="handleShowFormProject"
             ></v-btn> </template
         ></v-list-item>
       </v-list>
@@ -49,22 +54,30 @@
     :dialogFormGroup="dialogFormGroup"
     @on:cancelFormGroup="handleCancelFormGroup"
   />
+  <FormProject
+    :dialogFormProject="dialogFormProject"
+    @on:cancelFormProject="handleCancelFormProject"
+  />
 </template>
 
 <script>
 import FormGroup from "../../components/FormGroup.vue";
 import FormUserVue from "../../components/FormUser.vue";
+import FormProject from "../../components/FormProject.vue";
 import { mapActions } from "vuex";
 export default {
   data() {
     return {
       dialogFormUser: false,
       dialogFormGroup: false,
+      dialogFormProject: false,
     };
   },
   created() {
-    // this.getUsers();
+    this.getUsers();
     this.getGroups();
+    this.getProjects();
+    this.getForms();
   },
   methods: {
     ...mapActions("auth_store", ["getEnty"]),
@@ -76,11 +89,30 @@ export default {
       const params = { url: "groups/", mutation1: "setState", enty: "groups" };
       await this.getEnty(params);
     },
+    async getProjects() {
+      const params = {
+        url: "projects/",
+        mutation1: "setState",
+        enty: "projects",
+      };
+      await this.getEnty(params);
+    },
+    async getForms() {
+      const params = {
+        url: "survey-form/",
+        mutation1: "setState",
+        enty: "forms",
+      };
+      await this.getEnty(params);
+    },
     handleShowFormGroup() {
       this.dialogFormGroup = true;
     },
     handleShowFormUser() {
       this.dialogFormUser = true;
+    },
+    handleShowFormProject() {
+      this.dialogFormProject = true;
     },
     handleCancelFormGroup() {
       this.dialogFormGroup = false;
@@ -88,10 +120,14 @@ export default {
     handleCancelFormUser() {
       this.dialogFormUser = false;
     },
+    handleCancelFormProject() {
+      this.dialogFormProject = false;
+    },
   },
   components: {
     FormGroup,
     FormUserVue,
+    FormProject,
   },
 };
 </script>

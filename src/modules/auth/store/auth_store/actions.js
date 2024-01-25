@@ -12,8 +12,9 @@ export const getEnty = async ({ commit }, params) => {
   commit(params.mutation1, { key: params.enty, value: res.data });
 };
 export const saveEnty = async ({ commit }, params) => {
+  console.log("DATA POST: ", params.data);
   const url = `/v1/${params.url}`;
-  const res = await apiClient.post(url,params.data);
+  const res = await apiClient.post(url, params.data);
   console.log(`RESPONSE POST ENTY TO ${url}`, res);
   commit(params.mutation1, { key: params.enty, value: res.data });
 };
