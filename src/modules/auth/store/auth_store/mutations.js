@@ -7,3 +7,6 @@ export const removeState = (state, { key, keySearch, value }) => {
 export const addEnty = (state, { key, value }) => {
   state[key] = [value, ...state[key]];
 };
+export const addInstructive = (state, instructive) => {
+  state.instructive = instructive;
+};

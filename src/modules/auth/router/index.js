@@ -49,6 +49,14 @@ export default {
               /* webpackChunkName: "proyectos" */ "@/modules/auth/pages/Administracion/Proyectos.vue"
             ),
         },
+        {
+          path: "instructivos",
+          name: "admin-instructivos",
+          component: () =>
+            import(
+              /* webpackChunkName: "instructivos" */ "@/modules/auth/pages/Administracion/Instructivos.vue"
+            ),
+        },
       ],
     },
   ],

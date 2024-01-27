@@ -43,29 +43,43 @@ export default {
     return {
       dialog: false,
       name: null,
-      surveys: [
-        { id: 1, nombre: "Acompañamiento" },
-        { id: 2, nombre: "Usuarios" },
-      ],
+      updateItem: null,
+      updateGroup: false,
     };
   },
   props: {
     dialogFormGroup: { type: Boolean },
+    groupToUpdate: { type: Object },
   },
   methods: {
-    ...mapActions("auth_store", ["saveEnty"]),
+    ...mapActions("auth_store", ["saveEnty", "updateEnty"]),
     async handleSaveGroup() {
-      const params = {
-        url: "groups/",
-        mutation1: "addEnty",
-        enty: "groups",
-        data: { name: this.name },
-      };
-      try {
-        await this.saveEnty(params);
-        this.dialog = false;
-      } catch (error) {
-        console.log(error);
+      if (this.updateGroup) {
+        const params = {
+          url: `groups/${this.updateItem.id}/`,
+          mutation1: "addEnty",
+          enty: "groups",
+          data: { name: this.name },
+        };
+        try {
+          await this.updateEnty(params);
+          this.dialog = false;
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        const params = {
+          url: "groups/",
+          mutation1: "addEnty",
+          enty: "groups",
+          data: { name: this.name },
+        };
+        try {
+          await this.saveEnty(params);
+          this.dialog = false;
+        } catch (error) {
+          console.log(error);
+        }
       }
     },
   },
@@ -75,6 +89,12 @@ export default {
     },
     dialog(newValue) {
       if (newValue === false) this.$emit("on:cancelFormGroup");
+    },
+    groupToUpdate(newValue) {
+      this.updateGroup = true;
+      this.dialog = true;
+      this.name = newValue.name;
+      this.updateItem = newValue;
     },
   },
 };

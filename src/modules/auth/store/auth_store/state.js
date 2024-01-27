@@ -4,4 +4,5 @@ export default () => ({
   groups: [],
   projects: [],
   forms: [],
+  instructive: {},
 });

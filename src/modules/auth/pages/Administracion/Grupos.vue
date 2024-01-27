@@ -8,9 +8,25 @@
         @click="handleShowFormGroup"
       ></v-btn> </template
   ></v-toolbar>
-  <v-data-table :headers="headers" :items="groups"> </v-data-table>
+  <v-data-table :headers="headers" :items="groups">
+    <template v-slot:item.actions="{ item }">
+      <v-row>
+        <v-btn icon size="x-small" @click="handleUpdateGroup(item)"
+          ><v-tooltip activator="parent" location="start"
+            >Actualizar grupo</v-tooltip
+          ><v-icon>mdi-file-document-refresh-outline</v-icon></v-btn
+        >
+        <v-btn icon size="x-small" class="ml-1"
+          ><v-tooltip activator="parent" location="start"
+            >Eliiminar grupo</v-tooltip
+          ><v-icon>mdi-trash-can-outline</v-icon></v-btn
+        >
+      </v-row>
+    </template></v-data-table
+  >
   <FormGroup
     :dialogFormGroup="dialogFormGroup"
+    :groupToUpdate="groupToUpdate"
     @on:cancelFormGroup="handleCancelFormGroup"
   />
 </template>
@@ -22,6 +38,7 @@ export default {
   data() {
     return {
       dialogFormGroup: false,
+      groupToUpdate: null,
     };
   },
   computed: {
@@ -30,6 +47,7 @@ export default {
       return [
         { align: "center", key: "id", title: "Id grupo" },
         { align: "center", key: "name", title: "Nombre del grupo" },
+        { title: "Actions", key: "actions", sortable: false },
       ];
     },
   },
@@ -42,6 +60,9 @@ export default {
     },
     handleCancelFormGroup() {
       this.dialogFormGroup = false;
+    },
+    handleUpdateGroup(item) {
+      this.groupToUpdate = item;
     },
   },
 };

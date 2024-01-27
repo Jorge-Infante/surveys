@@ -18,7 +18,7 @@
         <v-list-item
           prepend-icon="mdi-account-group-outline"
           title="Usuarios"
-          value="clockin"
+          value="users"
           :to="{ name: 'admin-usuarios' }"
           ><template v-slot:append>
             <v-btn
@@ -32,7 +32,7 @@
         <v-list-item
           prepend-icon="mdi-file-sign"
           title="Proyectos"
-          value=""
+          value="projects"
           :to="{ name: 'admin-proyectos' }"
           ><template v-slot:append>
             <v-btn
@@ -40,6 +40,19 @@
               variant="text"
               icon="mdi-plus"
               @click="handleShowFormProject"
+            ></v-btn> </template
+        ></v-list-item>
+        <v-list-item
+          prepend-icon="mdi-list-box-outline"
+          title="Instructivo"
+          value="instructives"
+          :to="{ name: 'admin-instructivos' }"
+          ><template v-slot:append>
+            <v-btn
+              size="x-small"
+              variant="text"
+              icon="mdi-plus"
+              @click="handleShowFormInstructive"
             ></v-btn> </template
         ></v-list-item>
       </v-list>
@@ -54,6 +67,10 @@
     :dialogFormGroup="dialogFormGroup"
     @on:cancelFormGroup="handleCancelFormGroup"
   />
+  <FormInstructive
+    :dialogFormInstructive="dialogFormInstructive"
+    @on:cancelFormInstructive="handleCancelFormInstructive"
+  />
   <FormProject
     :dialogFormProject="dialogFormProject"
     @on:cancelFormProject="handleCancelFormProject"
@@ -64,6 +81,7 @@
 import FormGroup from "../../components/FormGroup.vue";
 import FormUserVue from "../../components/FormUser.vue";
 import FormProject from "../../components/FormProject.vue";
+import FormInstructive from "../../components/FormInstructive.vue";
 import { mapActions } from "vuex";
 export default {
   data() {
@@ -71,6 +89,7 @@ export default {
       dialogFormUser: false,
       dialogFormGroup: false,
       dialogFormProject: false,
+      dialogFormInstructive: false,
     };
   },
   created() {
@@ -78,6 +97,7 @@ export default {
     this.getGroups();
     this.getProjects();
     this.getForms();
+    this.getInstructives();
   },
   methods: {
     ...mapActions("auth_store", ["getEnty"]),
@@ -94,6 +114,14 @@ export default {
         url: "projects/",
         mutation1: "setState",
         enty: "projects",
+      };
+      await this.getEnty(params);
+    },
+    async getInstructives() {
+      const params = {
+        url: "instruccions/",
+        mutation1: "setState",
+        enty: "instructives",
       };
       await this.getEnty(params);
     },
@@ -114,6 +142,9 @@ export default {
     handleShowFormProject() {
       this.dialogFormProject = true;
     },
+    handleShowFormInstructive() {
+      this.dialogFormInstructive = true;
+    },
     handleCancelFormGroup() {
       this.dialogFormGroup = false;
     },
@@ -123,11 +154,15 @@ export default {
     handleCancelFormProject() {
       this.dialogFormProject = false;
     },
+    handleCancelFormInstructive() {
+      this.dialogFormInstructive = false;
+    },
   },
   components: {
     FormGroup,
     FormUserVue,
     FormProject,
+    FormInstructive,
   },
 };
 </script>
