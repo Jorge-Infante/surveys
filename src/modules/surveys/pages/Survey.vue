@@ -114,7 +114,7 @@
                       :loading="loadingImage"
                       :disabled="loadingImage"
                       v-if="item.type == 'Imagen'"
-                      :hint="item.url"
+                      :hint="urlImage(item.url)"
                       persistent-hint
                       accept="image/*"
                       variant="filled"
@@ -332,6 +332,13 @@ export default {
       //   item.idShared == question.idShared
       // );
       // console.log("PREGUNTAS: ", preguntas);
+    },
+    urlImage(url) {
+      let test = url.startsWith("https")
+        ? url
+        : `https://test-apiothras.djsoftwaremakers.com${url}`;
+
+      return test;
     },
     imgFocus(input, indexArg) {
       this.imgFlag = true;

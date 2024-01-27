@@ -57,8 +57,9 @@ export default {
       if (this.updateGroup) {
         const params = {
           url: `groups/${this.updateItem.id}/`,
-          mutation1: "addEnty",
+          mutation1: "updateState",
           enty: "groups",
+          keySearch: this.updateItem.id,
           data: { name: this.name },
         };
         try {

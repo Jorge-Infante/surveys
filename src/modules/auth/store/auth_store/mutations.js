@@ -10,3 +10,10 @@ export const addEnty = (state, { key, value }) => {
 export const addInstructive = (state, instructive) => {
   state.instructive = instructive;
 };
+
+export const updateState = (state, { key, keySearch, value }) => {
+  console.log(key, keySearch, value)
+  let index = state[key].findIndex((item) => item.id === keySearch);
+  console.log("INDEX: ", index);
+  state[key][index] = value;
+};

@@ -8,9 +8,25 @@
         @click="handleShowFormUser"
       ></v-btn> </template
   ></v-toolbar>
-  <v-data-table :headers="headers" :items="users"> </v-data-table>
+  <v-data-table :headers="headers" :items="users">
+    <template v-slot:item.actions="{ item }">
+      <v-row>
+        <v-btn icon size="x-small" @click="handleUpdateUser(item)"
+          ><v-tooltip activator="parent" location="start"
+            >Actualizar grupo</v-tooltip
+          ><v-icon>mdi-file-document-refresh-outline</v-icon></v-btn
+        >
+        <v-btn icon size="x-small" class="ml-1"
+          ><v-tooltip activator="parent" location="start"
+            >Eliiminar grupo</v-tooltip
+          ><v-icon>mdi-trash-can-outline</v-icon></v-btn
+        >
+      </v-row>
+    </template>
+  </v-data-table>
   <FormUserVue
     :dialogFormUser="dialogFormUser"
+    :userToUpdate="userToUpdate"
     @on:cancelFormUser="handleCancelFormUser"
   />
 </template>
@@ -22,6 +38,7 @@ export default {
   data() {
     return {
       dialogFormUser: false,
+      userToUpdate: null,
     };
   },
   computed: {
@@ -32,7 +49,8 @@ export default {
         { align: "center", key: "user.username", title: "Nombre de usuario" },
         { align: "center", key: "user.first_name", title: "Nombre" },
         { align: "center", key: "ext_profile", title: "Perfil" },
-        
+        { title: "Actions", key: "actions", sortable: false },
+
         // { align: "center", key: "last_name", title: "Apellido" },
       ];
     },
@@ -46,6 +64,9 @@ export default {
     },
     handleCancelFormUser() {
       this.dialogFormUser = false;
+    },
+    handleUpdateUser(item) {
+      this.userToUpdate = item;
     },
   },
 };
