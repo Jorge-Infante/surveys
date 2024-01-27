@@ -334,11 +334,13 @@ export default {
       // console.log("PREGUNTAS: ", preguntas);
     },
     urlImage(url) {
-      let test = url.startsWith("https")
-        ? url
-        : `https://test-apiothras.djsoftwaremakers.com${url}`;
+      if (url) {
+        let test = url.startsWith("https")
+          ? url
+          : `https://test-apiothras.djsoftwaremakers.com${url}`;
 
-      return test;
+        return test;
+      }
     },
     imgFocus(input, indexArg) {
       this.imgFlag = true;

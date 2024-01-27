@@ -337,18 +337,18 @@ export default {
         this.items = result.rows.map((row) => row.doc);
         console.log("los items: ", this.items);
         if (this.user.group === "administradores") {
-        this.administrador = true;
-        this.extensionista = false;
-        this.coordinador = false;
-      } else if (this.user.group === "extensionistas") {
-        this.extensionista = true;
-        this.administrador = false;
-        this.coordinador = false;
-      } else if (this.user.group === "coordinador") {
-        this.coordinador = true;
-        this.administrador = false;
-        this.extensionista = false;
-      }
+          this.administrador = true;
+          this.extensionista = false;
+          this.coordinador = false;
+        } else if (this.user.group === "extensionistas") {
+          this.extensionista = true;
+          this.administrador = false;
+          this.coordinador = false;
+        } else if (this.user.group === "coordinador") {
+          this.coordinador = true;
+          this.administrador = false;
+          this.extensionista = false;
+        }
       } catch (error) {
         console.error("Error fetching items:", error);
       }
@@ -379,7 +379,8 @@ export default {
               let params = { file };
               console.log("PARAMETROS: ", params);
               const res = await this.uploadFile(params);
-              question.url = res.url;
+              let newUrl = `https://test-apiothras.djsoftwaremakers.com${res.url}`;
+              question.url = newUrl;
             } catch (error) {
               console.log("error al cargar la imagen: ", error);
             }
@@ -499,9 +500,7 @@ export default {
       }
     },
     page(nuevo) {
-      this.getSurveys(
-        `page=${nuevo}&page_size=${this.itemsPerPage}`
-      );
+      this.getSurveys(`page=${nuevo}&page_size=${this.itemsPerPage}`);
     },
   },
   created() {
