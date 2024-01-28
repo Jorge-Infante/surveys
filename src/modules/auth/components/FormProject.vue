@@ -15,6 +15,7 @@
               label="Encuesta"
               item-value="id"
               item-title="name"
+              multiple
               :returnObject="false"
             ></v-autocomplete>
           </v-col>

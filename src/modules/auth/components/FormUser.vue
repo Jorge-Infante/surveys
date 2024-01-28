@@ -128,6 +128,7 @@ export default {
       identification: null,
       ext_profile: null,
       projects_select: null,
+      updateUser: false,
       reglaIgualdad: (v) => v === this.password || "Los campos no son iguales",
       rules: {
         required: (value) => !!value || "El campo es obligatorio",
@@ -153,9 +154,10 @@ export default {
   },
   props: {
     dialogFormUser: { type: Boolean },
+    userToUpdate: { type: Object },
   },
   methods: {
-    ...mapActions("auth_store", ["saveEnty"]),
+    ...mapActions("auth_store", ["saveEnty", "updateEnty"]),
     validarIgualdad() {
       // Actualiza la regla cuando cambia el valor de campo1
       this.reglaIgualdad = (v) =>
@@ -193,6 +195,10 @@ export default {
     },
     formData(newValue) {
       console.log("Nuevo form data: ", newValue);
+    },
+    userToUpdate(newValue) {
+      this.dialog = true;
+      console.log(newValue);
     },
   },
 };

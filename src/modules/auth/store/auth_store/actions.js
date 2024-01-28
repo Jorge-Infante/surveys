@@ -18,3 +18,21 @@ export const saveEnty = async ({ commit }, params) => {
   console.log(`RESPONSE POST ENTY TO ${url}`, res);
   commit(params.mutation1, { key: params.enty, value: res.data });
 };
+export const updateEnty = async ({ commit }, params) => {
+  console.log("DATA PUT: ", params.data);
+  const url = `/v1/${params.url}`;
+  const res = await apiClient.put(url, params.data);
+  console.log(`RESPONSE POST ENTY TO ${url}`, res);
+  commit(params.mutation1, {
+    key: params.enty,
+    keySearch: params.keySearch,
+    value: res.data,
+  });
+};
+export const saveInstructive = async ({ commit }, params) => {
+  console.log("DATA POST: ", params.data);
+  const url = `/v1/${params.url}`;
+  const res = await apiClient.post(url, params.data);
+  console.log(`RESPONSE POST ENTY TO ${url}`, res);
+  commit("addInstructive", res.data);
+};
