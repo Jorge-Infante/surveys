@@ -337,7 +337,7 @@ export default {
       if (url) {
         let test = url.startsWith("https")
           ? url
-          : `https://test-apiothras.djsoftwaremakers.com${url}`;
+          : `https://apiothras.djsoftwaremakers.com${url}`;
 
         return test;
       }
