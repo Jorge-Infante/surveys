@@ -125,6 +125,15 @@
           value="dashBoard-surveys"
           :to="{ name: 'dashBoard-surveys' }"
         ></v-list-item>
+        <v-list-item
+            v-show="administrador"
+            @click="handleCloseDrawer"
+            prepend-icon="mdi-account-multiple-plus"
+            title="Usuarios"
+            class="text-left"
+            value="users-admin"
+            :to="{ name: 'auth-admin' }"
+          ></v-list-item>
       </v-list>
 
       <template v-slot:append>

@@ -581,7 +581,7 @@ export default {
       let question = this.sectionToFind.question;
       let seccion = this.sectionToFind.seccion;
 
-      question.url = `https://test-apiothras.djsoftwaremakers.com${nuevo}`;
+      question.url = `https://apiothras.djsoftwaremakers.com${nuevo}`;
       //reemplazar pregunta en la seccion
       seccion.questions[this.sectionToFind.questionIdx] = question;
       //reeemplazar seccion en las secciones
