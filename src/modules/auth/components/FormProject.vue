@@ -49,6 +49,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import Swal from "sweetalert2";
 export default {
   data() {
     return {
@@ -77,7 +78,15 @@ export default {
         try {
           await this.updateEnty(params);
           this.dialog = false;
+          Swal.fire({
+            title: "!Proyecto actualizado exitosamente!",
+            icon: "success",
+          });
         } catch (error) {
+          Swal.fire({
+            title: "¡Error al actulizar proyecto!",
+            icon: "error",
+          });
           console.log(error);
         }
       } else {
@@ -90,7 +99,15 @@ export default {
         try {
           await this.saveEnty(params);
           this.dialog = false;
+          Swal.fire({
+            title: "¡Proyecto registrado exitosamente!",
+            icon: "success",
+          });
         } catch (error) {
+          Swal.fire({
+            title: "¡Error al registrar proyecto!",
+            icon: "error",
+          });
           console.log(error);
         }
       }

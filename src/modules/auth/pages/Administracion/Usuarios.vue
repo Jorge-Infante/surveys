@@ -38,6 +38,7 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import FormUserVue from "../../components/FormUser.vue";
+import Swal from "sweetalert2";
 export default {
   data() {
     return {
@@ -82,7 +83,15 @@ export default {
       };
       try {
         await this.deleteEnty(params);
+        Swal.fire({
+          title: "¡Usuario eliminado exitosamente!",
+          icon: "success",
+        });
       } catch (error) {
+        Swal.fire({
+          title: "¡Error al eliminar usuario!",
+          icon: "error",
+        });
         console.log(error);
       }
     },

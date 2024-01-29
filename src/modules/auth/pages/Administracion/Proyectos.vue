@@ -38,6 +38,7 @@
 <script>
 import FormProject from "../../components/FormProject.vue";
 import { mapActions, mapState } from "vuex";
+import Swal from "sweetalert2";
 export default {
   data() {
     return {
@@ -78,7 +79,15 @@ export default {
       };
       try {
         await this.deleteEnty(params);
+        Swal.fire({
+          title: "¡Proyecto eliminado exitosamente!",
+          icon: "success",
+        });
       } catch (error) {
+        Swal.fire({
+          title: "¡Error al eliminar proyecto!",
+          icon: "error",
+        });
         console.log(error);
       }
     },

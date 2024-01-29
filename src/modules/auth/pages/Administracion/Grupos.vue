@@ -37,6 +37,7 @@
 
 <script>
 import FormGroup from "../../components/FormGroup.vue";
+import Swal from "sweetalert2";
 import { mapActions, mapState } from "vuex";
 export default {
   data() {
@@ -78,7 +79,15 @@ export default {
       };
       try {
         await this.deleteEnty(params);
+        Swal.fire({
+          title: "¡Grupo eliminado exitosamente!",
+          icon: "success",
+        });
       } catch (error) {
+        Swal.fire({
+          title: "¡Error al eliminar grupo!",
+          icon: "error",
+        });
         console.log(error);
       }
     },

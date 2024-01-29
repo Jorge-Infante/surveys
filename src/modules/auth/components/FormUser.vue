@@ -140,6 +140,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import Swal from "sweetalert2";
 export default {
   data() {
     return {
@@ -207,7 +208,15 @@ export default {
         try {
           await this.updateEnty(params);
           this.dialog = false;
+          Swal.fire({
+            title: "¡Usuario actualizado exitosamente!",
+            icon: "success",
+          });
         } catch (error) {
+          Swal.fire({
+            title: "¡Error al actulizar usuario!",
+            icon: "error",
+          });
           console.log(error);
         }
       } else {
@@ -220,7 +229,15 @@ export default {
         try {
           await this.saveEnty(params);
           this.dialog = false;
+          Swal.fire({
+            title: "Usuario registrado exitosamente!",
+            icon: "success",
+          });
         } catch (error) {
+          Swal.fire({
+            title: "¡Error al registrar usuario!",
+            icon: "error",
+          });
           console.log(error);
         }
       }

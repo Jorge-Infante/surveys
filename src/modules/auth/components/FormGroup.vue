@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import Swal from "sweetalert2";
 import { mapActions } from "vuex";
 export default {
   data() {
@@ -65,7 +66,15 @@ export default {
         try {
           await this.updateEnty(params);
           this.dialog = false;
+          Swal.fire({
+            title: "¡Grupo actualizado exitosamente!",
+            icon: "success",
+          });
         } catch (error) {
+          Swal.fire({
+            title: "¡Error al actulizar grupo!",
+            icon: "error",
+          });
           console.log(error);
         }
       } else {
@@ -78,7 +87,15 @@ export default {
         try {
           await this.saveEnty(params);
           this.dialog = false;
+          Swal.fire({
+            title: "¡Grupo registrado exitosamente!",
+            icon: "success",
+          });
         } catch (error) {
+          Swal.fire({
+            title: "¡Error al registrar grupo!",
+            icon: "error",
+          });
           console.log(error);
         }
       }
