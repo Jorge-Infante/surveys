@@ -29,6 +29,16 @@ export const updateEnty = async ({ commit }, params) => {
     value: res.data,
   });
 };
+export const deleteEnty = async ({ commit }, params) => {
+  console.log("DATA DELETE: ", params);
+  const url = `/v1/${params.url}`;
+  const res = await apiClient.delete(url);
+  console.log(`RESPONSE POST ENTY TO ${url}`, res);
+  commit(params.mutation1, {
+    key: params.enty,
+    keySearch: params.keySearch,
+  });
+};
 export const saveInstructive = async ({ commit }, params) => {
   console.log("DATA POST: ", params.data);
   const url = `/v1/${params.url}`;

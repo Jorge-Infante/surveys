@@ -55,25 +55,44 @@ export default {
       dialog: false,
       name: null,
       surveys_select: null,
+      updateProject: false,
+      updateItem: null,
     };
   },
   props: {
     dialogFormProject: { type: Boolean },
+    projectToUpdate: { type: Object },
   },
   methods: {
-    ...mapActions("auth_store", ["saveEnty"]),
+    ...mapActions("auth_store", ["saveEnty", "updateEnty"]),
     async handleSaveProject() {
-      const params = {
-        url: "projects/",
-        mutation1: "addEnty",
-        enty: "projects",
-        data: this.formData,
-      };
-      try {
-        await this.saveEnty(params);
-        this.dialog = false;
-      } catch (error) {
-        console.log(error);
+      if (this.updateProject) {
+        const params = {
+          url: `projects/${this.updateItem.id}/`,
+          mutation1: "updateState",
+          enty: "projects",
+          keySearch: this.updateItem.id,
+          data: this.formData,
+        };
+        try {
+          await this.updateEnty(params);
+          this.dialog = false;
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        const params = {
+          url: "projects/",
+          mutation1: "addEnty",
+          enty: "projects",
+          data: this.formData,
+        };
+        try {
+          await this.saveEnty(params);
+          this.dialog = false;
+        } catch (error) {
+          console.log(error);
+        }
       }
     },
   },
@@ -93,6 +112,14 @@ export default {
     },
     dialog(newValue) {
       if (newValue === false) this.$emit("on:cancelFormProject");
+    },
+    projectToUpdate(newValue) {
+      this.dialog = true;
+      this.updateProject = true;
+      this.updateItem = newValue;
+      this.name = newValue.name;
+      this.surveys_select = newValue.surveys;
+      console.log(newValue);
     },
   },
 };

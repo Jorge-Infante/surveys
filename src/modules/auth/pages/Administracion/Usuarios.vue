@@ -16,7 +16,11 @@
             >Actualizar grupo</v-tooltip
           ><v-icon>mdi-file-document-refresh-outline</v-icon></v-btn
         >
-        <v-btn icon size="x-small" class="ml-1"
+        <v-btn
+          icon
+          size="x-small"
+          class="ml-1"
+          @click="handleDeleteUser(item.id)"
           ><v-tooltip activator="parent" location="start"
             >Eliiminar grupo</v-tooltip
           ><v-icon>mdi-trash-can-outline</v-icon></v-btn
@@ -32,7 +36,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import FormUserVue from "../../components/FormUser.vue";
 export default {
   data() {
@@ -59,6 +63,7 @@ export default {
     FormUserVue,
   },
   methods: {
+    ...mapActions("auth_store", ["deleteEnty"]),
     handleShowFormUser() {
       this.dialogFormUser = true;
     },
@@ -67,6 +72,19 @@ export default {
     },
     handleUpdateUser(item) {
       this.userToUpdate = item;
+    },
+    async handleDeleteUser(id) {
+      const params = {
+        url: `users/${id}/`,
+        mutation1: "removeState",
+        enty: "users",
+        keySearch: id,
+      };
+      try {
+        await this.deleteEnty(params);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

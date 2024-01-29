@@ -65,7 +65,7 @@
             </v-autocomplete>
           </v-col>
         </v-row>
-        <v-row>
+        <v-row v-if="!updateUser">
           <v-col cols="6"
             ><v-text-field
               v-model="password"
@@ -82,6 +82,30 @@
             ><v-text-field
               v-model="password2"
               :rules="[reglaIgualdad, rules.required]"
+              clearable
+              type="password"
+              label="Contraseña"
+              autocomplete="off"
+              placeholder="Repita su contraseña"
+            ></v-text-field
+          ></v-col>
+        </v-row>
+        <v-row v-else>
+          <v-col cols="6"
+            ><v-text-field
+              v-model="password"
+              @input="validarIgualdad"
+              clearable
+              label="Contraseña"
+              type="password"
+              autocomplete="off"
+              placeholder="Contraseña del usuario"
+            ></v-text-field
+          ></v-col>
+          <v-col cols="6"
+            ><v-text-field
+              v-model="password2"
+              :rules="[reglaIgualdad]"
               clearable
               type="password"
               label="Contraseña"
@@ -119,6 +143,7 @@ import { mapActions, mapState } from "vuex";
 export default {
   data() {
     return {
+      updateItem: null,
       dialog: false,
       username: null,
       first_name: null,
@@ -171,17 +196,33 @@ export default {
       }
     },
     async handleSaveUser() {
-      const params = {
-        url: "users/",
-        mutation1: "addEnty",
-        enty: "users",
-        data: this.formData,
-      };
-      try {
-        await this.saveEnty(params);
-        this.dialog = false;
-      } catch (error) {
-        console.log(error);
+      if (this.updateUser) {
+        const params = {
+          url: `users/${this.updateItem.id}/`,
+          mutation1: "updateState",
+          enty: "users",
+          keySearch: this.updateItem.id,
+          data: this.formData,
+        };
+        try {
+          await this.updateEnty(params);
+          this.dialog = false;
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        const params = {
+          url: "users/",
+          mutation1: "addEnty",
+          enty: "users",
+          data: this.formData,
+        };
+        try {
+          await this.saveEnty(params);
+          this.dialog = false;
+        } catch (error) {
+          console.log(error);
+        }
       }
     },
   },
@@ -198,7 +239,15 @@ export default {
     },
     userToUpdate(newValue) {
       this.dialog = true;
+      this.updateUser = true;
       console.log(newValue);
+      this.username = newValue.user.username;
+      this.first_name = newValue.user.first_name;
+      this.groups_select = newValue.user.groups;
+      this.identification = newValue.identification;
+      this.ext_profile = newValue.ext_profile;
+      this.projects_select = newValue.projects;
+      this.updateItem = newValue;
     },
   },
 };
