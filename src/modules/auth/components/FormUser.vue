@@ -198,6 +198,12 @@ export default {
     },
     async handleSaveUser() {
       if (this.updateUser) {
+        let newProjectsSelect = this.projects_select.map(
+          (element) => element.id
+        );
+        this.projects_select = newProjectsSelect;
+        let newGroupsSelect = this.groups_select.map((element) => element.id);
+        this.groups_select = newGroupsSelect;
         const params = {
           url: `users/${this.updateItem.id}/`,
           mutation1: "updateState",

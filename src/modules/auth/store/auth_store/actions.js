@@ -22,7 +22,7 @@ export const updateEnty = async ({ commit }, params) => {
   console.log("DATA PUT: ", params.data);
   const url = `/v1/${params.url}`;
   const res = await apiClient.put(url, params.data);
-  console.log(`RESPONSE POST ENTY TO ${url}`, res);
+  console.log(`RESPONSE PUT ENTY TO ${url}`, res);
   commit(params.mutation1, {
     key: params.enty,
     keySearch: params.keySearch,
