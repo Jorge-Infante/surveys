@@ -32,8 +32,16 @@
             >
               <v-icon>mdi-download-outline</v-icon>
             </v-btn>
-            <v-btn icon size="x-small" @click="handleDeleteForm(item.id)">
+            <v-btn
+              class="mr-2"
+              icon
+              size="x-small"
+              @click="handleDeleteForm(item.id)"
+            >
               <v-icon>mdi-delete-empty-outline</v-icon>
+            </v-btn>
+            <v-btn icon size="x-small" @click="hadleEditForm(item)">
+              <v-icon>mdi-file-document-refresh-outline</v-icon>
             </v-btn>
           </td>
         </tr>
@@ -55,6 +63,17 @@ export default {
   },
   methods: {
     ...mapActions("survey_store", ["deleteFormSurvey", "downloadCsv"]),
+    hadleEditForm(item) {
+      console.log("--- Param edit form : ", item,"---");
+      item.update = true;
+      const form_id = item.id;
+
+      this.$router.push({
+        name: "survey-form-edit",
+        params: { id: form_id, showForm: true },
+      });
+
+    },
     handleDeleteForm(itemId) {
       Swal.fire({
         text: "¡No podrá revertir este cambio!",

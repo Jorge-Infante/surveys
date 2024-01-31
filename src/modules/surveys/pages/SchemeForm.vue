@@ -187,13 +187,14 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 import SeccionConfig from "../components/SeccionConfig.vue";
 import ConfigSurvey from "../components/ConfigSurvey.vue";
 import Swal from "sweetalert2";
 import { generarUUID } from "@/modules/surveys/utils/utils";
 export default {
   data: () => ({
+    formToUpdate: null,
     dialogConfig: false,
     formScheme: [],
     countFields: 0,
@@ -206,7 +207,16 @@ export default {
     seccions: [],
     dateFormat: "YYYY-MM-DD",
   }),
+  props: {
+    id: {
+      required: false,
+    },
+    showForm: {
+      required: false,
+    },
+  },
   computed: {
+    ...mapState("survey_store", ["forms"]),
     formData() {
       let data = {
         name: this.titulo,
@@ -229,7 +239,7 @@ export default {
     SeccionConfig,
   },
   methods: {
-    ...mapActions("survey_store", ["saveFormSurvey"]),
+    ...mapActions("survey_store", ["saveFormSurvey", "updateForm"]),
     handleShowConfig(seccion) {
       this.currentSeccion = seccion;
       this.dialogConfig = true;
@@ -248,27 +258,27 @@ export default {
       );
       // this.formScheme.push(nuevo);
       if (nuevo.type == "Seleccion dependiente") {
-        let idShared = generarUUID()
+        let idShared = generarUUID();
         let questionMain = {
           label: nuevo.label,
           descripcion: nuevo.descripcion,
-          idSeccion:nuevo.idSeccion,
+          idSeccion: nuevo.idSeccion,
           options: nuevo.optionsDep,
           type: nuevo.type,
           value: nuevo.value,
           order: "questionMain",
-          idShared
+          idShared,
         };
         let questionDep = {
           label: nuevo.childLabel,
-          idSeccion:nuevo.idSeccion,
+          idSeccion: nuevo.idSeccion,
           descripcion: nuevo.childDescrip,
           options: nuevo.optionsDepChild,
           type: nuevo.type,
           value: nuevo.value,
           order: "questionDep",
           idShared,
-          showOptions:[]
+          showOptions: [],
         };
         console.log("LA MAIN: ", questionMain);
         console.log("LA DEPENDIENTE: ", questionDep);
@@ -293,25 +303,51 @@ export default {
     async printForm() {
       console.log(" === > EL ESQUEMA : ", this.formData);
       this.loading = true;
-      try {
-        const res = await this.saveFormSurvey(this.formData);
-        console.log(" ---- EL RESPONSE: ", res);
-        if (res.status == 201) {
-          console.log(" ---- EL RESPONSE 2: ", res.status);
+      if (this.formToUpdate) {
+        this.formData.author = this.formToUpdate.author;
+        this.formData.slug_name = this.formToUpdate.slug_name;
+        const params = { id: this.formToUpdate.id, data: this.formData };
+        try {
+          const upRes = await this.updateForm(params);
+          console.log("RESPOSE UPDATE:  ", upRes);
+          if (upRes.status == 200) {
+            this.loading = false;
+            Swal.fire({
+              title: "Actualizado exitosamente!",
+              icon: "success",
+            });
+          }
+        } catch (error) {
           this.loading = false;
           Swal.fire({
-            title: "¡Encuesta registrada!",
-            icon: "success",
+            title: "¡Error al actualizar!",
+            icon: "error",
           });
+        } finally {
+          this.$router.go(-1);
+          this.clearData();
         }
-      } catch (error) {
-        Swal.fire({
-          title: "¡Error al registrar encuesta!",
-          icon: "error",
-        });
-        this.loading = false;
-      } finally {
-        this.clearData();
+      } else {
+        try {
+          const res = await this.saveFormSurvey(this.formData);
+          console.log(" ---- EL RESPONSE: ", res);
+          if (res.status == 201) {
+            console.log(" ---- EL RESPONSE 2: ", res.status);
+            this.loading = false;
+            Swal.fire({
+              title: "¡Encuesta registrada!",
+              icon: "success",
+            });
+          }
+        } catch (error) {
+          Swal.fire({
+            title: "¡Error al registrar encuesta!",
+            icon: "error",
+          });
+          this.loading = false;
+        } finally {
+          this.clearData();
+        }
       }
     },
     handleSetTitle() {
@@ -344,6 +380,27 @@ export default {
     cancelSeccionConfig() {
       this.dialogSeccion = false;
     },
+    selectForm(id) {
+      let form = this.forms.find((item) => item.id == id);
+      if (!form) {
+        this.$router.go(-1);
+      } else {
+        this.formToUpdate = form;
+        this.titulo = form.name;
+        this.seccions = form.data;
+        this.slug_name = form.slug_name;
+        console.log(
+          "----------------------------------------",
+          form,
+          id,
+          "form data: ",
+          this.formData
+        );
+      }
+    },
+  },
+  created() {
+    this.selectForm(this.id);
   },
 };
 </script>

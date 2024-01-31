@@ -22,7 +22,7 @@ export default {
           /* webpackChunkName: "survey-form" */ "@/modules/surveys/pages/Survey.vue"
         ),
       props: (route) => {
-        console.log('LOS PARAMS: ',route.params)
+        console.log("LOS PARAMS: ", route.params);
         return {
           id: route.params.id,
           showSurvey: route.params.showSurvey,
@@ -36,6 +36,21 @@ export default {
         import(
           /* webpackChunkName: "survey-form" */ "@/modules/surveys/pages/SchemeForm.vue"
         ),
+    },
+    {
+      path: "surveyFormEdit/:id/:showForm",
+      name: "survey-form-edit",
+      component: () =>
+        import(
+          /* webpackChunkName: "survey-form-edit" */ "@/modules/surveys/pages/SchemeForm.vue"
+        ),
+      props: (route) => {
+        console.log("LOS PARAMS: ", route.params);
+        return {
+          id: route.params.id,
+          showForm: route.params.showForm,
+        };
+      },
     },
     {
       path: "listForms",

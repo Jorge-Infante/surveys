@@ -1,8 +1,4 @@
-import {
-  apiClient,
-  imgClient,
-  downloadCsvApi,
-} from "@/api/base_api";
+import { apiClient, imgClient, downloadCsvApi } from "@/api/base_api";
 export const saveSurvey = async ({ commit }, data) => {
   const url = "v1/survey/";
   const res = await apiClient.post(url, data);
@@ -20,7 +16,7 @@ export const deleteSurvey = async ({ commit }, id) => {
 export const downloadRecords = async ({ commit }, params) => {
   const url = `/v1/get-report-record/?${params}`;
   console.log("  --- HALANDO RECORDS: ", url);
-  const res = await downloadCsvApi.get(url, { responseType: 'arraybuffer' });
+  const res = await downloadCsvApi.get(url, { responseType: "arraybuffer" });
 
   // commit("addSurvey", res.data);
   return res;
@@ -39,6 +35,13 @@ export const updateSurvey = async ({ commit }, params) => {
   commit("updateSurvey", res.data);
   return res;
 };
+export const updateForm = async ({ commit }, params) => {
+  console.log("  --- UPDATE FORM SURVEY DATA: ", params.data);
+  const url = `v1/survey-form/${params.id}/`;
+  const res = await apiClient.put(url, params.data);
+  commit("updateFormSurvey", res.data);
+  return res;
+};
 export const deleteFormSurvey = async ({ commit }, id) => {
   const url = `v1/survey-form/${id}/`;
   const res = await apiClient.delete(url);
@@ -49,7 +52,7 @@ export const deleteFormSurvey = async ({ commit }, id) => {
 };
 export const downloadExcel = async ({ commit }, params) => {
   const url = `v1/get-excel/?${params}}`;
-  const res = await apiClient.get(url, { responseType: 'arraybuffer' });
+  const res = await apiClient.get(url, { responseType: "arraybuffer" });
   // commit("addSurvey", res.data);
   return res;
 };

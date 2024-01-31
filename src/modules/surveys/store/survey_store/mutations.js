@@ -31,6 +31,12 @@ export const updateSurvey = (state, surveyUpdate) => {
   );
   state.surveysList[index] = surveyUpdate;
 };
+export const updateFormSurvey = (state, surveyUpdate) => {
+  let index = state.forms.findIndex(
+    (survey) => survey.id === surveyUpdate.id
+  );
+  state.forms[index] = surveyUpdate;
+};
 export const setImages = (state, images) => {
   state.images = [images, ...state.images];
   console.log("IMAGES INTO STATE: ", state.images);

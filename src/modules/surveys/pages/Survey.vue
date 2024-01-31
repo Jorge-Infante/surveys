@@ -21,10 +21,11 @@
           {{ titulo }}
         </v-toolbar-title></v-toolbar
       >
-      <v-row v-if="!titulo">
+      <div v-if="!titulo && instructives" v-html="instructives.text"></div>
+      <v-row v-if="!titulo && !instructives">
         <v-alert
           type="info"
-          title="Seleccione encuesta a diligenciar."
+          title="Seleccione encuesta a diligenciar, no hay registro de intructivos"
         ></v-alert>
       </v-row>
       <v-row class="ma-1">
@@ -263,12 +264,14 @@ export default {
     console.log(" ### ---- showSurvey ---- ### :", this.showSurvey);
   },
   created() {
+    this.getInstructives();
     this.getLocation();
     this.db = db;
     // this.fetchItems();
   },
   computed: {
     ...mapState("survey_store", ["surveyToFill", "surveysList", "appVersion"]),
+    ...mapState("auth_store", ["instructives"]),
     formData() {
       let data = {
         name: this.titulo,
@@ -306,6 +309,15 @@ export default {
       "updateSurvey",
       "setImagesList",
     ]),
+    ...mapActions("auth_store", ["getEnty"]),
+    async getInstructives() {
+      const params = {
+        url: "instruccions/",
+        mutation1: "setState",
+        enty: "instructives",
+      };
+      await this.getEnty(params);
+    },
     selectQuestionMain(index, question) {
       let seccion = this.findObjectById(question.idSeccion);
       console.log(
