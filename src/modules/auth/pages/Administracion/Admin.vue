@@ -30,7 +30,7 @@
         ></v-list-item>
 
         <v-list-item
-          prepend-icon="mdi-file-sign"
+          prepend-icon="mdi-chart-multiple"
           title="Proyectos"
           value="projects"
           :to="{ name: 'admin-proyectos' }"
@@ -53,6 +53,19 @@
               variant="text"
               icon="mdi-plus"
               @click="handleShowFormInstructive"
+            ></v-btn> </template
+        ></v-list-item>
+        <v-list-item
+          prepend-icon="mdi-file-sign"
+          title="Encuestas"
+          value="surveys"
+          :to="{ name: 'survey-fill-out' }"
+        >
+          <template v-slot:append>
+            <v-btn
+              size="x-small"
+              variant="text"
+              icon="mdi-swap-horizontal"
             ></v-btn> </template
         ></v-list-item>
       </v-list>
