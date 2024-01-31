@@ -98,7 +98,7 @@
           >
             <v-list>
               <v-list-item
-                v-for="item in formularios"
+                v-for="item in forms"
                 :key="item.id"
                 @click="selectForm(item)"
               >

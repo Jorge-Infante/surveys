@@ -382,9 +382,7 @@ export default {
     },
     selectForm(id) {
       let form = this.forms.find((item) => item.id == id);
-      if (!form) {
-        this.$router.go(-1);
-      } else {
+      if (form) {
         this.formToUpdate = form;
         this.titulo = form.name;
         this.seccions = form.data;
