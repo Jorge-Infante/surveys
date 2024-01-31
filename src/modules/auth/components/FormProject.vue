@@ -114,6 +114,14 @@ export default {
           console.log(error);
         }
       }
+      this.clearData();
+    },
+    clearData() {
+      this.name = null;
+      this.surveys_select = null;
+      this.surveys_select_arr = [];
+      this.updateProject = false;
+      this.updateItem = null;
     },
   },
   computed: {
@@ -131,7 +139,10 @@ export default {
       this.dialog = newValue;
     },
     dialog(newValue) {
-      if (newValue === false) this.$emit("on:cancelFormProject");
+      if (newValue === false) {
+        this.$emit("on:cancelFormProject");
+        this.clearData();
+      }
     },
     projectToUpdate(newValue) {
       this.dialog = true;

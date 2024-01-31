@@ -63,6 +63,10 @@ export default {
       } catch (error) {
         console.log(error);
       }
+      this.clearData();
+    },
+    clearData() {
+      this.text = null;
     },
   },
   watch: {
@@ -70,7 +74,10 @@ export default {
       this.dialog = newValue;
     },
     dialog(newValue) {
-      if (newValue === false) this.$emit("on:cancelFormInstructive");
+      if (newValue === false) {
+        this.$emit("on:cancelFormInstructive");
+        this.clearData();
+      }
     },
   },
 };

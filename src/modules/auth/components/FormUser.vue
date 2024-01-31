@@ -268,6 +268,21 @@ export default {
           this.errors = error.response.data.errors;
         }
       }
+      this.clearData();
+    },
+    clearData() {
+      this.username = null;
+      this.first_name = null;
+      this.password = null;
+      this.groups_select_arr = [];
+      this.identification = null;
+      this.ext_profile = null;
+      this.projects_select_arr = [];
+      this.password2 = null;
+      this.updateUser = false;
+      this.errors = null;
+      this.groups_select = null;
+      this.projects_select = null;
     },
   },
 
@@ -276,7 +291,10 @@ export default {
       this.dialog = newValue;
     },
     dialog(newValue) {
-      if (newValue === false) this.$emit("on:cancelFormUser");
+      if (newValue === false) {
+        this.$emit("on:cancelFormUser");
+        this.clearData();
+      }
     },
     formData(newValue) {
       console.log("Nuevo form data: ", newValue);

@@ -69,6 +69,12 @@ export default {
         this.handleSaveGroup();
       }
     },
+    clearData() {
+      this.dialog = false;
+      this.name = null;
+      this.updateItem = null;
+      this.updateGroup = false;
+    },
     async handleSaveGroup() {
       if (this.updateGroup) {
         const params = {
@@ -114,6 +120,7 @@ export default {
           console.log(error);
         }
       }
+      this.clearData();
     },
   },
   watch: {
@@ -121,7 +128,10 @@ export default {
       this.dialog = newValue;
     },
     dialog(newValue) {
-      if (newValue === false) this.$emit("on:cancelFormGroup");
+      if (newValue === false) {
+        this.$emit("on:cancelFormGroup");
+        this.clearData();
+      }
     },
     groupToUpdate(newValue) {
       this.updateGroup = true;
