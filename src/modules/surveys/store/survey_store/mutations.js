@@ -36,6 +36,7 @@ export const updateFormSurvey = (state, surveyUpdate) => {
     (survey) => survey.id === surveyUpdate.id
   );
   state.forms[index] = surveyUpdate;
+  console.log('*** MUTANDO FORMS : ',surveyUpdate,'state.forms',state.forms)
 };
 export const setImages = (state, images) => {
   state.images = [images, ...state.images];

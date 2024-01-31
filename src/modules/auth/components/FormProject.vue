@@ -56,6 +56,7 @@ export default {
       dialog: false,
       name: null,
       surveys_select: null,
+      surveys_select_arr: [],
       updateProject: false,
       updateItem: null,
     };
@@ -68,6 +69,8 @@ export default {
     ...mapActions("auth_store", ["saveEnty", "updateEnty"]),
     async handleSaveProject() {
       if (this.updateProject) {
+        let newSurveysSelect = this.surveys_select.map((element) => element.id);
+        this.surveys_select = newSurveysSelect;
         const params = {
           url: `projects/${this.updateItem.id}/`,
           mutation1: "updateState",
@@ -118,7 +121,7 @@ export default {
     formData() {
       let data = {
         name: this.name,
-        surveys: this.surveys_select,
+        surveys: this.surveys_select_arr,
       };
       return data;
     },
@@ -137,6 +140,9 @@ export default {
       this.name = newValue.name;
       this.surveys_select = newValue.surveys;
       console.log(newValue);
+    },
+    surveys_select(newValue) {
+      this.surveys_select_arr = newValue;
     },
   },
 };
