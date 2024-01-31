@@ -129,7 +129,7 @@
             v-show="administrador"
             @click="handleCloseDrawer"
             prepend-icon="mdi-account-multiple-plus"
-            title="Usuarios"
+            title="Administración"
             class="text-left"
             value="users-admin"
             :to="{ name: 'auth-admin' }"
