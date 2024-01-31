@@ -3,10 +3,15 @@
     <v-card class="px-6 py-8">
       <v-toolbar title="Creación de grupo"></v-toolbar>
 
-      <v-form class="mt-4">
+      <v-form class="mt-4" @submit.prevent ref="form">
         <v-row>
           <v-col cols="12">
-            <v-text-field clearable label="Nombre" v-model="name"></v-text-field
+            <v-text-field
+              clearable
+              label="Nombre"
+              v-model="name"
+              :rules="[rules.required]"
+            ></v-text-field
           ></v-col>
         </v-row>
 
@@ -18,7 +23,7 @@
           color="success"
           size="small"
           variant="elevated"
-          @click="handleSaveGroup"
+          @click="validate"
         >
           Guardar
         </v-btn>
@@ -46,6 +51,9 @@ export default {
       name: null,
       updateItem: null,
       updateGroup: false,
+      rules: {
+        required: (value) => !!value || "El campo es obligatorio",
+      },
     };
   },
   props: {
@@ -54,6 +62,13 @@ export default {
   },
   methods: {
     ...mapActions("auth_store", ["saveEnty", "updateEnty"]),
+    async validate() {
+      const { valid } = await this.$refs.form.validate();
+      if (valid) {
+        console.log("VALIDACIÓN OK OK OK");
+        this.handleSaveGroup();
+      }
+    },
     async handleSaveGroup() {
       if (this.updateGroup) {
         const params = {

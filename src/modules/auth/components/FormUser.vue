@@ -115,6 +115,27 @@
           ></v-col>
         </v-row>
       </v-form>
+      <v-row class="d-flex justify-center" v-if="errors">
+        <v-col cols="10"
+          ><v-alert
+            density="compact"
+            type="warning"
+            title="Por favor, validar los siguientes datos... "
+          >
+            <p v-if="this.errors.identification">
+              Cedula: {{ this.errors.identification[0] }}
+            </p>
+            <div v-if="this.errors.user">
+              <p v-if="this.errors.user.first_name">
+                Nombre: {{ this.errors.user.first_name[0] }}
+              </p>
+              <p v-if="this.errors.user.username">
+                Usuario: {{ this.errors.user.username[0] }}
+              </p>
+            </div>
+          </v-alert></v-col
+        >
+      </v-row>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn
@@ -151,10 +172,13 @@ export default {
       password: null,
       password2: null,
       groups_select: null,
+      groups_select_arr: [],
       identification: null,
       ext_profile: null,
       projects_select: null,
+      projects_select_arr: [],
       updateUser: false,
+      errors: null,
       reglaIgualdad: (v) => v === this.password || "Los campos no son iguales",
       rules: {
         required: (value) => !!value || "El campo es obligatorio",
@@ -169,11 +193,11 @@ export default {
           username: this.username,
           first_name: this.first_name,
           password: this.password,
-          groups: this.groups_select,
+          groups: this.groups_select_arr,
         },
         identification: this.identification,
         ext_profile: this.ext_profile,
-        projects: this.projects_select,
+        projects: this.projects_select_arr,
       };
       return data;
     },
@@ -240,11 +264,8 @@ export default {
             icon: "success",
           });
         } catch (error) {
-          Swal.fire({
-            title: "¡Error al registrar usuario!",
-            icon: "error",
-          });
           console.log(error);
+          this.errors = error.response.data.errors;
         }
       }
     },
@@ -271,6 +292,12 @@ export default {
       this.ext_profile = newValue.ext_profile;
       this.projects_select = newValue.projects;
       this.updateItem = newValue;
+    },
+    projects_select(newValue) {
+      this.projects_select_arr = newValue;
+    },
+    groups_select(newValue) {
+      this.groups_select_arr = newValue;
     },
   },
 };

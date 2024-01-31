@@ -5,28 +5,29 @@
         size="small"
         variant="text"
         icon="mdi-plus"
-        @click="handleShowFormGroup"
+        @click="handleShowFormInstructive"
       ></v-btn> </template
   ></v-toolbar>
   <div v-if="instructives" v-html="instructives.text"></div>
   <!-- <v-data-table :headers="headers" :items="instructives"> </v-data-table> -->
-  <FormGroup
-    :dialogFormGroup="dialogFormGroup"
-    @on:cancelFormGroup="handleCancelFormGroup"
+  <FormInstructive
+    :dialogFormInstructive="dialogFormInstructive"
+    @on:cancelFormInstructive="handleCancelFormInstructive"
   />
 </template>
 
 <script>
 import FormGroup from "../../components/FormGroup.vue";
+import FormInstructive from "@/modules/auth/components/FormInstructive.vue";
 import { mapState } from "vuex";
 export default {
   data() {
     return {
       dialogFormGroup: false,
+      dialogFormInstructive: false,
     };
   },
-  mounted(){
-  },
+  mounted() {},
   computed: {
     ...mapState("auth_store", ["instructives"]),
     headers() {
@@ -38,6 +39,7 @@ export default {
   },
   components: {
     FormGroup,
+    FormInstructive,
   },
   methods: {
     handleShowFormGroup() {
@@ -46,12 +48,18 @@ export default {
     handleCancelFormGroup() {
       this.dialogFormGroup = false;
     },
+    handleCancelFormInstructive() {
+      this.dialogFormInstructive = false;
+    },
+    handleShowFormInstructive() {
+      this.dialogFormInstructive = true;
+    },
   },
-  watch:{
-    instructives(newValue){
-      console.log(newValue.text)
-    }
-  }
+  watch: {
+    instructives(newValue) {
+      console.log(newValue.text);
+    },
+  },
 };
 </script>
 
