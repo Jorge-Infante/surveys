@@ -264,11 +264,10 @@ export default {
             icon: "success",
           });
         } catch (error) {
-          console.log(error);
+          console.log("seteando el errors: ", error);
           this.errors = error.response.data.errors;
         }
       }
-      this.clearData();
     },
     clearData() {
       this.username = null;
@@ -280,8 +279,8 @@ export default {
       this.projects_select_arr = [];
       this.password2 = null;
       this.updateUser = false;
-      this.errors = null;
       this.groups_select = null;
+      this.errors = null;
       this.projects_select = null;
     },
   },
@@ -316,6 +315,9 @@ export default {
     },
     groups_select(newValue) {
       this.groups_select_arr = newValue;
+    },
+    errors(newValue) {
+      console.log("...........new value .........", newValue);
     },
   },
 };
