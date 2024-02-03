@@ -94,6 +94,18 @@ export const getSurveys = async ({ commit }, params) => {
     console.log(error);
   }
 };
+export const getProjects = async ({ commit }, params) => {
+  try {
+    const url = `v1/get-surveys-project/?${params}`;
+    const res = await apiClient.get(url);
+    console.log("  --- RES SURVEYS: ", res.data);
+    commit("setSurveys", res.data.surveys_list);
+    commit("setTotalSurveys", res.data.total);
+    return res.data.surveys;
+  } catch (error) {
+    console.log(error);
+  }
+};
 export const getDashboard = async ({ commit }) => {
   try {
     const url = "v1/get-dashboard/";

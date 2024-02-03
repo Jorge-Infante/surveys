@@ -84,6 +84,13 @@
         <v-expansion-panel-title>Filtros</v-expansion-panel-title>
         <v-expansion-panel-text>
           <v-row>
+          <v-col cols="4"
+            ><v-autocomplete
+              v-model="selectProject"
+              label="Proyecto"
+              :items="proyectos"
+            ></v-autocomplete
+            ></v-col>
             <v-col cols="4"
               ><v-autocomplete
                 v-model="selectSurvey"
@@ -97,7 +104,9 @@
                 label="Departamento"
                 :items="departamentos"
               ></v-autocomplete
-            ></v-col>
+            ></v-col>            
+          </v-row>
+          <v-row>
             <v-col cols="4"
               ><v-autocomplete
                 v-model="selectMun"
@@ -105,8 +114,6 @@
                 :items="municipios"
               ></v-autocomplete
             ></v-col>
-          </v-row>
-          <v-row>
             <v-col cols="4"
               ><v-autocomplete
                 v-model="selectExt"
@@ -247,6 +254,7 @@ export default {
       loading: false,
       selectExt: null,
       selectSurvey: null,
+      selectProject: null,
       selectDep: null,
       selectMun: null,
       panel: [0],
@@ -264,6 +272,7 @@ export default {
       options: ["Aprobado", "Terminado", "Rechazado"],
       usuarios: [],
       encuestas: [],
+      proyectos: [],
       listReport: [],
       dialogDelete: false,
       idDelete: null,
@@ -281,6 +290,7 @@ export default {
       "downloadExcel",
       "finishSurvey",
       "getSurveys",
+      "getProjects",
       "deleteSurvey",
       "getFilters",
     ]),
@@ -403,6 +413,7 @@ export default {
       this.departamentos = this.filters.departamentos;
       this.municipios = this.filters.municipios;
       this.encuestas = this.filters.forms;
+      this.proyectos = this.filters.proyectos;
     },
     async updateSurveys() {
       await this.getSurveys(
@@ -481,10 +492,19 @@ export default {
     formData(nuevo) {
       console.log("El form Data: ", nuevo);
     },
-    page(nuevo) {
-      this.getSurveys(
-        `page=${nuevo}&page_size=${this.itemsPerPage}&extensionista=${this.selectExt}&encuesta=${this.selectSurvey}&municipio=${this.selectMun}&departamento=${this.selectDep}`
-      );
+    async page(nuevo) {
+      if (this.selectProject !== '' && 
+        this.selectSurvey === '' &&
+        this.selectDep === '' &&
+        this.selectMun === '' &&
+        this.selectExt === '') {
+        const filterSurveys = await this.getProjects(`project=${this.selectProject}&page=${nuevo}&page_size=${this.itemsPerPage}`);
+        this.encuestas = filterSurveys;
+      } else {
+        this.getSurveys(
+          `page=${nuevo}&page_size=${this.itemsPerPage}&extensionista=${this.selectExt}&encuesta=${this.selectSurvey}&municipio=${this.selectMun}&departamento=${this.selectDep}`
+        );
+      }
     },
     surveysList(nuevo) {
       this.listReport = nuevo;
@@ -493,7 +513,17 @@ export default {
       this.selectDep = '';
       this.selectMun = '';
       this.selectExt = '';
-      this.updateSurveys();
+      if (nuevo) {
+        this.updateSurveys();
+      };
+    },
+    async selectProject(nuevo) {
+      this.selectSurvey = '';
+      this.selectDep = '';
+      this.selectMun = '';
+      this.selectExt = '';
+      const filterSurveys = await this.getProjects(`project=${nuevo}`);
+      this.encuestas = filterSurveys;
     },
     selectMun(nuevo) {
       if (nuevo) {
