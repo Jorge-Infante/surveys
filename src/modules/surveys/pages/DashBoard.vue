@@ -124,14 +124,22 @@
             <v-col cols="2"
               ><v-btn 
                 :loading="loading"
-                @click="HandleDownloadExcel" 
-                >Exportar Excel</v-btn></v-col
+                @click="HandleDownloadExcel"
+                class="export-btn"
+                prepend-icon="mdi-file-excel"
+                variant="outlined"
+                color="success"
+                >Excel</v-btn></v-col
             >
             <v-col cols="2">
               <v-btn 
                 :loading="loading"
                 @click="HandleDownloadRecords"
-                >Exportar Records</v-btn
+                class="export-btn"
+                prepend-icon="mdi-information-variant-circle"
+                variant="outlined"
+                color="info"
+                >Records</v-btn
               ></v-col
             >
           </v-row>
@@ -159,31 +167,32 @@
               show-select
             >
               <template v-slot:item.actions="{ item }">
-                <v-row>
-                  <v-btn
-                    icon
-                    size="x-small"
-                    :to="{ name: 'survey-fill-out' }"
-                    @click="hadleEditSurvey(item)"
-                    ><v-tooltip activator="parent" location="start"
-                      >Actualizar encuesta</v-tooltip
-                    ><v-icon>mdi-file-document-refresh-outline</v-icon></v-btn
-                  >
-                  <v-btn icon size="x-small" @click="handleFinishSurvey(item)"
-                    ><v-tooltip activator="parent" location="start"
-                      >Finalizar encuesta</v-tooltip
-                    ><v-icon>mdi-check</v-icon></v-btn
-                  >
-                  <v-btn
-                    icon
-                    size="x-small"
-                    class="ml-1"
-                    @click="showDeleteDialog(item.id)"
-                    ><v-tooltip activator="parent" location="start"
-                      >Eliiminar encuesta</v-tooltip
-                    ><v-icon>mdi-trash-can-outline</v-icon></v-btn
-                  >
-                </v-row>
+                  <v-row>
+                    <v-btn-group>
+                      <v-btn
+                        icon
+                        size="x-small"
+                        :to="{ name: 'survey-fill-out' }"
+                        @click="hadleEditSurvey(item)"
+                        ><v-tooltip activator="parent" location="start"
+                          >Actualizar encuesta</v-tooltip
+                        ><v-icon>mdi-file-document-refresh-outline</v-icon></v-btn
+                      >
+                      <v-btn icon size="x-small" @click="handleFinishSurvey(item)"
+                        ><v-tooltip activator="parent" location="start"
+                          >Finalizar encuesta</v-tooltip
+                        ><v-icon>mdi-check</v-icon></v-btn
+                      >
+                      <v-btn
+                        icon
+                        size="x-small"
+                        @click="showDeleteDialog(item.id)"
+                        ><v-tooltip activator="parent" location="start"
+                          >Eliminar encuesta</v-tooltip
+                        ><v-icon>mdi-trash-can-outline</v-icon></v-btn
+                      >
+                    </v-btn-group>
+                  </v-row>
               </template>
               <template v-slot:item.estado="{ item }">
                 <div v-if="item.approved_by">Aprobada</div>
@@ -446,7 +455,7 @@ export default {
         { align: "center", key: "author_username", title: "Usuario" },
         { align: "center", key: "created", title: "Creación" },
         { align: "center", key: "estado", title: "Estado" },
-        { title: "Actions", key: "actions", sortable: false },
+        { title: "Acciones", key: "actions", sortable: false },
       ];
     },
     formData() {
@@ -547,4 +556,37 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+@media only screen and (max-width: 600px) {
+  /* Estilos para pantallas pequeñas */
+  .export-btn{
+    width: 80px;
+    font-size: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@media only screen and (min-width: 601px) and (max-width: 1024px) {
+  /* Estilos para pantallas medianas */
+  .export-btn{
+    width: 100px;
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@media only screen and (min-width: 1025px) {
+  /* Estilos para pantallas grandes */
+  .export-btn{
+    width: 170px;
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+</style>
