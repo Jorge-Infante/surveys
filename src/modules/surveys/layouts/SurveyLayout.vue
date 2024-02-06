@@ -15,13 +15,13 @@
       <v-spacer></v-spacer>
 
       <!-- Show/hide based on screen size -->
-      <v-btn
+      <!-- <v-btn
         v-show="administrador"
         text
         class="hidden-sm-and-down"
         :to="{ name: 'survey-form' }"
         >Crear encuesta</v-btn
-      >
+      > -->
       <v-btn
         v-show="administrador"
         text
@@ -63,7 +63,7 @@
     </v-app-bar>
     <v-navigation-drawer v-model="drawer">
       <v-list density="compact" nav>
-        <v-list-item
+        <!-- <v-list-item
           v-show="administrador"
           @click="handleCloseDrawer"
           prepend-icon="mdi-file-document-plus"
@@ -71,7 +71,7 @@
           class="text-left"
           value="create-survey"
           :to="{ name: 'survey-form' }"
-        ></v-list-item>
+        ></v-list-item> -->
         <v-list-item
           v-show="administrador"
           @click="handleCloseDrawer"

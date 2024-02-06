@@ -68,6 +68,13 @@
               icon="mdi-swap-horizontal"
             ></v-btn> </template
         ></v-list-item>
+        <v-list-item
+          prepend-icon="mdi-file-document-plus"
+          title="Crear encuesta"
+          class="text-left"
+          value="create-survey"
+          :to="{ name: 'survey-form' }"
+        ></v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-main><router-view></router-view></v-main>

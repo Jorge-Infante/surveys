@@ -57,6 +57,14 @@ export default {
               /* webpackChunkName: "instructivos" */ "@/modules/auth/pages/Administracion/Instructivos.vue"
             ),
         },
+        {
+          path: "surveyForm",
+          name: "survey-form",
+          component: () =>
+            import(
+              /* webpackChunkName: "survey-form" */ "@/modules/surveys/pages/SchemeForm.vue"
+            ),
+        },
       ],
     },
   ],
