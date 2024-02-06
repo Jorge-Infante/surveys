@@ -336,6 +336,7 @@ export default {
           );
           console.log(questionDep, index);
           console.log(seccion.questions[index]);
+          seccion.questions[index].value = null;
           seccion.questions[index].showOptions = questionDep;
           // seccion.questions
         }
