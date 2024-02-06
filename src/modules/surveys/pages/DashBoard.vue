@@ -4,21 +4,20 @@
       <v-expansion-panel>
         <v-expansion-panel-title>Proyectos</v-expansion-panel-title>
         <v-expansion-panel-text>
-            <div
-              cols="12"
-              v-for="project in dashBoardData.total_project"
-              :key="project.project_name"
-            >
-              <div class="text-left text-capitalize">
-                {{ project.project_name }}
-              </div>
-              <v-row>
-                <v-col
+          <v-card
+            v-for="project in dashBoardData.total_project"
+            :key="project.project_name"
+            :title="project.project_name"
+            class="text-left ma-4"
+          >
+            
+            <v-row class="mt-2">
+              <v-col
                 cols="6"
                 v-for="item in project.formats"
                 :key="item.project_name"
               >
-                <v-card class="text-left text-capitalize">
+                <v-card class="text-left text-capitalize ma-2" variant="flat">
                   <div class="d-flex align-center justify-space-between ml-2">
                     {{ item.format_name }}
                   </div>
@@ -34,7 +33,7 @@
                 </v-card>
               </v-col>
             </v-row>
-          </div>
+          </v-card>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -93,12 +92,12 @@
         <v-expansion-panel-title>Filtros</v-expansion-panel-title>
         <v-expansion-panel-text>
           <v-row>
-          <v-col cols="4"
-            ><v-autocomplete
-              v-model="selectProject"
-              label="Proyecto"
-              :items="proyectos"
-            ></v-autocomplete
+            <v-col cols="4"
+              ><v-autocomplete
+                v-model="selectProject"
+                label="Proyecto"
+                :items="proyectos"
+              ></v-autocomplete
             ></v-col>
             <v-col cols="4"
               ><v-autocomplete
@@ -113,7 +112,7 @@
                 label="Departamento"
                 :items="departamentos"
               ></v-autocomplete
-            ></v-col>            
+            ></v-col>
           </v-row>
           <v-row>
             <v-col cols="4"
@@ -131,17 +130,18 @@
               ></v-autocomplete
             ></v-col>
             <v-col cols="2"
-              ><v-btn 
+              ><v-btn
                 :loading="loading"
                 @click="HandleDownloadExcel"
                 class="export-btn"
                 prepend-icon="mdi-file-excel"
                 variant="outlined"
                 color="success"
-                >Excel</v-btn></v-col
+                >Excel</v-btn
+              ></v-col
             >
             <v-col cols="2">
-              <v-btn 
+              <v-btn
                 :loading="loading"
                 @click="HandleDownloadRecords"
                 class="export-btn"
@@ -176,32 +176,32 @@
               show-select
             >
               <template v-slot:item.actions="{ item }">
-                  <v-row>
-                    <v-btn-group>
-                      <v-btn
-                        icon
-                        size="x-small"
-                        :to="{ name: 'survey-fill-out' }"
-                        @click="hadleEditSurvey(item)"
-                        ><v-tooltip activator="parent" location="start"
-                          >Actualizar encuesta</v-tooltip
-                        ><v-icon>mdi-file-document-refresh-outline</v-icon></v-btn
-                      >
-                      <v-btn icon size="x-small" @click="handleFinishSurvey(item)"
-                        ><v-tooltip activator="parent" location="start"
-                          >Finalizar encuesta</v-tooltip
-                        ><v-icon>mdi-check</v-icon></v-btn
-                      >
-                      <v-btn
-                        icon
-                        size="x-small"
-                        @click="showDeleteDialog(item.id)"
-                        ><v-tooltip activator="parent" location="start"
-                          >Eliminar encuesta</v-tooltip
-                        ><v-icon>mdi-trash-can-outline</v-icon></v-btn
-                      >
-                    </v-btn-group>
-                  </v-row>
+                <v-row>
+                  <v-btn-group>
+                    <v-btn
+                      icon
+                      size="x-small"
+                      :to="{ name: 'survey-fill-out' }"
+                      @click="hadleEditSurvey(item)"
+                      ><v-tooltip activator="parent" location="start"
+                        >Actualizar encuesta</v-tooltip
+                      ><v-icon>mdi-file-document-refresh-outline</v-icon></v-btn
+                    >
+                    <v-btn icon size="x-small" @click="handleFinishSurvey(item)"
+                      ><v-tooltip activator="parent" location="start"
+                        >Finalizar encuesta</v-tooltip
+                      ><v-icon>mdi-check</v-icon></v-btn
+                    >
+                    <v-btn
+                      icon
+                      size="x-small"
+                      @click="showDeleteDialog(item.id)"
+                      ><v-tooltip activator="parent" location="start"
+                        >Eliminar encuesta</v-tooltip
+                      ><v-icon>mdi-trash-can-outline</v-icon></v-btn
+                    >
+                  </v-btn-group>
+                </v-row>
               </template>
               <template v-slot:item.estado="{ item }">
                 <div v-if="item.approved_by">Aprobada</div>
@@ -210,7 +210,10 @@
                 <div v-else>Pendiente</div>
               </template>
               <template v-slot:bottom>
-                <span class="text-end mt-4"> {{ ((page - 1) * 20) + 1 }} - {{ page * 20 }} de {{ totalSurveys }} registros </span>
+                <span class="text-end mt-4">
+                  {{ (page - 1) * 20 + 1 }} - {{ page * 20 }} de
+                  {{ totalSurveys }} registros
+                </span>
                 <div class="text-center">
                   <v-pagination
                     v-model="page"
@@ -346,8 +349,8 @@ export default {
       });
     },
     HandleDownloadRecords() {
-      this.loading=true;
-      const params = `ids=${this.idsList}&extensionista=${this.selectExt}&encuesta=${this.selectSurvey}&municipio=${this.selectMun}&departamento=${this.selectDep}&characters=${this.search}`
+      this.loading = true;
+      const params = `ids=${this.idsList}&extensionista=${this.selectExt}&encuesta=${this.selectSurvey}&municipio=${this.selectMun}&departamento=${this.selectDep}&characters=${this.search}`;
       this.downloadRecords(params)
         .then((response) => {
           // Crear un objeto URL para el blob
@@ -371,8 +374,8 @@ export default {
         });
     },
     HandleDownloadExcel() {
-      this.loading=true;
-      const params = `ids=${this.idsList}&extensionista=${this.selectExt}&encuesta=${this.selectSurvey}&municipio=${this.selectMun}&departamento=${this.selectDep}&characters=${this.search}`
+      this.loading = true;
+      const params = `ids=${this.idsList}&extensionista=${this.selectExt}&encuesta=${this.selectSurvey}&municipio=${this.selectMun}&departamento=${this.selectDep}&characters=${this.search}`;
       this.downloadExcel(params)
         .then((response) => {
           // Crear un objeto URL para el blob
@@ -428,7 +431,7 @@ export default {
     async initialFilters() {
       await this.getDashboard();
       await this.getSurveys(`page=${1}&page_size=${this.itemsPerPage}`);
-      this.listReport = this.surveysList;  
+      this.listReport = this.surveysList;
       this.usuarios = this.filters.users;
       this.departamentos = this.filters.departamentos;
       this.municipios = this.filters.municipios;
@@ -513,12 +516,16 @@ export default {
       console.log("El form Data: ", nuevo);
     },
     async page(nuevo) {
-      if (this.selectProject !== '' && 
-        this.selectSurvey === '' &&
-        this.selectDep === '' &&
-        this.selectMun === '' &&
-        this.selectExt === '') {
-        const filterSurveys = await this.getProjects(`project=${this.selectProject}&page=${nuevo}&page_size=${this.itemsPerPage}`);
+      if (
+        this.selectProject !== "" &&
+        this.selectSurvey === "" &&
+        this.selectDep === "" &&
+        this.selectMun === "" &&
+        this.selectExt === ""
+      ) {
+        const filterSurveys = await this.getProjects(
+          `project=${this.selectProject}&page=${nuevo}&page_size=${this.itemsPerPage}`
+        );
         this.encuestas = filterSurveys;
       } else {
         this.getSurveys(
@@ -530,37 +537,37 @@ export default {
       this.listReport = nuevo;
     },
     selectSurvey(nuevo) {
-      this.selectDep = '';
-      this.selectMun = '';
-      this.selectExt = '';
+      this.selectDep = "";
+      this.selectMun = "";
+      this.selectExt = "";
       if (nuevo) {
         this.updateSurveys();
-      };
+      }
     },
     async selectProject(nuevo) {
-      this.selectSurvey = '';
-      this.selectDep = '';
-      this.selectMun = '';
-      this.selectExt = '';
+      this.selectSurvey = "";
+      this.selectDep = "";
+      this.selectMun = "";
+      this.selectExt = "";
       const filterSurveys = await this.getProjects(`project=${nuevo}`);
       this.encuestas = filterSurveys;
     },
     selectMun(nuevo) {
       if (nuevo) {
         this.updateSurveys();
-      };
+      }
     },
     selectDep(nuevo) {
       if (nuevo) {
         this.updateSurveys();
-      };
+      }
     },
     selectExt(nuevo) {
       if (nuevo) {
         this.updateSurveys();
-      };
+      }
     },
-    search(nuevo){
+    search(nuevo) {
       this.updateSurveys();
     },
   },
@@ -570,7 +577,7 @@ export default {
 <style>
 @media only screen and (max-width: 600px) {
   /* Estilos para pantallas pequeñas */
-  .export-btn{
+  .export-btn {
     width: 80px;
     font-size: 8px;
     white-space: nowrap;
@@ -581,7 +588,7 @@ export default {
 
 @media only screen and (min-width: 601px) and (max-width: 1024px) {
   /* Estilos para pantallas medianas */
-  .export-btn{
+  .export-btn {
     width: 100px;
     font-size: 10px;
     white-space: nowrap;
@@ -592,7 +599,7 @@ export default {
 
 @media only screen and (min-width: 1025px) {
   /* Estilos para pantallas grandes */
-  .export-btn{
+  .export-btn {
     width: 170px;
     font-size: 12px;
     white-space: nowrap;
