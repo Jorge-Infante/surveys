@@ -2,30 +2,39 @@
   <div>
     <v-expansion-panels v-model="panel" multiple>
       <v-expansion-panel>
-        <v-expansion-panel-title>Encuestas</v-expansion-panel-title>
+        <v-expansion-panel-title>Proyectos</v-expansion-panel-title>
         <v-expansion-panel-text>
-          <v-row>
-            <v-col
-              cols="6"
-              v-for="item in dashBoardData.total_project"
-              :key="item.format_slug_name"
+            <div
+              cols="12"
+              v-for="project in dashBoardData.total_project"
+              :key="project.project_name"
             >
-              <v-card class="text-left text-capitalize">
-                <div class="d-flex align-center justify-space-between ml-2">
-                  {{ item.format_name }}
-                </div>
-                <v-row>
-                  <v-card-text>
-                    <v-col cols="6">
-                      <p>Realizadas: {{ item.total_surveys }}</p>
-                      <p>Aprobadas: {{ item.total_surveys_approved }}</p>
-                      <p>Total del proyecto: {{ item.total_project }}</p>
-                    </v-col>
-                  </v-card-text>
-                </v-row>
-              </v-card>
-            </v-col>
-          </v-row>
+              <div class="text-left text-capitalize">
+                {{ project.project_name }}
+              </div>
+              <v-row>
+                <v-col
+                cols="6"
+                v-for="item in project.formats"
+                :key="item.project_name"
+              >
+                <v-card class="text-left text-capitalize">
+                  <div class="d-flex align-center justify-space-between ml-2">
+                    {{ item.format_name }}
+                  </div>
+                  <v-row>
+                    <v-card-text>
+                      <v-col>
+                        <p>Realizadas: {{ item.total_surveys }}</p>
+                        <p>Aprobadas: {{ item.total_surveys_approved }}</p>
+                        <p>Total del proyecto: {{ item.total_project }}</p>
+                      </v-col>
+                    </v-card-text>
+                  </v-row>
+                </v-card>
+              </v-col>
+            </v-row>
+          </div>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -201,10 +210,12 @@
                 <div v-else>Pendiente</div>
               </template>
               <template v-slot:bottom>
-                <div class="text-center pt-2">
+                <span class="text-end mt-4"> {{ ((page - 1) * 20) + 1 }} - {{ page * 20 }} de {{ totalSurveys }} registros </span>
+                <div class="text-center">
                   <v-pagination
                     v-model="page"
                     :length="pageCount"
+                    class="pa-0"
                   ></v-pagination>
                 </div>
               </template>

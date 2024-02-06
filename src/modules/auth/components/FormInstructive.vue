@@ -6,7 +6,7 @@
       <v-form class="mt-4">
         <v-row>
           <v-col cols="12">
-            <v-textarea clearable label="Nombre" v-model="text"></v-textarea
+            <v-textarea clearable label="Contenido HTML" v-model="text"></v-textarea
           ></v-col>
         </v-row>
 
