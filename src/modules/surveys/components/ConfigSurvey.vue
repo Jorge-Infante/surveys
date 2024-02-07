@@ -87,6 +87,51 @@
             ><v-icon>mdi-plus</v-icon></v-btn
           >
         </v-col>
+        <v-col cols="12" v-if="optionsFormInput">
+          <v-row v-for="(item, index) in optionsInput" :key="index">
+            <v-row>
+              <v-col cols="6">
+                <v-text-field
+                  label="Clave"
+                  v-model="optionsInput[index].clave"
+                  @input="updateOptionsInput()"
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field label="Valor" v-model="optionsInput[index].valor">
+                </v-text-field>
+              </v-col>
+            </v-row>
+            <v-btn
+              class="ml-2"
+              icon
+              size="x-small"
+              @click="HandleAddInputs(item, index)"
+              ><v-icon>mdi-format-text-rotation-none</v-icon></v-btn
+            >
+            <v-row v-if="optionsInput[index].input">
+              <v-col cols="6">
+                <v-text-field
+                  label="Nombre"
+                  v-model="optionsInput[index].label"
+                  @input="updateOptionsInput()"
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  label="Descripcion"
+                  v-model="optionsInput[index].descripcion"
+                >
+                </v-text-field>
+              </v-col>
+            </v-row>
+          </v-row>
+          <v-btn icon size="x-small" @click="HandleAddInputOption"
+            ><v-icon>mdi-plus</v-icon></v-btn
+          >
+        </v-col>
       </v-row>
 
       <v-card-actions>
@@ -146,6 +191,7 @@ export default {
       "Fecha",
       "Imagen",
       "Seleccion dependiente",
+      "Seleccion con texto",
     ],
     inputSelect: null,
     description: null,
@@ -155,11 +201,14 @@ export default {
     labelValueDep: null,
     options: [],
     optionsDep: [],
+    optionsInput: [],
+    inputDependents: [],
     dependents: [],
     dependentsList: [],
     idPrincipal: null,
     optionsFormDep: false,
     optionsForm: false,
+    optionsFormInput: false,
     dependent: false,
   }),
   props: {
@@ -191,6 +240,15 @@ export default {
         let option = { id: id, clave: "", valor: "" };
         this.optionsDep.push(option);
       }
+      if (nuevo === "Seleccion con texto") {
+        this.optionsFormInput = true;
+        this.optionsInput.push({
+          id: generarUUID(),
+          input: false,
+          clave: "",
+          valor: "",
+        });
+      }
     },
     options(nuevo) {
       console.log("NUEVO VALOR ARR: ", nuevo);
@@ -200,11 +258,22 @@ export default {
     updateOptions() {
       console.log("OPTIONS: ", this.options);
     },
+    updateOptionsInput() {
+      console.log("OPTIONS INPUT: ", this.optionsInput);
+    },
     HandleAddOption() {
       this.options.push({ clave: "", valor: "" });
     },
     HandleAddOptionDep() {
       this.optionsDep.push({ id: generarUUID(), clave: "", valor: "" });
+    },
+    HandleAddInputOption() {
+      this.optionsInput.push({
+        id: generarUUID(),
+        input: false,
+        clave: "",
+        valor: "",
+      });
     },
     HandleAddDependents(id) {
       this.dependents = this.dependentsList.filter(
@@ -222,6 +291,11 @@ export default {
       );
 
       this.idPrincipal = id;
+    },
+    HandleAddInputs(item, index) {
+      item.input = true;
+      this.optionsInput[index] = item;
+      console.log(this.optionsInput);
     },
     addDependents() {
       this.dependents.push({
@@ -260,7 +334,15 @@ export default {
           optionsDep: this.optionsDep,
           childLabel: this.labelValueDep,
           childDescrip: this.descriptionDep,
-          optionsDepChild: this.dependentsList
+          optionsDepChild: this.dependentsList,
+        };
+      } else if (this.optionsInput.length > 0) {
+        form = {
+          idSeccion: this.currentSeccion.id,
+          type: this.inputSelect,
+          label: this.labelValue,
+          descripcion: this.description,
+          optionsInput: this.optionsInput,
         };
       } else {
         form = {

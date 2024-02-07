@@ -141,6 +141,15 @@
                 append-icon="mdi-delete-circle-outline"
                 @click:append="onClear(item, index)"
               ></v-select>
+              <v-select
+                readonly
+                v-if="item.type == 'Seleccion con texto'"
+                :items="item.optionsInput"
+                item-title="valor"
+                item-value="clave"
+                append-icon="mdi-delete-circle-outline"
+                @click:append="onClear(item, index)"
+              ></v-select>
             </v-col>
           </v-row>
           <v-card-actions>

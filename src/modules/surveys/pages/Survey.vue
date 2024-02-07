@@ -142,6 +142,17 @@
                       item-value="clave"
                       return-object
                     ></v-select>
+                    <v-select
+                      v-model="seccion.questions[index].value"
+                      v-if="item.type == 'Seleccion con texto'"
+                      :items="item.optionsInput"
+                      item-title="valor"
+                      item-value="clave"
+                      return-object
+                      @update:modelValue="
+                        selectQuestionMainInput(index, item, seccion)
+                      "
+                    ></v-select>
                   </v-col>
                 </v-row>
               </v-expansion-panel-text>
@@ -345,6 +356,30 @@ export default {
       //   item.idShared == question.idShared
       // );
       // console.log("PREGUNTAS: ", preguntas);
+    },
+    selectQuestionMainInput(index, item, seccion) {
+      if (item.value.input) {
+        console.log(index, item, seccion);
+        let newQuestion = {
+          idSeccion: seccion.id,
+          label: item.value.label,
+          descripcion: item.value.descripcion,
+          type: "Texto",
+          input: item.value.input,
+          valor: item.value.valor,
+        };
+        if (!seccion.questions[index + 1]) {
+          seccion.questions.splice(index + 1, 0, newQuestion);
+        } else {
+          if(newQuestion!=item.value.valor){
+            seccion.questions.splice(index + 1, 1);
+            seccion.questions.splice(index + 1, 0, newQuestion);
+          }
+        }
+      } else {
+        seccion.questions.splice(index + 1, 1);
+      }
+      // myArray.splice(insertIndex, 0, newElement);
     },
     urlImage(url) {
       if (url) {
