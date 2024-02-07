@@ -55,7 +55,7 @@
               @click="handleShowFormInstructive"
             ></v-btn> </template
         ></v-list-item>
-        <v-list-item
+        <!-- <v-list-item
           prepend-icon="mdi-file-sign"
           title="Encuestas"
           value="surveys"
@@ -67,7 +67,7 @@
               variant="text"
               icon="mdi-swap-horizontal"
             ></v-btn> </template
-        ></v-list-item>
+        ></v-list-item> -->
         <v-list-item
           prepend-icon="mdi-file-document-plus"
           title="Crear encuesta"
@@ -76,6 +76,18 @@
           :to="{ name: 'survey-form' }"
         ></v-list-item>
       </v-list>
+      <template v-slot:append>
+        <div class="pa-2">
+          <v-btn
+            block
+            class="btn-outline-primary"
+            :to="{ name: 'survey-fill-out' }"
+          >
+            Encuestas
+            <v-icon icon="mdi-logout" end></v-icon>
+          </v-btn>
+        </div>
+      </template>
     </v-navigation-drawer>
     <v-main><router-view></router-view></v-main>
   </v-layout>
