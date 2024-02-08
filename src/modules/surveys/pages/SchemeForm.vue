@@ -319,9 +319,14 @@ export default {
         };
         console.log("LA MAIN: ", questionMain);
         console.log("LA DEPENDIENTE: ", questionDep);
-
-        this.seccions[idxSeccion].questions.push(questionMain);
-        this.seccions[idxSeccion].questions.push(questionDep);
+        if (nuevo.editQuestion != null) {
+          this.seccions[nuevo.indexSeccion].questions[nuevo.editQuestion] =
+            questionMain;
+          this.seccions[idxSeccion].questions.push(questionDep);
+        } else {
+          this.seccions[idxSeccion].questions.push(questionMain);
+          this.seccions[idxSeccion].questions.push(questionDep);
+        }
       } else {
         if (nuevo.editQuestion != null) {
           console.log(
