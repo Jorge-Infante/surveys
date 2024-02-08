@@ -36,7 +36,7 @@
           width="100%"
           min-height="300"
           variant="outlined"
-          v-for="seccion in seccions"
+          v-for="(seccion, indexSeccion) in seccions"
           :key="seccion.id"
         >
           <v-row>
@@ -77,14 +77,18 @@
               <v-text-field
                 readonly
                 v-if="item.type == 'Texto'"
+                prepend-icon="mdi-pencil-outline"
                 append-icon="mdi-delete-circle-outline"
                 @click:append="onClear(item, index)"
+                @click:prepend="onEdit(item, index, seccion, indexSeccion)"
               ></v-text-field>
               <v-text-field
                 readonly
                 v-if="item.type == 'Numerico'"
+                prepend-icon="mdi-pencil-outline"
                 append-icon="mdi-delete-circle-outline"
                 @click:append="onClear(item, index)"
+                @click:prepend="onEdit(item, index, seccion, indexSeccion)"
               ></v-text-field>
               <v-select
                 readonly
@@ -92,8 +96,10 @@
                 :items="item.options"
                 item-title="valor"
                 item-value="clave"
+                prepend-icon="mdi-pencil-outline"
                 append-icon="mdi-delete-circle-outline"
                 @click:append="onClear(item, index)"
+                @click:prepend="onEdit(item, index, seccion, indexSeccion)"
               ></v-select>
               <v-combobox
                 readonly
@@ -102,8 +108,10 @@
                 item-title="valor"
                 item-value="clave"
                 multiple
+                prepend-icon="mdi-pencil-outline"
                 append-icon="mdi-delete-circle-outline"
                 @click:append="onClear(item, index)"
+                @click:prepend="onEdit(item, index, seccion, indexSeccion)"
               ></v-combobox>
               <v-text-field
                 readonly
@@ -111,17 +119,20 @@
                 v-if="item.type == 'Fecha'"
                 type="date"
                 :format="dateFormat"
+                prepend-icon="mdi-pencil-outline"
                 append-icon="mdi-delete-circle-outline"
                 @click:append="onClear(item, index)"
+                @click:prepend="onEdit(item, index, seccion, indexSeccion)"
               ></v-text-field>
               <v-file-input
                 v-model="seccion.questions[index].value"
                 v-if="item.type == 'Imagen'"
                 accept="image/*"
                 variant="filled"
-                prepend-icon="mdi-camera"
+                prepend-icon="mdi-pencil-outline"
                 append-icon="mdi-delete-circle-outline"
                 @click:append="onClear(item, index)"
+                @click:prepend="onEdit(item, index, seccion, indexSeccion)"
               ></v-file-input>
               <v-select
                 readonly
@@ -129,8 +140,10 @@
                 :items="item.options"
                 item-title="valor"
                 item-value="clave"
+                prepend-icon="mdi-pencil-outline"
                 append-icon="mdi-delete-circle-outline"
                 @click:append="onClear(item, index)"
+                @click:prepend="onEdit(item, index, seccion, indexSeccion)"
               ></v-select>
               <v-select
                 readonly
@@ -138,8 +151,10 @@
                 :items="item.options"
                 item-title="valor"
                 item-value="clave"
+                prepend-icon="mdi-pencil-outline"
                 append-icon="mdi-delete-circle-outline"
                 @click:append="onClear(item, index)"
+                @click:prepend="onEdit(item, index, seccion, indexSeccion)"
               ></v-select>
               <v-select
                 readonly
@@ -147,8 +162,10 @@
                 :items="item.optionsInput"
                 item-title="valor"
                 item-value="clave"
+                prepend-icon="mdi-pencil-outline"
                 append-icon="mdi-delete-circle-outline"
                 @click:append="onClear(item, index)"
+                @click:prepend="onEdit(item, index, seccion, indexSeccion)"
               ></v-select>
             </v-col>
           </v-row>
@@ -186,6 +203,8 @@
       @on:handleCancel="cancelConfigSurvey"
       :dialogConfig="dialogConfig"
       :currentSeccion="currentSeccion"
+      :editQuestion="editQuestion"
+      :indexSeccion="indexSeccion"
     />
     <SeccionConfig
       @on:handleCancel="cancelSeccionConfig"
@@ -215,6 +234,8 @@ export default {
     currentSeccion: null,
     seccions: [],
     dateFormat: "YYYY-MM-DD",
+    editQuestion: null,
+    indexSeccion: null,
   }),
   props: {
     id: {
@@ -250,6 +271,13 @@ export default {
   methods: {
     ...mapActions("survey_store", ["saveFormSurvey", "updateForm"]),
     handleShowConfig(seccion) {
+      this.currentSeccion = seccion;
+      this.dialogConfig = true;
+    },
+    onEdit(item, index, seccion, indexSeccion) {
+      console.log(item, index);
+      this.editQuestion = index;
+      this.indexSeccion = indexSeccion;
       this.currentSeccion = seccion;
       this.dialogConfig = true;
     },
@@ -291,13 +319,25 @@ export default {
         };
         console.log("LA MAIN: ", questionMain);
         console.log("LA DEPENDIENTE: ", questionDep);
+
         this.seccions[idxSeccion].questions.push(questionMain);
         this.seccions[idxSeccion].questions.push(questionDep);
       } else {
-        this.seccions[idxSeccion].questions.push(nuevo);
+        if (nuevo.editQuestion != null) {
+          console.log(
+            "------------------- QUESTION ---------",
+            nuevo.indexSeccion,
+            this.seccions[nuevo.indexSeccion].questions[nuevo.editQuestion]
+          );
+          this.seccions[nuevo.indexSeccion].questions[nuevo.editQuestion] =
+            nuevo;
+        } else {
+          this.seccions[idxSeccion].questions.push(nuevo);
+        }
       }
 
       this.dialogConfig = false;
+      this.editQuestion = null;
     },
     onClear(item, idx) {
       let seccion = this.findObjectById(item.idSeccion);

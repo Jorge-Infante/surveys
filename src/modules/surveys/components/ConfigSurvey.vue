@@ -214,6 +214,8 @@ export default {
   props: {
     dialogConfig: { type: Boolean, required: false },
     currentSeccion: { type: Object, required: false },
+    editQuestion: { type: Number },
+    indexSeccion: { type: Number },
   },
   watch: {
     dialogConfig(nuevo) {
@@ -353,6 +355,13 @@ export default {
         };
         console.log("FORM out OPTIONS: ", form);
       }
+      form.editQuestion = this.editQuestion;
+      form.indexSeccion = this.indexSeccion;
+      console.log(
+        "------------------- this.editQuestion ---------",
+        this.editQuestion,
+        form
+      );
       this.$emit("on:handleAddForm", form);
       this.inputSelect = null;
       this.formFields = [];
