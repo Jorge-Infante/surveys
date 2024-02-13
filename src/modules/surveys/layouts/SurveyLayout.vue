@@ -278,9 +278,9 @@ export default {
         this.refreshToken().then((resp) => {
           try {
             this.getForms();
-            this.getForms;
+            this.getSurveys();
             this.me();
-            console.log('---this.getForms -----this.getForms---this.me()-----')
+            console.log("---this.getForms -----this.getForms---this.me()-----");
             // this.refillUser();
           } catch (error) {
             console.log("error en network");
