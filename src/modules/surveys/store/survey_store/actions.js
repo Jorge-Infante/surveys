@@ -129,7 +129,7 @@ export const logOut = async ({ commit }, data) => {
 export const me = async ({ commit }) => {
   const url = "v1/me/";
   const res = await apiClient.get(url);
-  console.log("RESPONSE USER ME: ", res.data);
+  console.log("--- RESPONSE ME: ", res.data);
   if (res.data.groups[0] === "administradores") {
     res.data.group = "administradores";
   } else if (res.data.groups[0] === "extensionistas") {

@@ -126,14 +126,14 @@
           :to="{ name: 'dashBoard-surveys' }"
         ></v-list-item>
         <v-list-item
-            v-show="administrador"
-            @click="handleCloseDrawer"
-            prepend-icon="mdi-account-multiple-plus"
-            title="Administración"
-            class="text-left"
-            value="users-admin"
-            :to="{ name: 'auth-admin' }"
-          ></v-list-item>
+          v-show="administrador"
+          @click="handleCloseDrawer"
+          prepend-icon="mdi-account-multiple-plus"
+          title="Administración"
+          class="text-left"
+          value="users-admin"
+          :to="{ name: 'auth-admin' }"
+        ></v-list-item>
       </v-list>
 
       <template v-slot:append>
@@ -189,6 +189,7 @@ export default {
       "reSetForms",
       "reSetSurveys",
       "reSetUser",
+      "me",
     ]),
     // async getUser() {
     //   await this.me();
@@ -234,7 +235,7 @@ export default {
     async getData() {
       const key = "your-vuex-key";
       await this.checkInternetConnection();
-      var user = '';
+      var user = "";
       console.log("ASI EL INTERNET: ", this.isConnected);
       try {
         const value = await localforage.getItem(key);
@@ -277,8 +278,9 @@ export default {
         this.refreshToken().then((resp) => {
           try {
             this.getForms();
-            this.getSurveys();
-            
+            this.getForms;
+            this.me();
+            console.log('---this.getForms -----this.getForms---this.me()-----')
             // this.refillUser();
           } catch (error) {
             console.log("error en network");
@@ -303,7 +305,7 @@ export default {
   watch: {
     user(nuevo) {
       console.log("SI CAMBIA CUANDO RECARGO");
-      console.log(this.user.group)
+      console.log(this.user.group);
       if (this.user.group === "administradores") {
         this.administrador = true;
       } else if (this.user.group === "extensionistas") {
