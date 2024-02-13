@@ -65,9 +65,12 @@ export default {
       this.dialogFormGroup = true;
     },
     handleCancelFormGroup() {
+      console.log("CANCEL FORM");
       this.dialogFormGroup = false;
+      this.groupToUpdate = null;
     },
     handleUpdateGroup(item) {
+      this.dialogFormGroup = true;
       this.groupToUpdate = item;
     },
     async handleDeleteGroup(id) {
@@ -77,19 +80,31 @@ export default {
         enty: "groups",
         keySearch: id,
       };
-      try {
-        await this.deleteEnty(params);
-        Swal.fire({
-          title: "¡Grupo eliminado exitosamente!",
-          icon: "success",
-        });
-      } catch (error) {
-        Swal.fire({
-          title: "¡Error al eliminar grupo!",
-          icon: "error",
-        });
-        console.log(error);
-      }
+      Swal.fire({
+        text: "¡No podrá revertir los cambios!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Eliminar",
+        cancelButtonText: "Cancelar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          try {
+            this.deleteEnty(params);
+            Swal.fire({
+              title: "¡Grupo eliminado exitosamente!",
+              icon: "success",
+            });
+          } catch (error) {
+            Swal.fire({
+              title: "¡Error al eliminar grupo!",
+              icon: "error",
+            });
+            console.log(error);
+          }
+        }
+      });
     },
   },
 };

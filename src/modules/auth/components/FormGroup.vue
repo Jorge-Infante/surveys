@@ -24,6 +24,7 @@
           size="small"
           variant="elevated"
           @click="validate"
+          :loading="loading"
         >
           Guardar
         </v-btn>
@@ -51,6 +52,7 @@ export default {
       name: null,
       updateItem: null,
       updateGroup: false,
+      loading: false,
       rules: {
         required: (value) => !!value || "El campo es obligatorio",
       },
@@ -76,6 +78,7 @@ export default {
       this.updateGroup = false;
     },
     async handleSaveGroup() {
+      this.loading = true;
       if (this.updateGroup) {
         const params = {
           url: `groups/${this.updateItem.id}/`,
@@ -87,11 +90,14 @@ export default {
         try {
           await this.updateEnty(params);
           this.dialog = false;
+          this.loading = false;
           Swal.fire({
             title: "¡Grupo actualizado exitosamente!",
             icon: "success",
           });
         } catch (error) {
+          this.loading = false;
+          this.dialog = false;
           Swal.fire({
             title: "¡Error al actulizar grupo!",
             icon: "error",
@@ -108,11 +114,14 @@ export default {
         try {
           await this.saveEnty(params);
           this.dialog = false;
+          this.loading = false;
           Swal.fire({
             title: "¡Grupo registrado exitosamente!",
             icon: "success",
           });
         } catch (error) {
+          this.loading = false;
+          this.dialog = false;
           Swal.fire({
             title: "¡Error al registrar grupo!",
             icon: "error",
@@ -134,10 +143,12 @@ export default {
       }
     },
     groupToUpdate(newValue) {
-      this.updateGroup = true;
-      this.dialog = true;
-      this.name = newValue.name;
-      this.updateItem = newValue;
+      if (newValue) {
+        this.updateGroup = true;
+        this.dialog = true;
+        this.name = newValue.name;
+        this.updateItem = newValue;
+      }
     },
   },
 };

@@ -143,6 +143,7 @@
           size="small"
           variant="elevated"
           @click="validate"
+          :loading="loading"
         >
           Guardar
         </v-btn>
@@ -178,6 +179,7 @@ export default {
       projects_select: null,
       projects_select_arr: [],
       updateUser: false,
+      loading:false,
       errors: null,
       reglaIgualdad: (v) => v === this.password || "Los campos no son iguales",
       rules: {
@@ -193,11 +195,11 @@ export default {
           username: this.username,
           first_name: this.first_name,
           password: this.password,
-          groups: this.groups_select_arr,
+          groups: this.groups_select,
         },
         identification: this.identification,
         ext_profile: this.ext_profile,
-        projects: this.projects_select_arr,
+        projects: this.projects_select,
       };
       return data;
     },
@@ -221,13 +223,8 @@ export default {
       }
     },
     async handleSaveUser() {
+      this.loading = true
       if (this.updateUser) {
-        let newProjectsSelect = this.projects_select.map(
-          (element) => element.id
-        );
-        this.projects_select = newProjectsSelect;
-        let newGroupsSelect = this.groups_select.map((element) => element.id);
-        this.groups_select = newGroupsSelect;
         const params = {
           url: `users/${this.updateItem.id}/`,
           mutation1: "updateState",
@@ -238,11 +235,14 @@ export default {
         try {
           await this.updateEnty(params);
           this.dialog = false;
+          this.loading = false;
           Swal.fire({
             title: "¡Usuario actualizado exitosamente!",
             icon: "success",
           });
         } catch (error) {
+          this.dialog = false;
+          this.loading = false;
           Swal.fire({
             title: "¡Error al actulizar usuario!",
             icon: "error",
@@ -259,11 +259,13 @@ export default {
         try {
           await this.saveEnty(params);
           this.dialog = false;
+          this.loading = false;
           Swal.fire({
             title: "Usuario registrado exitosamente!",
             icon: "success",
           });
         } catch (error) {
+          this.loading = false;
           console.log("seteando el errors: ", error);
           this.errors = error.response.data.errors;
         }
@@ -299,22 +301,28 @@ export default {
       console.log("Nuevo form data: ", newValue);
     },
     userToUpdate(newValue) {
-      this.dialog = true;
-      this.updateUser = true;
-      console.log(newValue);
-      this.username = newValue.user.username;
-      this.first_name = newValue.user.first_name;
-      this.groups_select = newValue.user.groups;
-      this.identification = newValue.identification;
-      this.ext_profile = newValue.ext_profile;
-      this.projects_select = newValue.projects;
-      this.updateItem = newValue;
+      if (newValue) {
+        this.dialog = true;
+        this.updateUser = true;
+        console.log(newValue);
+        this.username = newValue.user.username;
+        this.first_name = newValue.user.first_name;
+        this.groups_select = newValue.user.groups.map((item) => item.id);
+        this.identification = newValue.identification;
+        this.ext_profile = newValue.ext_profile;
+        this.projects_select = newValue.projects.map((item) => item.id);
+        this.updateItem = newValue;
+        console.log("----------- userToUpdate -----", newValue);
+      }
     },
     projects_select(newValue) {
       this.projects_select_arr = newValue;
     },
     groups_select(newValue) {
       this.groups_select_arr = newValue;
+    },
+    projects_select_arr(newValue) {
+      console.log("------ TEST DE LA LISTA: ---", newValue);
     },
     errors(newValue) {
       console.log("...........new value .........", newValue);

@@ -30,6 +30,7 @@
           size="small"
           variant="elevated"
           @click="handleSaveProject"
+          :loading="loading"
         >
           Guardar
         </v-btn>
@@ -59,6 +60,7 @@ export default {
       surveys_select_arr: [],
       updateProject: false,
       updateItem: null,
+      loading: false,
     };
   },
   props: {
@@ -68,6 +70,7 @@ export default {
   methods: {
     ...mapActions("auth_store", ["saveEnty", "updateEnty"]),
     async handleSaveProject() {
+      this.loading = true;
       if (this.updateProject) {
         let newSurveysSelect = this.surveys_select.map((element) => element.id);
         this.surveys_select = newSurveysSelect;
@@ -81,11 +84,14 @@ export default {
         try {
           await this.updateEnty(params);
           this.dialog = false;
+          this.loading = false;
           Swal.fire({
             title: "!Proyecto actualizado exitosamente!",
             icon: "success",
           });
         } catch (error) {
+          this.loading = false;
+          this.dialog = false;
           Swal.fire({
             title: "¡Error al actulizar proyecto!",
             icon: "error",
@@ -102,11 +108,14 @@ export default {
         try {
           await this.saveEnty(params);
           this.dialog = false;
+          this.loading = false;
           Swal.fire({
             title: "¡Proyecto registrado exitosamente!",
             icon: "success",
           });
         } catch (error) {
+          this.dialog = false;
+          this.loading = false;
           Swal.fire({
             title: "¡Error al registrar proyecto!",
             icon: "error",
@@ -145,12 +154,14 @@ export default {
       }
     },
     projectToUpdate(newValue) {
-      this.dialog = true;
-      this.updateProject = true;
-      this.updateItem = newValue;
-      this.name = newValue.name;
-      this.surveys_select = newValue.surveys;
-      console.log(newValue);
+      if (newValue) {
+        this.dialog = true;
+        this.updateProject = true;
+        this.updateItem = newValue;
+        this.name = newValue.name;
+        this.surveys_select = newValue.surveys.map((item) => item.id);
+        console.log(newValue);
+      }
     },
     surveys_select(newValue) {
       this.surveys_select_arr = newValue;

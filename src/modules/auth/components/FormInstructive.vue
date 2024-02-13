@@ -6,7 +6,11 @@
       <v-form class="mt-4">
         <v-row>
           <v-col cols="12">
-            <v-textarea clearable label="Contenido HTML" v-model="text"></v-textarea
+            <v-textarea
+              clearable
+              label="Contenido HTML"
+              v-model="text"
+            ></v-textarea
           ></v-col>
         </v-row>
 
@@ -19,6 +23,7 @@
           size="small"
           variant="elevated"
           @click="handleSaveInstructive"
+          :loading="loading"
         >
           Guardar
         </v-btn>
@@ -43,6 +48,7 @@ export default {
     return {
       dialog: false,
       text: null,
+      loading: false,
     };
   },
   props: {
@@ -51,6 +57,7 @@ export default {
   methods: {
     ...mapActions("auth_store", ["saveInstructive"]),
     async handleSaveInstructive() {
+      this.loading = true;
       const params = {
         url: "instruccions/",
         mutation1: "addEnty",
@@ -60,7 +67,10 @@ export default {
       try {
         await this.saveInstructive(params);
         this.dialog = false;
+        this.loading = false;
       } catch (error) {
+        this.loading = false;
+        this.dialog = false;
         console.log(error);
       }
       this.clearData();

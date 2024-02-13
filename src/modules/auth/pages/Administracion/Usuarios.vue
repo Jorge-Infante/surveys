@@ -69,9 +69,12 @@ export default {
       this.dialogFormUser = true;
     },
     handleCancelFormUser() {
+      console.log("DIALOG CANCEL ---- --- -- -- TABLE");
       this.dialogFormUser = false;
+      this.userToUpdate = null;
     },
     handleUpdateUser(item) {
+      this.dialogFormUser = true;
       this.userToUpdate = item;
     },
     async handleDeleteUser(id) {
@@ -81,19 +84,31 @@ export default {
         enty: "users",
         keySearch: id,
       };
-      try {
-        await this.deleteEnty(params);
-        Swal.fire({
-          title: "¡Usuario eliminado exitosamente!",
-          icon: "success",
-        });
-      } catch (error) {
-        Swal.fire({
-          title: "¡Error al eliminar usuario!",
-          icon: "error",
-        });
-        console.log(error);
-      }
+      Swal.fire({
+        text: "¡No podrá revertir los cambios!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Eliminar",
+        cancelButtonText: "Cancelar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          try {
+            this.deleteEnty(params);
+            Swal.fire({
+              title: "¡Usuario eliminado exitosamente!",
+              icon: "success",
+            });
+          } catch (error) {
+            Swal.fire({
+              title: "¡Error al eliminar usuario!",
+              icon: "error",
+            });
+            console.log(error);
+          }
+        }
+      });
     },
   },
 };

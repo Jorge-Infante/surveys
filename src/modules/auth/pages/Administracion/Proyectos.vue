@@ -66,8 +66,10 @@ export default {
     },
     handleCancelFormProject() {
       this.dialogFormProject = false;
+      this.projectToUpdate = null;
     },
     handleUpdateProject(item) {
+      this.dialogFormProject = true;
       this.projectToUpdate = item;
     },
     async handleDeleteProject(id) {
@@ -77,19 +79,31 @@ export default {
         enty: "projects",
         keySearch: id,
       };
-      try {
-        await this.deleteEnty(params);
-        Swal.fire({
-          title: "¡Proyecto eliminado exitosamente!",
-          icon: "success",
-        });
-      } catch (error) {
-        Swal.fire({
-          title: "¡Error al eliminar proyecto!",
-          icon: "error",
-        });
-        console.log(error);
-      }
+      Swal.fire({
+        text: "¡No podrá revertir los cambios!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Eliminar",
+        cancelButtonText: "Cancelar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          try {
+            this.deleteEnty(params);
+            Swal.fire({
+              title: "¡Proyecto eliminado exitosamente!",
+              icon: "success",
+            });
+          } catch (error) {
+            Swal.fire({
+              title: "¡Error al eliminar proyecto!",
+              icon: "error",
+            });
+            console.log(error);
+          }
+        }
+      });
     },
   },
 };
