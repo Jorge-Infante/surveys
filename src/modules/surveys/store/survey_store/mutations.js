@@ -54,3 +54,15 @@ export const setDashBoardFilters = (state, filters) => {
 export const deleteSurvey = (state, id) => {
   state.surveysList = state.surveysList.filter((item) => item.id != id);
 };
+
+export const setFiltersRunning = (
+  state, { selectProject, selectSurvey, selectDep, selectMun, selectExt, search }
+) => {
+  console.log("setFiltersRunning", selectProject, selectSurvey, selectDep, selectMun, selectExt, search)
+  state.selectProjectStore = selectProject;
+  state.selectSurveyStore = selectSurvey;
+  state.selectDepStore = selectDep;
+  state.selectMunStore = selectMun;
+  state.selectExtStore = selectExt;
+  state.searchStore = search;
+};

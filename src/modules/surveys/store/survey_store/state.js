@@ -9,4 +9,10 @@ export default ()=>({
     appVersion:2.3,
     dashBoardData:[],
     filters: [],
+    searchStore: "",
+    selectExtStore: "",
+    selectSurveyStore: "",
+    selectMunStore: "",
+    selectDepStore: "",
+    selectProjectStore: "",
 })

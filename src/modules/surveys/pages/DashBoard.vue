@@ -269,18 +269,20 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapMutations } from "vuex";
 import Swal from "sweetalert2";
 export default {
   data() {
     return {
       loading: false,
-      selectExt: null,
-      selectSurvey: null,
-      selectProject: null,
-      selectDep: null,
-      selectMun: null,
+      initial: true,
       panel: [0],
+      search: "",
+      selectExt: "",
+      selectSurvey: "",
+      selectDep: "",
+      selectMun: "",
+      selectProject: "",
       departamentos: [],
       municipios: [],
       search: "",
@@ -317,6 +319,7 @@ export default {
       "deleteSurvey",
       "getFilters",
     ]),
+    ...mapMutations("survey_store", ["setFiltersRunning"]),
     showDeleteDialog(id) {
       this.idDelete = id;
       this.dialogDelete = true;
@@ -430,13 +433,21 @@ export default {
     },
     async initialFilters() {
       await this.getDashboard();
-      await this.getSurveys(`page=${1}&page_size=${this.itemsPerPage}`);
       this.listReport = this.surveysList;
       this.usuarios = this.filters.users;
       this.departamentos = this.filters.departamentos;
       this.municipios = this.filters.municipios;
       this.encuestas = this.filters.forms;
       this.proyectos = this.filters.proyectos;
+      this.initial = true;
+      this.search = this.searchStore;
+      this.selectExt = this.selectExtStore;
+      this.selectSurvey = this.selectSurveyStore;
+      this.selectDep = this.selectDepStore;
+      this.selectMun = this.selectMunStore;
+      this.selectProject = this.selectProjectStore;
+      await this.updateSurveys();
+      this.initial = false;
     },
     async updateSurveys() {
       await this.getSurveys(
@@ -452,6 +463,12 @@ export default {
       "totalSurveys",
       "forms",
       "filters",
+      "searchStore",
+      "selectExtStore",
+      "selectSurveyStore",
+      "selectMunStore",
+      "selectDepStore",
+      "selectProjectStore"
     ]),
     headers() {
       return [
@@ -498,10 +515,8 @@ export default {
     this.initialFilters();
   },
   watch: {
-    dashBoardData() {},
     selected(selectNew) {
       this.idsList = this.selected.join(",");
-      console.log("uno mas", selectNew, "con join", this.idsList);
     },
     selectState(nuevo) {
       if (nuevo === "Aprobado") {
@@ -537,38 +552,113 @@ export default {
       this.listReport = nuevo;
     },
     selectSurvey(nuevo) {
-      this.selectDep = "";
-      this.selectMun = "";
-      this.selectExt = "";
-      if (nuevo) {
-        this.updateSurveys();
+      console.log("selectSurvey", nuevo, this.initial);
+      if (this.initial === false) {
+        this.selectDep = "";
+        this.selectMun = "";
+        this.selectExt = "";
+        this.setFiltersRunning(
+          {
+            selectProject: this.selectProject,
+            selectSurvey: nuevo,
+            selectDep: this.selectDep,
+            selectMun: this.selectMun,
+            selectExt: this.selectExt,
+            search: this.search
+        }
+        );
+        if (nuevo) {
+          this.updateSurveys();
+        }
       }
     },
     async selectProject(nuevo) {
-      this.selectSurvey = "";
-      this.selectDep = "";
-      this.selectMun = "";
-      this.selectExt = "";
-      const filterSurveys = await this.getProjects(`project=${nuevo}`);
-      this.encuestas = filterSurveys;
+      if (this.initial === false) {
+        this.selectSurvey = "";
+        this.selectDep = "";
+        this.selectMun = "";
+        this.selectExt = "";
+        this.setFiltersRunning(
+          {
+            selectProject: nuevo,
+            selectSurvey: this.selectSurvey,
+            selectDep: this.selectDep,
+            selectMun: this.selectMun,
+            selectExt: this.selectExt,
+            search: this.search
+          }
+        );
+        if (nuevo) {
+          const filterSurveys = await this.getProjects(`project=${nuevo}`);
+          this.encuestas = filterSurveys;
+        }
+      }
     },
     selectMun(nuevo) {
-      if (nuevo) {
-        this.updateSurveys();
+      if (this.initial === false) {
+        this.setFiltersRunning(
+          {
+            selectProject: this.selectProject,
+            selectSurvey: this.selectSurvey,
+            selectDep: this.selectDep,
+            selectMun: nuevo,
+            selectExt: this.selectExt,
+            search: this.search
+          }
+        );
+        if (nuevo) {
+          this.updateSurveys();
+        }
       }
     },
     selectDep(nuevo) {
-      if (nuevo) {
-        this.updateSurveys();
+      if (this.initial === false) {
+        this.setFiltersRunning(
+          {
+            selectProject: this.selectProject,
+            selectSurvey: this.selectSurvey,
+            selectDep: nuevo,
+            selectMun: this.selectMun,
+            selectExt: this.selectExt,
+            search: this.search
+          }
+        );
+        if (nuevo) {
+          this.updateSurveys();
+        }
       }
     },
     selectExt(nuevo) {
-      if (nuevo) {
-        this.updateSurveys();
+      if (this.initial === false) {
+        this.setFiltersRunning(
+          {
+            selectProject: this.selectProject,
+            selectSurvey: this.selectSurvey,
+            selectDep: this.selectDep,
+            selectMun: this.selectMun,
+            selectExt: nuevo,
+            search: this.search
+          }
+        );
+        if (nuevo) {
+          this.updateSurveys();
+        }
       }
     },
     search(nuevo) {
-      this.updateSurveys();
+      if (this.initial === false) {
+        this.setFiltersRunning(
+          {
+            selectProject: this.selectProject,
+            selectSurvey: this.selectSurvey,
+            selectDep: this.selectDep,
+            selectMun: this.selectMun,
+            selectExt: this.selectExt,
+            search: nuevo
+          }
+        );
+        this.updateSurveys();
+      }
     },
   },
 };

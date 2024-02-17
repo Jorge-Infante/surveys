@@ -10,7 +10,7 @@
           src="@/assets/images/logo-o.jpg"
         ></v-img>
       </v-toolbar-title>
-      Version 4.5
+      Version 4.6
 
       <v-spacer></v-spacer>
 
