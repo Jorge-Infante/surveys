@@ -363,6 +363,14 @@ export default {
         form
       );
       this.$emit("on:handleAddForm", form);
+      this.clearData();
+    },
+    cancelConfig() {
+      console.log("emitiendo");
+      this.$emit("on:handleCancel");
+      this.clearData();
+    },
+    clearData() {
       this.inputSelect = null;
       this.formFields = [];
       this.labelValue = null;
@@ -370,10 +378,10 @@ export default {
       this.optionsForm = false;
       this.dialog = false;
       this.description = null;
-    },
-    cancelConfig() {
-      console.log("emitiendo");
-      this.$emit("on:handleCancel");
+      this.optionsInput = [];
+      this.optionsFormInput = false;
+      this.dependents = [];
+      this.inputDependents = [];
     },
   },
 };
