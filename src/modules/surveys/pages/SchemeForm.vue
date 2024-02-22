@@ -158,6 +158,28 @@
               ></v-select>
               <v-select
                 readonly
+                v-if="item.order == 'questionDep2'"
+                :items="item.options"
+                item-title="valor"
+                item-value="clave"
+                prepend-icon="mdi-pencil-outline"
+                append-icon="mdi-delete-circle-outline"
+                @click:append="onClear(item, index)"
+                @click:prepend="onEdit(item, index, seccion, indexSeccion)"
+              ></v-select>
+              <v-select
+                readonly
+                v-if="item.order == 'questionDep3'"
+                :items="item.options"
+                item-title="valor"
+                item-value="clave"
+                prepend-icon="mdi-pencil-outline"
+                append-icon="mdi-delete-circle-outline"
+                @click:append="onClear(item, index)"
+                @click:prepend="onEdit(item, index, seccion, indexSeccion)"
+              ></v-select>
+              <v-select
+                readonly
                 v-if="item.type == 'Seleccion con texto'"
                 :items="item.optionsInput"
                 item-title="valor"
@@ -317,6 +339,34 @@ export default {
           idShared,
           showOptions: [],
         };
+        let questionDep2;
+        let questionDep3;
+        if (nuevo.childLabel2) {
+          questionDep2 = {
+            label: nuevo.childLabel2,
+            idSeccion: nuevo.idSeccion,
+            descripcion: nuevo.childDescrip2,
+            options: nuevo.optionsDepChild2,
+            type: nuevo.type,
+            value: nuevo.value,
+            order: "questionDep2",
+            idShared,
+            showOptions: [],
+          };
+        }
+        if (nuevo.childLabel3) {
+          questionDep3 = {
+            label: nuevo.childLabel3,
+            idSeccion: nuevo.idSeccion,
+            descripcion: nuevo.childDescrip3,
+            options: nuevo.optionsDepChild3,
+            type: nuevo.type,
+            value: nuevo.value,
+            order: "questionDep3",
+            idShared,
+            showOptions: [],
+          };
+        }
         console.log("LA MAIN: ", questionMain);
         console.log("LA DEPENDIENTE: ", questionDep);
         if (nuevo.editQuestion != null) {
@@ -326,6 +376,12 @@ export default {
         } else {
           this.seccions[idxSeccion].questions.push(questionMain);
           this.seccions[idxSeccion].questions.push(questionDep);
+          if (nuevo.childLabel2) {
+            this.seccions[idxSeccion].questions.push(questionDep2);
+          }
+          if (nuevo.childLabel2) {
+            this.seccions[idxSeccion].questions.push(questionDep3);
+          }
         }
       } else {
         if (nuevo.editQuestion != null) {

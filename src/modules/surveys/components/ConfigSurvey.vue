@@ -28,20 +28,7 @@
             v-model="description"
           ></v-textarea
         ></v-col>
-        <v-col cols="4"
-          ><v-text-field
-            v-if="inputSelect == 'Seleccion dependiente'"
-            label="Nombre del campo dependiente"
-            v-model="labelValueDep"
-          ></v-text-field
-        ></v-col>
-        <v-col cols="4"
-          ><v-textarea
-            v-if="inputSelect == 'Seleccion dependiente'"
-            label="Descripción del campo dependiente"
-            v-model="descriptionDep"
-          ></v-textarea
-        ></v-col>
+
         <v-col cols="12" v-if="optionsForm">
           <v-row v-for="(item, index) in options" :key="index">
             <v-row>
@@ -152,7 +139,23 @@
     <v-dialog v-model="dependent" width="60%">
       <v-card title="Opciones dependientes">
         <v-col cols="12" class="ma-2">
-          <v-row v-for="(item, index) in dependents" :key="index">
+          <v-row>
+            <v-col cols="6"
+              ><v-text-field
+                v-if="inputSelect == 'Seleccion dependiente'"
+                label="Nombre del campo dependiente"
+                v-model="labelValueDep"
+              ></v-text-field
+            ></v-col>
+            <v-col cols="6"
+              ><v-textarea
+                v-if="inputSelect == 'Seleccion dependiente'"
+                label="Descripción del campo dependiente"
+                v-model="descriptionDep"
+              ></v-textarea
+            ></v-col>
+          </v-row>
+          <v-row v-for="(item, index) in dependents" :key="index" class="ma-4">
             <v-row>
               <v-col>
                 <v-text-field label="Clave" v-model="dependents[index].clave">
@@ -163,8 +166,15 @@
                 </v-text-field>
               </v-col>
             </v-row>
+            <v-btn
+              icon
+              class="ml-2"
+              size="x-small"
+              @click="HandleAddDependents2(item.id)"
+              ><v-icon>mdi-plus</v-icon></v-btn
+            >
           </v-row>
-          <v-btn icon size="x-small" @click="addDependents"
+          <v-btn icon size="x-small" @click="addDependents(idPrincipal)"
             ><v-icon>mdi-plus</v-icon></v-btn
           >
         </v-col>
@@ -174,6 +184,117 @@
           >
         </v-card-actions>
       </v-card>
+      <v-dialog v-model="dependent2" width="60%">
+        <v-card title="Opciones dependientes">
+          <v-col cols="12" class="ma-2">
+            <v-row>
+              <v-col cols="6"
+                ><v-text-field
+                  v-if="inputSelect == 'Seleccion dependiente'"
+                  label="Nombre del campo dependiente"
+                  v-model="labelValueDep2"
+                ></v-text-field
+              ></v-col>
+              <v-col cols="6"
+                ><v-textarea
+                  v-if="inputSelect == 'Seleccion dependiente'"
+                  label="Descripción del campo dependiente"
+                  v-model="descriptionDep2"
+                ></v-textarea
+              ></v-col>
+            </v-row>
+            <v-row
+              v-for="(item, index) in dependents2"
+              :key="index"
+              class="ma-4"
+            >
+              <v-row>
+                <v-col>
+                  <v-text-field
+                    label="Clave"
+                    v-model="dependents2[index].clave"
+                  >
+                  </v-text-field>
+                </v-col>
+                <v-col>
+                  <v-text-field
+                    label="Valor"
+                    v-model="dependents2[index].valor"
+                  >
+                  </v-text-field>
+                </v-col>
+              </v-row>
+              <v-btn
+                icon
+                class="ml-2"
+                size="x-small"
+                @click="HandleAddDependents3(item.id)"
+                ><v-icon>mdi-plus</v-icon></v-btn
+              >
+            </v-row>
+            <v-btn icon size="x-small" @click="addDependents2(idPrincipal)"
+              ><v-icon>mdi-plus</v-icon></v-btn
+            >
+          </v-col>
+          <v-card-actions class="justify-end">
+            <v-btn icon size="x-small" @click="cancelAddDependents2"
+              ><v-icon>mdi-check</v-icon></v-btn
+            >
+          </v-card-actions>
+        </v-card>
+        <v-dialog v-model="dependent3" width="60%">
+          <v-card title="Opciones dependientes">
+            <v-col cols="12" class="ma-2">
+              <v-row>
+                <v-col cols="6"
+                  ><v-text-field
+                    v-if="inputSelect == 'Seleccion dependiente'"
+                    label="Nombre del campo dependiente"
+                    v-model="labelValueDep3"
+                  ></v-text-field
+                ></v-col>
+                <v-col cols="6"
+                  ><v-textarea
+                    v-if="inputSelect == 'Seleccion dependiente'"
+                    label="Descripción del campo dependiente"
+                    v-model="descriptionDep3"
+                  ></v-textarea
+                ></v-col>
+              </v-row>
+              <v-row
+                v-for="(item, index) in dependents3"
+                :key="index"
+                class="ma-4"
+              >
+                <v-row>
+                  <v-col>
+                    <v-text-field
+                      label="Clave"
+                      v-model="dependents3[index].clave"
+                    >
+                    </v-text-field>
+                  </v-col>
+                  <v-col>
+                    <v-text-field
+                      label="Valor"
+                      v-model="dependents3[index].valor"
+                    >
+                    </v-text-field>
+                  </v-col>
+                </v-row>
+              </v-row>
+              <v-btn icon size="x-small" @click="addDependents3(idPrincipal)"
+                ><v-icon>mdi-plus</v-icon></v-btn
+              >
+            </v-col>
+            <v-card-actions class="justify-end">
+              <v-btn icon size="x-small" @click="cancelAddDependents3"
+                ><v-icon>mdi-check</v-icon></v-btn
+              >
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-dialog>
     </v-dialog>
   </v-dialog>
 </template>
@@ -196,20 +317,30 @@ export default {
     inputSelect: null,
     description: null,
     descriptionDep: null,
+    descriptionDep2: null,
+    descriptionDep3: null,
     formFields: [],
     labelValue: null,
     labelValueDep: null,
+    labelValueDep2: null,
+    labelValueDep3: null,
     options: [],
     optionsDep: [],
     optionsInput: [],
     inputDependents: [],
     dependents: [],
+    dependents2: [],
+    dependents3: [],
     dependentsList: [],
+    dependentsList2: [],
+    dependentsList3: [],
     idPrincipal: null,
     optionsFormDep: false,
     optionsForm: false,
     optionsFormInput: false,
     dependent: false,
+    dependent2: false,
+    dependent3: false,
   }),
   props: {
     dialogConfig: { type: Boolean, required: false },
@@ -257,6 +388,14 @@ export default {
     },
   },
   methods: {
+    handleAddDependents2() {
+      this.dependent2 = true;
+      console.log("dependientes segunda lista");
+    },
+    handleAddDependents3() {
+      this.dependent3 = true;
+      console.log("dependientes segunda lista");
+    },
     updateOptions() {
       console.log("OPTIONS: ", this.options);
     },
@@ -294,14 +433,69 @@ export default {
 
       this.idPrincipal = id;
     },
+    HandleAddDependents2(id) {
+      console.log("ID MAIN LISTA DEPENDIENTE 1: ", id);
+      console.log(
+        "LISTA DEPENDIENTE 1: ",
+        this.dependents,
+        "LISTA DEPENDIENTE 2: ",
+        this.dependentsList2
+      );
+      this.dependents2 = this.dependentsList2.filter(
+        (depend) => depend.idPrincipal == id
+      );
+      console.log("LOS DEPENDS FILTRADOS LISTA 2: ", this.dependents2);
+      console.log("ID PRINCIPAL: ", this.idPrincipal, "ID PARAM: ", id);
+      this.dependent2 = true;
+      this.idPrincipal = id;
+    },
+    HandleAddDependents3(id) {
+      console.log("ID MAIN LISTA DEPENDIENTE 2: ", id);
+      console.log(
+        "LISTA DEPENDIENTE 1: ",
+        this.dependents2,
+        "LISTA DEPENDIENTE 2: ",
+        this.dependentsList3
+      );
+      this.dependents3 = this.dependentsList3.filter(
+        (depend) => depend.idPrincipal == id
+      );
+      console.log("LOS DEPENDS FILTRADOS: ", this.dependents3);
+      console.log("ID PRINCIPAL: ", this.idPrincipal, "ID PARAM: ", id);
+      this.dependent3 = true;
+      this.idPrincipal = id;
+    },
     HandleAddInputs(item, index) {
       item.input = true;
       this.optionsInput[index] = item;
       console.log(this.optionsInput);
     },
-    addDependents() {
+    addDependents(id) {
+      this.dependent = true;
+      this.idPrincipal = id;
       this.dependents.push({
+        id: generarUUID(),
+        idPrincipal: id,
+        clave: "",
+        valor: "",
+      });
+    },
+    addDependents2(id) {
+      this.idPrincipal = id;
+      this.dependent2 = true;
+      this.dependents2.push({
         idPrincipal: this.idPrincipal,
+        id: generarUUID(),
+        clave: "",
+        valor: "",
+      });
+    },
+    addDependents3(id) {
+      this.idPrincipal = id;
+      this.dependent3 = true;
+      this.dependents3.push({
+        idPrincipal: this.idPrincipal,
+        id: generarUUID(),
         clave: "",
         valor: "",
       });
@@ -315,6 +509,16 @@ export default {
         "LISTA DEPENDIENTE: ",
         this.dependentsList
       );
+    },
+    cancelAddDependents2() {
+      this.dependentsList2 = [...this.dependentsList2, ...this.dependents2];
+      this.dependent2 = false;
+      console.log("LISTA DEPENDIENTE 2: ", this.dependentsList2);
+    },
+    cancelAddDependents3() {
+      this.dependentsList3 = [...this.dependentsList3, ...this.dependents3];
+      this.dependent3 = false;
+      console.log("LISTA DEPENDIENTE 3: ", this.dependentsList3);
     },
     hadleSendForm() {
       let form;
@@ -334,9 +538,18 @@ export default {
           label: this.labelValue,
           descripcion: this.description,
           optionsDep: this.optionsDep,
+
           childLabel: this.labelValueDep,
           childDescrip: this.descriptionDep,
           optionsDepChild: this.dependentsList,
+
+          childLabel2: this.labelValueDep2,
+          childDescrip2: this.descriptionDep2,
+          optionsDepChild2: this.dependentsList2,
+
+          childLabel3: this.labelValueDep3,
+          childDescrip3: this.descriptionDep3,
+          optionsDepChild3: this.dependentsList3,
         };
       } else if (this.optionsInput.length > 0) {
         form = {

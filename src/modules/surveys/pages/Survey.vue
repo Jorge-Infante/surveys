@@ -141,6 +141,24 @@
                       item-title="valor"
                       item-value="clave"
                       return-object
+                      @update:modelValue="selectQuestionDep(index, item)"
+                    ></v-select>
+                    <v-select
+                      v-model="seccion.questions[index].value"
+                      v-if="item.order == 'questionDep2'"
+                      :items="item.showOptions"
+                      item-title="valor"
+                      item-value="clave"
+                      return-object
+                      @update:modelValue="selectQuestionDep2(index, item)"
+                    ></v-select>
+                    <v-select
+                      v-model="seccion.questions[index].value"
+                      v-if="item.order == 'questionDep3'"
+                      :items="item.showOptions"
+                      item-title="valor"
+                      item-value="clave"
+                      return-object
                     ></v-select>
                     <v-select
                       v-model="seccion.questions[index].value"
@@ -357,6 +375,54 @@ export default {
       // );
       // console.log("PREGUNTAS: ", preguntas);
     },
+    selectQuestionDep(index, question) {
+      let seccion = this.findObjectById(question.idSeccion);
+      console.log(
+        "SECCION: ",
+        seccion,
+        "index: ",
+        index,
+        "question: ",
+        question.idShared
+      );
+      for (let [index, item] of seccion.questions.entries()) {
+        if (
+          item.idShared == question.idShared &&
+          item.order == "questionDep2"
+        ) {
+          console.log("LA PREGUNTA: ", item);
+          const questionDep2 = item.options.filter(
+            (dep) => dep.idPrincipal == question.value.id
+          );
+          seccion.questions[index].value = null;
+          seccion.questions[index].showOptions = questionDep2;
+        }
+      }
+    },
+    selectQuestionDep2(index, question) {
+      let seccion = this.findObjectById(question.idSeccion);
+      console.log(
+        "SECCION: ",
+        seccion,
+        "index: ",
+        index,
+        "question: ",
+        question.idShared
+      );
+      for (let [index, item] of seccion.questions.entries()) {
+        if (
+          item.idShared == question.idShared &&
+          item.order == "questionDep3"
+        ) {
+          console.log("LA PREGUNTA: ", item);
+          const questionDep3 = item.options.filter(
+            (dep) => dep.idPrincipal == question.value.id
+          );
+          seccion.questions[index].value = null;
+          seccion.questions[index].showOptions = questionDep3;
+        }
+      }
+    },
     selectQuestionMainInput(index, item, seccion) {
       if (item.value.input) {
         console.log(index, item, seccion);
@@ -371,7 +437,7 @@ export default {
         if (!seccion.questions[index + 1]) {
           seccion.questions.splice(index + 1, 0, newQuestion);
         } else {
-          if(newQuestion!=item.value.valor){
+          if (newQuestion != item.value.valor) {
             seccion.questions.splice(index + 1, 1);
             seccion.questions.splice(index + 1, 0, newQuestion);
           }
