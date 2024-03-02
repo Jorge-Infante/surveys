@@ -6,7 +6,7 @@
         <v-expansion-panel-text>
           <v-card flat>
             <template v-slot:text>
-              <v-text-field
+              <v-text-field v-show="coordinador || administrador"
                 v-model="search"
                 label="Buscar encuesta en la nube"
                 prepend-inner-icon="mdi-magnify"
@@ -14,13 +14,49 @@
                 variant="outlined"
                 hide-details
               ></v-text-field>
+              <v-row v-show="extensionista">
+                <v-col cols="6">
+                  <v-text-field
+                    v-model="search"
+                    label="Buscar encuesta en la nube"
+                    prepend-inner-icon="mdi-magnify"
+                    single-line
+                    variant="outlined"
+                    hide-details
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="3">
+                  <v-btn
+                    :loading="loading"
+                    @click="HandleDownloadExcel"
+                    class="export-btn"
+                    prepend-icon="mdi-file-excel"
+                    variant="outlined"
+                    color="success"
+                    >Excel</v-btn
+                  >                  
+                </v-col>
+                <v-col cols="3">                  
+                  <v-btn
+                    :loading="loading"
+                    @click="HandleDownloadRecords"
+                    class="export-btn"
+                    prepend-icon="mdi-information-variant-circle"
+                    variant="outlined"
+                    color="info"
+                    >Records</v-btn
+                  >
+                </v-col>
+              </v-row>
             </template>
 
             <v-data-table
+              v-model="selected"
               v-show="extensionista"
               :headers="headers"
               :items="surveysList"
               :search="search"
+              show-select
             >
               <template v-slot:item.actions="{ item }">
                 <v-row>
@@ -259,6 +295,8 @@ export default {
       coordinador: false,
       extensionista: true,
       page: 1,
+      idsList: "",
+      selected: [],
     };
   },
   computed: {
@@ -310,6 +348,8 @@ export default {
       "uploadFile",
       "deleteSurvey",
       "getSurveys",
+      "downloadRecords",
+      "downloadExcel",
     ]),
     showDeleteDialog(id) {
       this.idDelete = id;
@@ -379,7 +419,7 @@ export default {
               let params = { file };
               console.log("PARAMETROS: ", params);
               const res = await this.uploadFile(params);
-              let newUrl = `https://test-apiothras.djsoftwaremakers.com${res.url}`;
+              let newUrl = `http://localhost:8000${res.url}`;
               question.url = newUrl;
             } catch (error) {
               console.log("error al cargar la imagen: ", error);
@@ -482,6 +522,72 @@ export default {
         params: { id: survey_id, showSurvey: false },
       });
     },
+    HandleDownloadRecords() {
+      this.loading = true;
+      if (this.idsList === "") {
+        Swal.fire({
+          title: "¡Por favor seleccione encuestas!",
+          icon: "info",
+        });
+        this.loading = false;
+        return
+      }
+      const params = `ids=${this.idsList}`;
+      this.downloadRecords(params)
+        .then((response) => {
+          // Crear un objeto URL para el blob
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+
+          // Crear un enlace temporal y hacer clic para descargar
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", `Archivos.zip`);
+          document.body.appendChild(link);
+          link.click();
+
+          // Limpiar el enlace y el objeto URL después de la descarga
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+          this.loading = false;
+        })
+        .catch((error) => {
+          this.loading = false;
+          console.error("Error al descargar el archivo:", error);
+        });
+    },
+    HandleDownloadExcel() {
+      this.loading = true;
+      if (this.idsList === "") {
+        Swal.fire({
+          title: "¡Por favor seleccione encuestas!",
+          icon: "info",
+        });
+        this.loading = false;
+        return
+      }
+      const params = `ids=${this.idsList}`;
+      this.downloadExcel(params)
+        .then((response) => {
+          // Crear un objeto URL para el blob
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+
+          // Crear un enlace temporal y hacer clic para descargar
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", `Archivos.zip`);
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+          this.loading = false;
+        })
+        .catch((error) => {
+          this.loading = false;
+          console.error("Error al descargar el archivo:", error);
+        });
+    },
   },
   watch: {
     user(nuevo) {
@@ -501,6 +607,10 @@ export default {
     },
     page(nuevo) {
       this.getSurveys(`page=${nuevo}&page_size=${this.itemsPerPage}`);
+    },
+    selected(selectNew) {
+      this.idsList = this.selected.join(",");
+      console.log(this.idsList);
     },
   },
   created() {
