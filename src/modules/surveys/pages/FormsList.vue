@@ -6,7 +6,7 @@
       class="card-title"
     ></v-toolbar>
 
-    <v-table class="mt-5" fixed-header height="300px" density="compact">
+    <v-table class="mt-5" fixed-header density="compact">
       <thead>
         <tr>
           <th class="text-center">Id</th>
