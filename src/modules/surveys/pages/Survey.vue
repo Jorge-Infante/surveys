@@ -433,17 +433,21 @@ export default {
           type: "Texto",
           input: item.value.input,
           valor: item.value.valor,
+          textDep: true,
         };
         if (!seccion.questions[index + 1]) {
           seccion.questions.splice(index + 1, 0, newQuestion);
         } else {
           if (newQuestion != item.value.valor) {
-            seccion.questions.splice(index + 1, 1);
+            // seccion.questions.splice(index + 1, 1);
+            console.log("SPLICE 1 ------------");
             seccion.questions.splice(index + 1, 0, newQuestion);
           }
         }
       } else {
-        seccion.questions.splice(index + 1, 1);
+        if (seccion.questions[index + 1].textDep) {
+          seccion.questions.splice(index + 1, 1);
+        }
       }
       // myArray.splice(insertIndex, 0, newElement);
     },

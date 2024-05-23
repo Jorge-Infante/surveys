@@ -75,7 +75,7 @@
                 {{ item.descripcion }}
               </div>
               <v-text-field
-                readonly
+                
                 v-if="item.type == 'Texto'"
                 prepend-icon="mdi-pencil-outline"
                 append-icon="mdi-delete-circle-outline"
@@ -83,7 +83,7 @@
                 @click:prepend="onEdit(item, index, seccion, indexSeccion)"
               ></v-text-field>
               <v-text-field
-                readonly
+                
                 v-if="item.type == 'Numerico'"
                 prepend-icon="mdi-pencil-outline"
                 append-icon="mdi-delete-circle-outline"
@@ -91,7 +91,7 @@
                 @click:prepend="onEdit(item, index, seccion, indexSeccion)"
               ></v-text-field>
               <v-select
-                readonly
+                
                 v-if="item.type == 'Seleccion simple'"
                 :items="item.options"
                 item-title="valor"
@@ -102,7 +102,7 @@
                 @click:prepend="onEdit(item, index, seccion, indexSeccion)"
               ></v-select>
               <v-combobox
-                readonly
+                
                 v-if="item.type == 'Selecccion multiple'"
                 :items="item.options"
                 item-title="valor"
@@ -114,7 +114,7 @@
                 @click:prepend="onEdit(item, index, seccion, indexSeccion)"
               ></v-combobox>
               <v-text-field
-                readonly
+                
                 v-model="seccion.questions[index].value"
                 v-if="item.type == 'Fecha'"
                 type="date"
@@ -135,7 +135,7 @@
                 @click:prepend="onEdit(item, index, seccion, indexSeccion)"
               ></v-file-input>
               <v-select
-                readonly
+                
                 v-if="item.order == 'questionMain'"
                 :items="item.options"
                 item-title="valor"
@@ -146,7 +146,7 @@
                 @click:prepend="onEdit(item, index, seccion, indexSeccion)"
               ></v-select>
               <v-select
-                readonly
+                
                 v-if="item.order == 'questionDep'"
                 :items="item.options"
                 item-title="valor"
@@ -157,7 +157,7 @@
                 @click:prepend="onEdit(item, index, seccion, indexSeccion)"
               ></v-select>
               <v-select
-                readonly
+                
                 v-if="item.order == 'questionDep2'"
                 :items="item.options"
                 item-title="valor"
@@ -168,7 +168,7 @@
                 @click:prepend="onEdit(item, index, seccion, indexSeccion)"
               ></v-select>
               <v-select
-                readonly
+                
                 v-if="item.order == 'questionDep3'"
                 :items="item.options"
                 item-title="valor"
@@ -179,7 +179,7 @@
                 @click:prepend="onEdit(item, index, seccion, indexSeccion)"
               ></v-select>
               <v-select
-                readonly
+                
                 v-if="item.type == 'Seleccion con texto'"
                 :items="item.optionsInput"
                 item-title="valor"

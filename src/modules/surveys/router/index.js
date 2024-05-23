@@ -29,14 +29,14 @@ export default {
         };
       },
     },
-    // {
-    //   path: "surveyForm",
-    //   name: "survey-form",
-    //   component: () =>
-    //     import(
-    //       /* webpackChunkName: "survey-form" */ "@/modules/surveys/pages/SchemeForm.vue"
-    //     ),
-    // },
+    {
+      path: "surveyForm",
+      name: "survey-form",
+      component: () =>
+        import(
+          /* webpackChunkName: "survey-form" */ "@/modules/surveys/pages/SchemeForm.vue"
+        ),
+    },
     {
       path: "surveyFormEdit/:id/:showForm",
       name: "survey-form-edit",

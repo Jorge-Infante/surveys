@@ -15,7 +15,7 @@ const routes = [
   },
   {
     path: "/survey",
-    beforeEnter:[ isAuthenticatedGuard ] ,
+     
     ...surveyRouter,
   },
 ];

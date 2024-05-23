@@ -2,7 +2,7 @@ import axios from "axios";
 import { refreshAccessToken } from "./auth_api";
 import router from '@/router';
 export const authClient = axios.create({
-  baseURL: "https://test-apiothras.djsoftwaremakers.com/api/",
+  baseURL: "https://test-api.ohtrasapp.com/api/",
   withCredentials: false,
 
   headers: {
@@ -11,7 +11,7 @@ export const authClient = axios.create({
 });
 
 export const apiClient = axios.create({
-  baseURL: "https://test-apiothras.djsoftwaremakers.com/api/",
+  baseURL: "https://test-api.ohtrasapp.com/api/",
   withCredentials: false,
 
   headers: {
